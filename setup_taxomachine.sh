@@ -1,4 +1,5 @@
 JAVAFLAGS="-Xmx30G"
+HELPTEXT="usage:\nsetup_taxomachine.sh <options>\\n\\t[--clean-db]\n\t[--setup-db]\n\t[--download-ott]\n\t[--test]\n\t[--force]\n\t[--update-taxomachine]\n\t[--recompile-taxomachine]\n\t[-ott-version <2.0|2.1|2.2>]\n\t[-prefix <path>]\n\n"
 
 while [ $# -gt 0 ]; do
 	case "$1" in
@@ -7,40 +8,44 @@ while [ $# -gt 0 ]; do
 		--download-ott) DOWNLOAD_OTT=true;;
 		--test) TEST=true;;
 		--force) FORCE=true;;
+		--update-taxomachine) UPDATE=true;;
+		--recompile-taxomachine) RECOMPILE=true;;
 		-ott-version)
 			shift
 			case "$1" in
+				2.0) VERSION="ott2.0";;
 				2.1) VERSION="ott2.1";;
 				2.2) VERSION="ott2.2";;
-				*) echo "version $1 not recognized.";; 
+				*) printf "version $1 not recognized.";; 
 			esac;;
 		-prefix) shift; PFSET=true; PREFIX="$1";;
-		-*) echo "usage: setup_taxomachine.sh [--clean-db] [--setup-db] [--download-ott] [--test] [--force] [-ott-version <2.1|2.2>] [-prefix <path>]";;
+		--help) printf "$HELPTEXT"; exit 0;;
+		*) printf "\nunrecognized argument: $1.\n"; printf "$HELPTEXT"; exit 1;
 	esac
 	shift
 done
 
 JAVA=java
 if [ $TEST ]; then
-	echo "\njust testing. java commands will be echoed instead of executed"
+	printf "\njust testing. java commands will be printed instead of executed\n"
 	$JAVA="java"
 fi
 
 if [ ! $VERSION ]; then
 	VERSION="ott2.2"
-	echo "\nwill attempt to use $VERSION"
+	printf "\nwill attempt to use $VERSION\n"
 fi
 
 if [ ! $PFSET ]; then
 	PREFIX="$HOME/phylo/"
 	if [ ! $FORCE ]; then
-		echo "\nprefix is not set. all files will be downloaded to $PREFIX. continue? y/n:"
+		printf "\nprefix is not set. all files will be downloaded to $PREFIX. continue? y/n:"
 		while [ true ]; do
 			read RESP
 			case "$RESP" in
 				n) exit;;
 				y) break;;
-				*) echo "unrecognized input. uze ^C to exit script";;
+				*) printf "unrecognized input. uze ^C to exit script";;
 			esac
 		done
 	fi
@@ -51,7 +56,7 @@ if [ ! -d $PREFIX ]; then
 fi
 cd $PREFIX
 PREFIX=$(pwd)"/"
-echo "\ninstalling files at: $PREFIX"
+printf "\ninstalling files at: $PREFIX\n"
 
 OTT_SOURCENAME="ott"
 OTT_DOWNLOADDIR=$PREFIX"data/"
@@ -61,8 +66,8 @@ fi
 
 if [ $DOWNLOAD_OTT ]; then
 
-	echo "\ntaxonomy $VERSION will be downloaded"
-	echo "installing $VERSION taxonomy at: $OTT_DOWNLOADDIR"
+	printf "\ntaxonomy $VERSION will be downloaded\n"
+	printf "installing $VERSION taxonomy at: $OTT_DOWNLOADDIR\n"
 
 	# removing existing copy
 	cd $OTT_DOWNLOADDIR
@@ -76,10 +81,10 @@ fi
 
 OTT_SOURCEDIR="$OTT_DOWNLOADDIR$VERSION/"
 if [ ! -d $OTT_SOURCEDIR ]; then
-	echo "can't find $OTT_SOURCEDIR. use --download to download a copy"
+	printf "\ncan\'t find $OTT_SOURCEDIR. use --download-ott to download a copy\n"
 	exit
 fi
-echo "using $VERSION taxonomy at: $OTT_SOURCEDIR"
+printf "\nusing $VERSION taxonomy at: $OTT_SOURCEDIR\n"
 
 OTT_TAXONOMY=$OTT_SOURCEDIR"taxonomy"
 OTT_SYNONYMS=$OTT_SOURCEDIR"synonyms"
@@ -87,23 +92,35 @@ OTT_SYNONYMS=$OTT_SOURCEDIR"synonyms"
 # download taxomachine
 TAXOMACHINE_HOME=$PREFIX"taxomachine/"
 if [ ! -d $TAXOMACHINE_HOME ]; then
-	echo "installing taxomachine at: $TAXOMACHINE_HOME"
+	printf "\ninstalling taxomachine at: $TAXOMACHINE_HOME\n"
 	git clone git@github.com:OpenTreeOfLife/taxomachine.git
 fi
-echo "using taxomachine at: $TAXOMACHINE_HOME"
+printf "\nusing taxomachine at: $TAXOMACHINE_HOME\n"
+
+# pull from the git repo and remove the binary if updating is turned on
+TAXOMACHINE=$TAXOMACHINE_HOME"target/taxomachine-0.0.1-SNAPSHOT-jar-with-dependencies.jar"
+if [ $UPDATE ]; then
+	cd $TAXOMACHINE_HOME
+	git pull origin master
+	rm -f $TAXOMACHINE
+fi
+
+# just remove the binary if we want recompile
+if [ $RECOMPILE ]; then
+	rm -f $TAXOMACHINE
+fi
 
 # compile taxomachine if necessary
-TAXOMACHINE=$TAXOMACHINE_HOME"target/taxomachine-0.0.1-SNAPSHOT-jar-with-dependencies.jar"
 if [ ! -f $TAXOMACHINE ]; then
-	cd $TAXOMACHINE_HOME
+	cd $TAXOMACHINE_HOME	
 	./mvn_cmdline.sh
 fi
 
 # clean the db if necessary
 TAXOMACHINE_DB=$OTT_DOWNLOADDIR$VERSION".db"
 if [ $CLEANDB ]; then
-	echo "removing the existing database at: $TAXOMACHINE_DB"
-	rm -Rf TAXOMACHINE_DB
+	printf "\nremoving the existing database at: $TAXOMACHINE_DB\n"
+	rm -Rf $TAXOMACHINE_DB
 fi
 
 # load taxonomy and make the indexes
@@ -111,7 +128,7 @@ if [ $SETUP_DB ]; then
 
 	# require explicit instructions to remove existing db
 	if [ -d $TAXOMACHINE_DB ]; then
-		echo "database at $TAXOMACHINE_DB already exists. to rebuild it, use --clean-db --setup-db"
+		printf "\ndatabase at $TAXOMACHINE_DB already exists. to rebuild it, use --clean-db --setup-db\n"
 		exit
 	fi
 	
