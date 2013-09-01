@@ -39,7 +39,7 @@ fi
 if [ ! $PFSET ]; then
 	PREFIX="$HOME/phylo/"
 	if [ ! $FORCE ]; then
-		printf "\nprefix is not set. all files will be downloaded to $PREFIX. continue? y/n:"
+		printf "\nprefix is not set. the default prefix $PREFIX will be used. continue? y/n:"
 		while [ true ]; do
 			read RESP
 			case "$RESP" in
@@ -56,7 +56,7 @@ if [ ! -d $PREFIX ]; then
 fi
 cd $PREFIX
 PREFIX=$(pwd)"/"
-printf "\ninstalling files at: $PREFIX\n"
+printf "\nworking at prefix $PREFIX\n"
 
 OTT_SOURCENAME="ott"
 OTT_DOWNLOADDIR=$PREFIX"data/"
