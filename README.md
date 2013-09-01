@@ -10,9 +10,9 @@ For now, these tools should at least help simplify tedious, repetitive tasks.
 setup_otu.sh
 ------------
 
-Just a very basic script to setup the simple prototype editor and run it in a web browser.
+Just a very basic script that will download, set up, and run the simple prototype editor (it will open the editor in a web browser). This script will probably only work out-of-the-box on linux.
 
 setup_taxomachine.sh
 ------------
 
-A more fully-featured script to facilitate installing taxomachine, building a taxonomy database, and running taxonomy services. Run it with the flag --help for information on options.
+A more fully-featured script to facilitate installing taxomachine, building a taxonomy database, and running taxonomy services. Run it with the '--help' flag for information on options.

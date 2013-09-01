@@ -1,5 +1,5 @@
 JAVAFLAGS="-Xmx30G"
-HELPTEXT="usage:\nsetup_taxomachine.sh <options>\\n\\t[--clean-db]\n\t[--setup-db]\n\t[--download-ott]\n\t[--test]\n\t[--force]\n\t[--update-taxomachine]\n\t[--recompile-taxomachine]\n\t[-ott-version <2.0|2.1|2.2>]\n\t[-prefix <path>]\n\n"
+HELPTEXT="usage:\nsetup_taxomachine.sh <options>\n\t[--clean-db]\n\t[--setup-db]\n\t[--download-ott]\n\t[--test]\n\t[--force]\n\t[--update-taxomachine]\n\t[--recompile-taxomachine]\n\t[-ott-version <2.0|2.1|2.2>]\n\t[-prefix <path>]\n\n"
 
 while [ $# -gt 0 ]; do
 	case "$1" in
