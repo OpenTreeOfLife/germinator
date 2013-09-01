@@ -76,7 +76,7 @@ fi
 # ok, now we can use pip to install grequests
 #pip install grequests
 
-### we do not seem to need grequests!
+### we do not appear to need grequests!
 
 OTU_NEO4J_HOME="$PREFIX/neo4j-community-1.9.3-otu"
 OTU_NEO4J_DAEMON="$OTU_NEO4J_HOME/bin/neo4j"
@@ -102,7 +102,6 @@ if [ ! -d $OTU_HOME ]; then
     printf "\ninstalling otu at: $OTU_HOME\n"
     git clone git@github.com:chinchliff/otu.git
 fi
-printf "\nusing otu at: $OTU_HOME\n"
 
 if [ $UPDATE ]; then
     printf "\ngetting latest updates from github master\n"
@@ -139,9 +138,13 @@ if [ $RESTART_NEO4J ]; then
 fi
 
 if [ $RESTART_OTU ]; then
+    
     # open the tool in the web browser
+    OTU_URL="http://localhost:8000/"
     if [ $LINUX ]; then
-        xdg-open http://localhost:8000/
+        xdg-open "$OTU_URL"
+    elif [ $MAC ]; then
+        open "$OTU_URL"
     fi
 
     # start the webserver (from the views directory -- this is important for redirects)
