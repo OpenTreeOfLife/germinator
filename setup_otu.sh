@@ -10,7 +10,7 @@ while [ $# -gt 0 ]; do
 		--recompile-otu) RECOMPILE=true;;
 		--restart-neo4j) RESTART_NEO4J=true;;
 		--restart-otu) RESTART_OTU=true;;
-		--open-otu) OPEN_OTU=true;
+		--open-otu) OPEN_OTU=true;;
 		-prefix) shift; PREFIX="$1";;
 		--help) printf "$HELPTEXT"; exit 0;;
 		*) printf "\nunrecognized argument: $1.\n"; printf "$HELPTEXT"; exit 1;
