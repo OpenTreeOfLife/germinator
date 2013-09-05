@@ -10,6 +10,7 @@ while [ $# -gt 0 ]; do
 		--recompile-plugin) RECOMPILE=true;;
 		--restart-neo4j) RESTART_NEO4J=true;;
 		--restart-otu) RESTART_OTU=true;;
+		--open-otu) OPEN_OTU=true;;
 		-prefix) shift; PREFIX="$1";;
 		--help) printf "$HELPTEXT"; exit 0;;
 		*) printf "\nunrecognized argument: $1.\n"; printf "$HELPTEXT"; exit 1;
@@ -39,8 +40,9 @@ cd $PREFIX
 PREFIX=$(pwd)
 printf "\nworking at prefix $PREFIX\n"
 
-if [ $OSTYPE = "linux-gnu" ]; then
-    echo "linux"
+OSTYPE=$(uname -msr)
+
+if echo $OSTYPE | grep "Linux" ; then
     LINUX=true
 
     # get pip and libevent
@@ -48,8 +50,7 @@ if [ $OSTYPE = "linux-gnu" ]; then
 #    apt-get install python-pip
 #    apt-get install libevent-dev
 
-elif [ $OSTYPE = "darwin12" ]; then
-    echo "mac"
+elif echo $OSTYPE | grep "darwin" ; then
     MAC=true
 #    exit
     # for mac, we need homebrew to get pip to get grequests, soo...
@@ -137,8 +138,7 @@ if [ $RESTART_NEO4J ]; then
     $OTU_NEO4J_DAEMON restart
 fi
 
-if [ $RESTART_OTU ]; then
-    
+if [ $OPEN_OTU ]; then
     # open the tool in the web browser
     OTU_URL="http://localhost:8000/"
     if [ $LINUX ]; then
@@ -146,6 +146,9 @@ if [ $RESTART_OTU ]; then
     elif [ $MAC ]; then
         open "$OTU_URL"
     fi
+fi
+
+if [ $RESTART_OTU ]; then
 
     # start the webserver (from the views directory -- this is important for redirects)
     cd views
