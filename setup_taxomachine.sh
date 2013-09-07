@@ -1,11 +1,4 @@
-# TODO: for standalone version, install taxomachine in the path.
-
-
-# TODO: add options for loading the plugin and starting the neo4j server
-# ./mvn_serverplugins.sh
-# mv target/opentree-neo4j-plugins-0.0.1-SNAPSHOT.jar ../neo4j-advanced-1.9.M02-taxo/plugins/
-# ../neo4j-advanced-1.9.M02-taxo/bin/neo4j restart
-
+# TODO: record output to log file
 
 JAVAFLAGS="-Xms4G -Xmx30G"
 HELPTEXT="usage:\nsetup_taxomachine.sh <options>\n\t[--clean-db]\n\t[--setup-db]\n\t[--download-ott]\n\t[--setup-server]\n\t[--restart-server]\n\t[--test]\n\t[--force]\n\t[--update-taxomachine]\n\t[--recompile-taxomachine]\n\t[--recompile-plugin]\n\t[-ott-version <2.0|2.1|2.2>]\n\t[-prefix <path>]\n\n"
@@ -75,7 +68,7 @@ if [ ! -d $JARSDIR ]; then
     mkdir $JARSDIR
 fi
 
-OTT_SOURCENAME="/ott"
+OTT_SOURCENAME="ott"
 OTT_DOWNLOADDIR=$PREFIX"/data"
 if [ ! -d $OTT_DOWNLOADDIR ]; then
 	mkdir $OTT_DOWNLOADDIR
@@ -137,12 +130,15 @@ if [ ! -f $TAXOMACHINE_INSTALL_LOCATION ]; then
 	mv $TAXOMACHINE_COMPILE_LOCATION $TAXOMACHINE_INSTALL_LOCATION
 fi
 
-TAXOMACHINE_COMMAND="$JAVA $JAVAFLAGS -jar $TAXOMACHINE_INSTALL_LOCATION"
+TAXOMACHINE_COMMAND="$JAVA $JAVAFLAGS -jar $TAXOMACHINE_INSTALL_LOCATION \"\$@\""
 TAXOMACHINE_START_SCRIPT="/usr/local/bin/taxomachine"
 INSTALL_START_SCRIPT=true
 if [ -f $TAXOMACHINE_START_SCRIPT ]; then
-    if cat $TAXOMACHINE_START_SCRIPT | grep $TAXOMACHINE_COMMAND ; then
+    if cat $TAXOMACHINE_START_SCRIPT | grep '$TAXOMACHINE_COMMAND' ; then
         INSTALL_START_SCRIPT=false
+#        echo "already there"
+#    else
+#        echo "not there!"
     fi
 fi
 
@@ -151,9 +147,17 @@ if [ $INSTALL_START_SCRIPT = true ]; then
     chmod +x $TAXOMACHINE_START_SCRIPT
 fi
 
+# prepare for dealing with the neo4j server if necessary
+TAXO_NEO4J_HOME="$PREFIX/neo4j-community-1.9.3-taxomachine"
+TAXO_NEO4J_DAEMON="$TAXO_NEO4J_HOME/bin/neo4j"
+
 # clean the db if necessary
-TAXOMACHINE_DB=$OTT_DOWNLOADDIR$VERSION".db"
+TAXOMACHINE_DB="$OTT_DOWNLOADDIR/$VERSION.db"
 if [ $CLEANDB ]; then
+    if [ -f $TAXO_NEO_DAEMON ]; then
+        printf "\nattempting to shut down the neo4j server\n"
+        $TAXO_NEO4J_DAEMON stop
+    fi
 	printf "\nremoving the existing database at: $TAXOMACHINE_DB\n"
 	rm -Rf $TAXOMACHINE_DB
 fi
@@ -166,15 +170,18 @@ if [ $SETUP_DB ]; then
 		printf "\ndatabase at $TAXOMACHINE_DB already exists. to rebuild it, use --clean-db --setup-db\n"
 		exit
 	fi
-	
-	$JAVA $JAVAFLAGS -jar $TAXOMACHINE loadtaxsyn $OTT_SOURCENAME $OTT_TAXONOMY $OTT_SYNONYMS $TAXOMACHINE_DB
-	$JAVA $JAVAFLAGS -jar $TAXOMACHINE makecontexts $TAXOMACHINE_DB
-	$JAVA $JAVAFLAGS -jar $TAXOMACHINE makegenusindexes $TAXOMACHINE_DB
+
+#	echo "$TAXOMACHINE_START_SCRIPT loadtaxsyn $OTT_SOURCENAME $OTT_TAXONOMY $OTT_SYNONYMS $TAXOMACHINE_DB"
+#    echo "$TAXOMACHINE_START_SCRIPT makecontexts $TAXOMACHINE_DB"
+#	echo "$TAXOMACHINE_START_SCRIPT makegenusindexes $TAXOMACHINE_DB"
+
+	$TAXOMACHINE_START_SCRIPT loadtaxsyn $OTT_SOURCENAME $OTT_TAXONOMY $OTT_SYNONYMS $TAXOMACHINE_DB	
+	$TAXOMACHINE_START_SCRIPT makecontexts $TAXOMACHINE_DB
+	$TAXOMACHINE_START_SCRIPT makegenusindexes $TAXOMACHINE_DB
 fi
 
 # start the server
 if [ $SETUP_SERVER ]; then
-    TAXO_NEO4J_HOME="$PREFIX/neo4j-community-1.9.3-taxomachine"
 
     # download neo4j if necessary
     if [ ! -d $TAXO_NEO4J_HOME ]; then
@@ -225,7 +232,6 @@ if [ $SETUP_SERVER ]; then
 fi
 
 if [ $RESTART_SERVER ]; then
-    TAXO_NEO4J_DAEMON="$TAXO_NEO4J_HOME/bin/neo4j"
     $TAXO_NEO4J_DAEMON restart
 fi
 
