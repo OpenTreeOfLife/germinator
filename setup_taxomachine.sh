@@ -1,3 +1,12 @@
+# TODO: for standalone version, install taxomachine in the path.
+
+
+# TODO: add options for loading the plugin and starting the neo4j server
+# ./mvn_serverplugins.sh
+# mv target/opentree-neo4j-plugins-0.0.1-SNAPSHOT.jar ../neo4j-advanced-1.9.M02-taxo/plugins/
+# ../neo4j-advanced-1.9.M02-taxo/bin/neo4j restart
+
+
 JAVAFLAGS="-Xmx30G"
 HELPTEXT="usage:\nsetup_taxomachine.sh <options>\n\t[--clean-db]\n\t[--setup-db]\n\t[--download-ott]\n\t[--test]\n\t[--force]\n\t[--update-taxomachine]\n\t[--recompile-taxomachine]\n\t[-ott-version <2.0|2.1|2.2>]\n\t[-prefix <path>]\n\n"
 
