@@ -147,6 +147,11 @@ if [ $INSTALL_START_SCRIPT = true ]; then
     chmod +x $TAXOMACHINE_START_SCRIPT
 fi
 
+if [ ! -f $TAXOMACHINE_START_SCRIPT ]; then
+    printf "\nthe taxomachine start script could not be installed. do you need to sudo? quitting\n"
+    exit
+fi
+
 # prepare for dealing with the neo4j server if necessary
 TAXO_NEO4J_HOME="$PREFIX/neo4j-community-1.9.3-taxomachine"
 TAXO_NEO4J_DAEMON="$TAXO_NEO4J_HOME/bin/neo4j"
