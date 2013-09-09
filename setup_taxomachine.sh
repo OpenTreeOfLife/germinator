@@ -136,9 +136,6 @@ INSTALL_START_SCRIPT=true
 if [ -f $TAXOMACHINE_START_SCRIPT ]; then
     if cat $TAXOMACHINE_START_SCRIPT | grep '$TAXOMACHINE_COMMAND' ; then
         INSTALL_START_SCRIPT=false
-#        echo "already there"
-#    else
-#        echo "not there!"
     fi
 fi
 
@@ -199,7 +196,7 @@ if [ $SETUP_SERVER ]; then
     
     # point the server at the taxomachine db location
     TAXOMACHINE_DB_ASSIGNMENT="org.neo4j.server.database.location=$TAXOMACHINE_DB"
-    COMMENT="###############################################################\n# location for taxomachine db, location settings are in original file"
+    COMMENT="###############################################################\n# location for taxomachine db, original location settings are in original file"
     SERVER_PROPERTIES="$TAXO_NEO4J_HOME/conf/neo4j-server.properties"
     
     if cat $SERVER_PROPERTIES | grep -q $TAXOMACHINE_DB_ASSIGNMENT ; then
