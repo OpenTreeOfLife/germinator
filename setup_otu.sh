@@ -1,5 +1,5 @@
 JAVAFLAGS="-Xmx30G"
-HELPTEXT="usage:\nsetup_otu.sh <options>\\n\\t[--clean-db]\n\t[--test] (not yet)\n\t[--force]\n\t[--update-otu]\n\t[--recompile-plugin]\n\t[--restart-neo4j]\n\t[--restart-otu]\n\t[-prefix <path>]\n\n"
+HELPTEXT="usage:\nsetup_otu.sh <options>\\n\\t[--clean-db]\n\t[--test] (not yet)\n\t[--force]\n\t[--update-otu]\n\t[--recompile-plugin]\n\t[--restart-neo4j]\n\t[--restart-otu]\n\t[--open-otu]\n\t[-prefix <path>]\n\n"
 
 while [ $# -gt 0 ]; do
 	case "$1" in
