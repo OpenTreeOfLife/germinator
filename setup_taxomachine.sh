@@ -208,27 +208,28 @@ if [ $SETUP_SERVER ]; then
         grep -v "org.neo4j.server.database.location" "$ORIG_SERVER_PROPERTIES" >> "$SERVER_PROPERTIES"
 
     fi
-    
+
     #### TODO: switch the port to 7476. This is going to require neo4j enterprise
-        
-    printf "\nusing neo4j instance for taxomachine at: $TAXO_NEO4J_HOME\n"
 
-    # install the plugin if necessary
-    PLUGIN="opentree-neo4j-plugins-0.0.1-SNAPSHOT.jar"
-    PLUGIN_INSTALL_LOCATION="$TAXO_NEO4J_HOME/plugins/$PLUGIN"
+fi
 
-    # just remove the binary if we want recompile
-    if [ $RECOMPILE_PLUGIN ]; then    
-        rm -f $PLUGIN_INSTALL_LOCATION
-    fi
+printf "\nusing neo4j instance for taxomachine at: $TAXO_NEO4J_HOME\n"
 
-    # recompile if the plugin is not there    
-    if [ ! -f $PLUGIN_INSTALL_LOCATION ]; then
-    	cd $TAXOMACHINE_HOME	
-        sh mvn_serverplugins.sh
-        PLUGIN_COMPILE_LOCATION="$TAXOMACHINE_HOME/target/$PLUGIN"
-        mv "$PLUGIN_COMPILE_LOCATION" "$PLUGIN_INSTALL_LOCATION"
-    fi
+# install the plugin if necessary
+PLUGIN="opentree-neo4j-plugins-0.0.1-SNAPSHOT.jar"
+PLUGIN_INSTALL_LOCATION="$TAXO_NEO4J_HOME/plugins/"
+
+# just remove the binary if we want recompile
+if [ $RECOMPILE_PLUGIN ]; then    
+    rm -f $PLUGIN_INSTALL_LOCATION
+fi
+
+# recompile if the plugin is not there    
+if [ ! -f $PLUGIN_INSTALL_LOCATION ]; then
+    cd $TAXOMACHINE_HOME	
+    sh mvn_serverplugins.sh
+    PLUGIN_COMPILE_LOCATION="$TAXOMACHINE_HOME/target/$PLUGIN"
+    mv "$PLUGIN_COMPILE_LOCATION" "$PLUGIN_INSTALL_LOCATION"
 fi
 
 if [ $RESTART_SERVER ]; then
