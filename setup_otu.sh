@@ -44,40 +44,9 @@ OSTYPE=$(uname -msr)
 
 if echo $OSTYPE | grep "Linux" ; then
     LINUX=true
-
-    # get pip and libevent
-#    apt-get install python-dev
-#    apt-get install python-pip
-#    apt-get install libevent-dev
-
 elif echo $OSTYPE | grep "darwin" ; then
     MAC=true
-#    exit
-    # for mac, we need homebrew to get pip to get grequests, soo...
-    # first install homebrew
-    
-#    if [ ! brew ]; then
-#        ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
-#        brew doctor
-#    fi
-
-    # use brew to get python and libevent (required for gevent)
-#    brew install python --framework
-#    brew install libevent
-    
-    ### On MacOS X 10.8, you must be running Xcode 4.4+ and you must have installed
-    ### the command line tools for the following pip install to work properly.
-    ### See: http://stackoverflow.com/questions/11716107/gcc-4-2-error-on-mac-os-x-mountain-lion-unable-to-install-some-packages-with-pi
-
 fi
-
-# install virtualenv
-#pip install virtualenv # don't think this is necessary
-
-# ok, now we can use pip to install grequests
-#pip install grequests
-
-### we do not appear to need grequests!
 
 OTU_NEO4J_HOME="$PREFIX/neo4j-community-1.9.3-otu"
 OTU_NEO4J_DAEMON="$OTU_NEO4J_HOME/bin/neo4j"
@@ -101,7 +70,7 @@ OTU_HOME="$PREFIX/otu"
 # clone the otu repo if necessary
 if [ ! -d $OTU_HOME ]; then
     printf "\ninstalling otu at: $OTU_HOME\n"
-    git clone git@github.com:chinchliff/otu.git
+    git clone git@github.com:FePhyFoFum/otu.git
 fi
 
 if [ $UPDATE ]; then
@@ -151,6 +120,6 @@ fi
 if [ $START_OTU ]; then
 
     # start the webserver (from the views directory -- this is important for redirects)
-    cd views
+    cd "$OTU_HOME/views"
     ./server.py
 fi
