@@ -16,7 +16,7 @@ A simple script that to help setup and test the otu client and associated neo4j 
 
     sh setup_otu.sh -prefix . --start-otu
     
-There may be some issues with using prefixes other than ~/phylo/. If you find them, please post an issue to the tracker.
+Go to http://localhost:8000/ to use OTU.
 
 Other options are:
 
