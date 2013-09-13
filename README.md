@@ -12,9 +12,9 @@ Run scripts with the '--help' flag for information on options.
 setup_otu.sh
 ------------
 
-A simple script that to help setup and test the otu client and associated neo4j database. To install OTU, run
+A simple script to help setup and test the otu client and associated neo4j database. To install OTU, run
 
-    sh setup_otu.sh -prefix . --start-otu
+    sh setup_otu.sh -prefix . --restart-neo4j --start-otu
     
 Go to http://localhost:8000/ to use OTU.
 
