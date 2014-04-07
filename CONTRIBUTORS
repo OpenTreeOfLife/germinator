@@ -1,0 +1,15 @@
+    Here is the list of people who have contributed to this
+    repository.  It is sorted by name and formatted to allow easy
+    grepping and beautification by scripts.
+
+    The fields are: name (N), email (E), web-address (W), description
+    (D), main username (U), alias usernames (A) and geographic
+    location (S).
+
+    The format is that of the Linux kernel CREDITS file.  This file is
+    encoded in UTF-8.
+
+----------
+
+N: Cody Hinchliff
+S: Ann Arbor, MI
