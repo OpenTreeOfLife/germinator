@@ -26,15 +26,25 @@ the tires: (INCOMPLETE, PLEASE EXTEND)
 
 * Try the browser.
     * Go to the home page.  If the cellular orgnisms (or Asterales, etc.) tree is there, good.
+    * Review the server information linked from the site footer. CONFIRM that we're using sensible URLs for all services.
     * Click on a node.  If you get a new tree view, great.
-    * Try out an NCBI link (etc)
-    * Play with more of the tree browser UI
+    * Try out an NCBI link (etc).
+    * Try downloading a subtree.
+    * Play with more of the tree browser UI.
+    * Login and logout (by starting to add a comment).
+
 * Try curator app.
-    * View a study
-    * Edit a study
+    * View a study.
+    * Review the server information linked from the site footer. CONFIRM that we're using sensible URLs for all services, and esp. the appropriate docstore!
+    * Click on a node.  If you get a new tree view, great.
+    * Check for sensible entries in its History tab.
+    * Edit a study (also tests login and GitHub app).
+    * Save (trivial) changes to a study.
+    * Confirm these changes in the main study list (tests save and "live" oti).
+
 * Try the API.
     * Do some of the curl calls (phylesystem, oti, taxo, tree).  Mark has a script.
 
-Here are some things we don't do
+Here are some things we don't do:
 
-* Check for OTT-id-based URL stability across versions
+* Check for OTT-id-based URL stability across versions.
