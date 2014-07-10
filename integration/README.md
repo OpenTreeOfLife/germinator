@@ -32,11 +32,12 @@ the tires: (INCOMPLETE, PLEASE EXTEND)
     * Try downloading a subtree.
     * Play with more of the tree browser UI.
     * Login and logout (by starting to add a comment).
+    * Check the Bibliographic References page (touches a few services).
 
 * Try curator app.
     * View a study.
     * Review the server information linked from the site footer. CONFIRM that we're using sensible URLs for all services, and esp. the appropriate docstore!
-    * Click on a node.  If you get a new tree view, great.
+    * Click on a tree in the Trees list. You should see the tree in a popup, and a modified tree URL in the browser's address bar.
     * Check for sensible entries in its History tab.
     * Edit a study (also tests login and GitHub app).
     * Save (trivial) changes to a study.
