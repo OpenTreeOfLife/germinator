@@ -4,13 +4,13 @@ the taxonomy of the synthetic tree.
 The files with names of the form monophyly*.csv have rows like the
 following:
 
-    Chiroptera,"http://dx.doi.org/10.1007/s002390010094"
+    Tenrecidae,"http://dx.doi.org/10.1006/mpev.2001.1055"
 
 meaning:
 
-"Raise an alert if the taxon _Chiroptera_ (as it is defined by OTT) is
+"Raise an alert if the taxon _Tenrecidae_ (as it is defined by OTT) is
 not monophyletic.  Evidence for this monophyly claim may be found in
-the article with DOI http://dx.doi.org/10.1007/s002390010094 ."
+the article with DOI http://dx.doi.org/10.1006/mpev.2001.1055 ."
 
 Similarly, the files inclusions*.csv have rows like the following:
 
