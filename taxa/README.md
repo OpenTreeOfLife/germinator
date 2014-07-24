@@ -4,13 +4,13 @@ the taxonomy of the synthetic tree.
 The files with names of the form monophyly*.csv have rows like the
 following:
 
-    Archaea,"http://dx.doi.org/10.1242/jeb.015263"
+    Chiroptera,"http://dx.doi.org/10.1007/s002390010094"
 
 meaning:
 
-"Raise an alert if the taxon _Archaea_ (as it is defined by OTT) is
+"Raise an alert if the taxon _Chiroptera_ (as it is defined by OTT) is
 not monophyletic.  Evidence for this monophyly claim may be found in
-the article with DOI http://dx.doi.org/10.1242/jeb.015263 ."
+the article with DOI http://dx.doi.org/10.1007/s002390010094 ."
 
 Similarly, the files inclusions*.csv have rows like the following:
 
