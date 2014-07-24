@@ -44,7 +44,7 @@ the tires: (INCOMPLETE, PLEASE EXTEND)
     * Confirm these changes in the main study list (tests save and "live" oti).
 
 * Try the API.
-    * Do some of the curl calls (phylesystem, oti, taxo, tree).  Mark has a script.
+    * Do some of the curl calls (phylesystem, oti, taxo, tree).  Mark H has a script, a copy of which is here: http://mumble.net/~jar/tmp/ot18-status.html .
 
 Here are some things we don't do:
 
