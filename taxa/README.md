@@ -23,3 +23,12 @@ http://www.ncbi.nlm.nih.gov/taxonomy as it was when accessed on
 Remarks are free text.  Please make them as verbose as necessary in
 order to help persuade a skeptic who doubts the claim at some unknown
 future point in time.
+
+Similarly monophyly.csv
+
+    Archaea,"http://www.ncbi.nlm.nih.gov/taxonomy accessed 2014-07-24"
+
+Where there is any question, taxon names are as defined by OTT.  OTT
+ids can be given in lieu of names, for truly difficult situations.
+(For this to work the meaning of OTT ids has to be anchored. This is
+work in progress.)
