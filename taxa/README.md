@@ -1,4 +1,18 @@
-The file inclusions.csv has rows like the following:
+This directory holds regression tests that can be used to check either
+the taxonomy of the synthetic tree.
+
+The files with names of the form monophyly*.csv have rows like the
+following:
+
+    Archaea,"http://dx.doi.org/10.1242/jeb.015263"
+
+meaning:
+
+"Raise an alert if the taxon _Archaea_ (as it is defined by OTT) is
+not monophyletic.  Evidence for this monophyly claim may be found in
+the article with DOI http://dx.doi.org/10.1242/jeb.015263 ."
+
+Similarly, the files inclusions*.csv have rows like the following:
 
     Taxon1,Taxon2,"remarks"
 
@@ -20,15 +34,15 @@ Or:
 http://www.ncbi.nlm.nih.gov/taxonomy as it was when accessed on
 2014-07-24."
 
+"Inclusion" can be indirect, i.e. it doesn't refer to taxon
+parent/child relationships but rather logical inclusion, as if the
+taxa were sets of individual organisms or samples.
+
 Remarks are free text.  Please make them as verbose as necessary in
 order to help persuade a skeptic who doubts the claim at some unknown
 future point in time.
 
-Similarly monophyly.csv
-
-    Archaea,"http://www.ncbi.nlm.nih.gov/taxonomy accessed 2014-07-24"
-
 Where there is any question, taxon names are as defined by OTT.  OTT
-ids can be given in lieu of names, for truly difficult situations.
-(For this to work the meaning of OTT ids has to be anchored. This is
-work in progress.)
+ids can be given in lieu of names, for truly difficult homonym
+situations.  (For this to really work well the meaning of OTT ids has
+to be anchored and stable. This is work in progress.)
