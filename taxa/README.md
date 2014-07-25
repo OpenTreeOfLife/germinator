@@ -8,8 +8,8 @@ following:
 
 meaning:
 
-"Raise an alert if the taxon _Tenrecidae_ (as it is defined by OTT) is
-not monophyletic.  Evidence for this monophyly claim may be found in
+"Raise an alert if the taxon _Tenrecidae_ (as it is defined by OTT) does not show up as
+monophyletic.  Evidence for this monophyly claim may be found in
 the article with DOI http://dx.doi.org/10.1006/mpev.2001.1055 ."
 
 Similarly, the files inclusions*.csv have rows like the following:
@@ -22,7 +22,7 @@ E.g.
 
 meaning:
 
-"Raise an alert if the taxon _Odontomachus rixosus_ is not included in
+"Raise an alert if the taxon _Odontomachus rixosus_ does not show up as included in
 the taxon Hymenoptera.  Evidence for this inclusion claim may be found
 in the article with DOI http://dx.doi.org/10.1242/jeb.015263 ."
 
