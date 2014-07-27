@@ -35,7 +35,7 @@ the tires: (INCOMPLETE, PLEASE EXTEND)
     * Check the Bibliographic References page (touches a few services).
 
 * Try curator app.
-    * View a study.
+    * View a few studies: one in synthesis, one not in synthesis, one without a DOI.
     * Review the server information linked from the site footer. CONFIRM that we're using sensible URLs for all services, and esp. the appropriate docstore!
     * Click on a tree in the Trees list. You should see the tree in a popup, and a modified tree URL in the browser's address bar.
     * Check for sensible entries in its History tab.
