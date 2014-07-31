@@ -41,6 +41,11 @@ the tires: (INCOMPLETE, PLEASE EXTEND)
     * Check for sensible entries in its History tab.
     * Edit a study (also tests login and GitHub app).
     * Save (trivial) changes to a study.
+    * Save more substantive changes to a (throwaway) study...
+         * Map one or more OTUs (tests validation and taxon assignment)
+         * Set ingroup clade
+         * Update DOI or reference text via CrossRef.org lookup 
+         * Test for tree MRCA
     * Confirm these changes in the main study list (tests save and "live" oti).
 
 * Try the API.
