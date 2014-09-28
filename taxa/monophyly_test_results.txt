@@ -1,0 +1,947 @@
+
+Checking status of: Glaucophyta...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "class",
+  "in_graph" : true,
+  "name" : "Glaucophyta",
+  "num_tips" : 25,
+  "ott_id" : 664970,
+  "num_synth_children" : 25,
+  "tax_source" : "silva:X70803/#3,ncbi:38254,gbif:37,irmng:164",
+  "tree_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "node_id" : 3812928
+}
+Checking status of: Bacteria...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2542",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "5590"
+  }, {
+    "study_id" : "pg_2753",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6360"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  }, {
+    "study_id" : "pg_2757",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6369"
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "domain",
+  "in_graph" : true,
+  "name" : "Bacteria",
+  "num_tips" : 260323,
+  "ott_id" : 844192,
+  "num_synth_children" : 260323,
+  "tax_source" : "silva:A16379/#1,ncbi:2,gbif:3,irmng:13",
+  "tree_sources" : [ {
+    "study_id" : "pg_2542",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "5590"
+  }, {
+    "study_id" : "pg_2753",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6360"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  }, {
+    "study_id" : "pg_2757",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6369"
+  } ],
+  "node_id" : 134
+}
+Checking status of: Chordata...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_2710",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6291"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "phylum",
+  "in_graph" : true,
+  "name" : "Chordata",
+  "num_tips" : 88434,
+  "ott_id" : 125642,
+  "num_synth_children" : 88434,
+  "tax_source" : "ncbi:7711,gbif:44,irmng:148",
+  "tree_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_2710",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6291"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "node_id" : 2856752
+}
+Checking status of: Arachnida...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2710",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6291"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "class",
+  "in_graph" : true,
+  "name" : "Arachnida",
+  "num_tips" : 108685,
+  "ott_id" : 511967,
+  "num_synth_children" : 108685,
+  "tax_source" : "ncbi:6854,gbif:367,irmng:1136",
+  "tree_sources" : [ {
+    "study_id" : "pg_2710",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6291"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "node_id" : 870686
+}
+Checking status of: Coleoptera...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_1338",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "2666"
+  }, {
+    "study_id" : "pg_1337",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6167"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  }, {
+    "study_id" : "pg_2629",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6162"
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "order",
+  "in_graph" : true,
+  "name" : "Coleoptera",
+  "num_tips" : 199157,
+  "ott_id" : 865243,
+  "num_synth_children" : 199157,
+  "tax_source" : "ncbi:7041,gbif:1470,irmng:10279",
+  "tree_sources" : [ {
+    "study_id" : "pg_1338",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "2666"
+  }, {
+    "study_id" : "pg_1337",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6167"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  }, {
+    "study_id" : "pg_2629",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6162"
+  } ],
+  "node_id" : 1148323
+}
+Checking status of: Archaea...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2542",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "5590"
+  }, {
+    "study_id" : "pg_2731",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6428"
+  }, {
+    "study_id" : "pg_2715",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6308"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  }, {
+    "study_id" : "ot_106",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "1"
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "domain",
+  "in_graph" : true,
+  "name" : "Archaea",
+  "num_tips" : 3716,
+  "ott_id" : 996421,
+  "num_synth_children" : 3716,
+  "tax_source" : "silva:D37982/#1,ncbi:2157,gbif:2,irmng:12",
+  "tree_sources" : [ {
+    "study_id" : "pg_2542",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "5590"
+  }, {
+    "study_id" : "pg_2731",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6428"
+  }, {
+    "study_id" : "pg_2715",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6308"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  }, {
+    "study_id" : "ot_106",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "1"
+  } ],
+  "node_id" : 374744
+}
+Checking status of: Porifera...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_1343",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6255"
+  }, {
+    "study_id" : "pg_2710",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6291"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  }, {
+    "study_id" : "pg_2544",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6482"
+  }, {
+    "study_id" : "pg_2709",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6290"
+  }, {
+    "study_id" : "pg_2696",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6249"
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "phylum",
+  "in_graph" : true,
+  "name" : "Porifera",
+  "num_tips" : 10449,
+  "ott_id" : 67819,
+  "num_synth_children" : 10449,
+  "tax_source" : "ncbi:6040,gbif:105,irmng:190",
+  "tree_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_1343",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6255"
+  }, {
+    "study_id" : "pg_2710",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6291"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  }, {
+    "study_id" : "pg_2696",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6249"
+  }, {
+    "study_id" : "pg_2709",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6290"
+  } ],
+  "node_id" : 846823
+}
+Checking status of: Fungi...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "kingdom",
+  "in_graph" : true,
+  "name" : "Fungi",
+  "num_tips" : 296667,
+  "ott_id" : 352914,
+  "num_synth_children" : 296667,
+  "tax_source" : "silva:D11377/#4,h2007:1,if:90156,ncbi:4751,gbif:5,irmng:14",
+  "tree_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "node_id" : 384893
+}
+Checking status of: Chloroplastida...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_2046",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "5928"
+  }, {
+    "study_id" : "pg_2820",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6566"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "kingdom",
+  "in_graph" : true,
+  "name" : "Chloroplastida",
+  "num_tips" : 304959,
+  "ott_id" : 361838,
+  "num_synth_children" : 304959,
+  "tax_source" : "silva:D13324/#3,study713:361838,ncbi:33090,gbif:6,irmng:15",
+  "tree_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_2820",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6566"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "node_id" : 3171054
+}
+Checking status of: Annelida...
+{
+  "synth_sources" : [ {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "phylum",
+  "in_graph" : true,
+  "name" : "Annelida",
+  "num_tips" : 18574,
+  "ott_id" : 941620,
+  "num_synth_children" : 18574,
+  "tax_source" : "ncbi:6340,gbif:42,irmng:234",
+  "tree_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_2710",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6291"
+  }, {
+    "study_id" : "pg_1366",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6166"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "node_id" : 2768980
+}
+Checking status of: Eukaryota...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "domain",
+  "in_graph" : true,
+  "name" : "Eukaryota",
+  "num_tips" : 2075421,
+  "ott_id" : 304358,
+  "num_synth_children" : 2075421,
+  "tax_source" : "silva:D11377/#1,ncbi:2759",
+  "tree_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "node_id" : 381851
+}
+Checking status of: Lepidoptera...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_1338",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "2666"
+  }, {
+    "study_id" : "pg_1337",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6167"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  }, {
+    "study_id" : "pg_2629",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6162"
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "order",
+  "in_graph" : true,
+  "name" : "Lepidoptera",
+  "num_tips" : 278594,
+  "ott_id" : 965954,
+  "num_synth_children" : 278594,
+  "tax_source" : "ncbi:7088,gbif:797,irmng:12144",
+  "tree_sources" : [ {
+    "study_id" : "pg_1338",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "2666"
+  }, {
+    "study_id" : "pg_1337",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6167"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  }, {
+    "study_id" : "pg_2629",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6162"
+  } ],
+  "node_id" : 1953744
+}
+Checking status of: Rhodophyta...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "phylum",
+  "in_graph" : true,
+  "name" : "Rhodophyceae",
+  "num_tips" : 12214,
+  "ott_id" : 878953,
+  "num_synth_children" : 12214,
+  "tax_source" : "silva:L19345/#3,ncbi:2763,gbif:106,irmng:250",
+  "tree_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "node_id" : 3812979
+}
+Checking status of: Malacostraca...
+{
+  "synth_sources" : [ {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "class",
+  "in_graph" : true,
+  "name" : "Malacostraca",
+  "num_tips" : 46490,
+  "ott_id" : 212701,
+  "num_synth_children" : 46490,
+  "tax_source" : "ncbi:6681,gbif:229,irmng:1190",
+  "tree_sources" : [ {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "node_id" : 1066634
+}
+Checking status of: Arthropoda...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_2710",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6291"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "phylum",
+  "in_graph" : true,
+  "name" : "Arthropoda",
+  "num_tips" : 1143801,
+  "ott_id" : 632179,
+  "num_synth_children" : 1143801,
+  "tax_source" : "ncbi:6656,gbif:54,irmng:235",
+  "tree_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_2710",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6291"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "node_id" : 868385
+}
+Checking status of: Ctenophora...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_2710",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6291"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "phylum",
+  "in_graph" : true,
+  "name" : "Ctenophora",
+  "num_tips" : 222,
+  "ott_id" : 641212,
+  "num_synth_children" : 222,
+  "tax_source" : "ncbi:10197,gbif:51,irmng:109",
+  "tree_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_2710",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6291"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "node_id" : 3135167
+}
+Checking status of: Cnidaria...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_2710",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6291"
+  }, {
+    "study_id" : "pg_2708",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6289"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "phylum",
+  "in_graph" : true,
+  "name" : "Cnidaria",
+  "num_tips" : 18109,
+  "ott_id" : 641033,
+  "num_synth_children" : 18109,
+  "tax_source" : "ncbi:6073,gbif:43,irmng:151",
+  "tree_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_2710",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6291"
+  }, {
+    "study_id" : "pg_2708",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6289"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "node_id" : 3106785
+}
+Checking status of: Mollusca...
+{
+  "synth_sources" : [ {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "phylum",
+  "in_graph" : true,
+  "name" : "Mollusca",
+  "num_tips" : 80173,
+  "ott_id" : 802117,
+  "num_synth_children" : 80173,
+  "tax_source" : "ncbi:6447,gbif:52,irmng:175",
+  "tree_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_421",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "523"
+  }, {
+    "study_id" : "pg_2710",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6291"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "node_id" : 2614393
+}
+Checking status of: Hymenoptera...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_1338",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "2666"
+  }, {
+    "study_id" : "pg_1337",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6167"
+  }, {
+    "study_id" : "pg_1563",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6170"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  }, {
+    "study_id" : "pg_2629",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6162"
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "order",
+  "in_graph" : true,
+  "name" : "Hymenoptera",
+  "num_tips" : 127711,
+  "ott_id" : 753726,
+  "num_synth_children" : 127711,
+  "tax_source" : "ncbi:7399,gbif:1457,irmng:10830",
+  "tree_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_1338",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "2666"
+  }, {
+    "study_id" : "pg_1337",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6167"
+  }, {
+    "study_id" : "pg_1563",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6170"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  }, {
+    "study_id" : "pg_2629",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6162"
+  } ],
+  "node_id" : 1743595
+}
+Checking status of: Metazoa...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_2710",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6291"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "kingdom",
+  "in_graph" : true,
+  "name" : "Metazoa",
+  "num_tips" : 1440177,
+  "ott_id" : 691846,
+  "num_synth_children" : 1440177,
+  "tax_source" : "silva:D14357/#4,ncbi:33208,gbif:1,irmng:11",
+  "tree_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_2710",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6291"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "node_id" : 846818
+}
+Checking status of: Cunoniaceae...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_283",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "184"
+  }, {
+    "study_id" : "pg_2712",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6296"
+  }, {
+    "study_id" : "pg_2539",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6294"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "family",
+  "in_graph" : true,
+  "name" : "Cunoniaceae",
+  "num_tips" : 130,
+  "ott_id" : 782239,
+  "num_synth_children" : 130,
+  "tax_source" : "ncbi:3776,gbif:2405,irmng:114612",
+  "tree_sources" : [ {
+    "study_id" : "pg_283",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "184"
+  }, {
+    "study_id" : "pg_2712",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6296"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  }, {
+    "study_id" : "pg_2539",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6294"
+  } ],
+  "node_id" : 3389943
+}
+Checking status of: Haptophyta...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "phylum",
+  "in_graph" : true,
+  "name" : "Haptophyta",
+  "num_tips" : 1935,
+  "ott_id" : 151014,
+  "num_synth_children" : 1935,
+  "tax_source" : "silva:L34669/#2,ncbi:2830,gbif:70,irmng:243",
+  "tree_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  } ],
+  "node_id" : 381858
+}
+Checking status of: Diptera...
+{
+  "synth_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_2594",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6014"
+  }, {
+    "study_id" : "pg_437",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6242"
+  }, {
+    "study_id" : "pg_1338",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "2666"
+  }, {
+    "study_id" : "pg_1337",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6167"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  }, {
+    "study_id" : "pg_2629",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6162"
+  } ],
+  "in_synth_tree" : true,
+  "rank" : "order",
+  "in_graph" : true,
+  "name" : "Diptera",
+  "num_tips" : 172485,
+  "ott_id" : 661378,
+  "num_synth_children" : 172485,
+  "tax_source" : "ncbi:7147,gbif:811,irmng:10063",
+  "tree_sources" : [ {
+    "study_id" : "pg_2822",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6569"
+  }, {
+    "study_id" : "pg_2594",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6014"
+  }, {
+    "study_id" : "pg_437",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6242"
+  }, {
+    "study_id" : "pg_1338",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "2666"
+  }, {
+    "study_id" : "pg_1337",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6167"
+  }, {
+    "study_id" : "taxonomy",
+    "git_sha" : "",
+    "tree_id" : ""
+  }, {
+    "study_id" : "pg_2629",
+    "git_sha" : "a2c48df995ddc9fd208986c3d4225112550c8452",
+    "tree_id" : "6162"
+  } ],
+  "node_id" : 1486975
+}
