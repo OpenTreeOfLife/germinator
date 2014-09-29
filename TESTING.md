@@ -1,14 +1,9 @@
 Open Tree integration tests
 =====
 
-(STUB, PLEASE ADD ITEMS)
-
-We badly need some tests.
-
-Mainly integration tests - is the site good enough to go to production?
-
-But unit tests would be nice too.  They would live in particular repos
-and might be invoked from here.
+This repository holds integration tests, intended to answer the
+question, is a new version of the web site good enough to go to
+production?
 
 Tests can be automated or manual.  Automated means you run a program
 and the program does all the tests.  Manual means there are
@@ -16,18 +11,22 @@ human-readable instructions and a person runs them.  There should be a
 low barrier to entry for adding tests, so if automation is really
 hard, tests should be just listed for a person to do.
 
+Unit tests live in particular applicable repositories.  See
+TESTING.md in each repository for information about
+repository-specific testing.
+
 Tests are of two kinds: regression tests, and progress tests.
 
 * Regression tests are tests that have passed in the past
 * Progress tests are tests that we hope will pass one day
 
-There are no formal tests now.  Here are things we tend to do to kick
-the tires: (INCOMPLETE, PLEASE EXTEND)
+Here are manual tests we tend to do to kick the tires:
 
-* Try the browser.
+* Try the tree browser.
     * Go to the home page.  If the cellular orgnisms (or Asterales, etc.) tree is there, good.
     * Review the server information linked from the site footer. CONFIRM that we're using sensible URLs for all services.
     * Click on a node.  If you get a new tree view, great.
+    * Try making a comment.
     * Try out an NCBI link (etc).
     * Try downloading a subtree.
     * Play with more of the tree browser UI.
@@ -49,7 +48,13 @@ the tires: (INCOMPLETE, PLEASE EXTEND)
     * Confirm these changes in the main study list (tests save and "live" oti).
 
 * Try the API.
-    * Do some of the curl calls (phylesystem, oti, taxo, tree).  Mark H has a script, a copy of which is here: http://mumble.net/~jar/tmp/ot18-status.html .
+    * Documentation [here](https://github.com/OpenTreeOfLife/opentree/wiki/Open-Tree-of-Life-APIs)
+    * Do some of the curl calls
+    * Mark H has a [script](http://phylo.bio.ku.edu/status/status.html).  A copy modified to point to devapi is [here](http://mumble.net/~jar/tmp/ot20-status.html).
+
+* Taxon and relationship testing
+    * Work in progress for smasher, taxomachine, and treemachine to check existence of taxa and relationships between them
+
 
 Here are some things we don't do:
 
