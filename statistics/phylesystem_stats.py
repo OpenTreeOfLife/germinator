@@ -147,12 +147,13 @@ def _is_for_synthesis(study_annotations):
     return True
 
 DEFAULT_OUTPUT = 'phylesystem.json'
+DEFAULT_SERVER = 'http://devapi.opentreeoflife.org/'
 
 
 def getargs():
     """reads command-line arguments"""
     filename = DEFAULT_OUTPUT
-    server = 'http://api.opentreeoflife.org/'
+    server = DEFAULT_SERVER
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--server',
                         help="specifies server to query as http URI")
@@ -174,11 +175,14 @@ def process():
     '''
 
     server, filename = getargs()
-
+    if not server.startswith('http://'):
+        server = 'http://' + server
+    if not server.endswith('/'):
+        server = server + '/'
     api_url = server + 'v2/'
 
     # point where needed, but see get_remote_otus
-    study_api_url = 'http://api.opentreeoflife.org/phylesystem/v1/study/'
+    study_api_url = server + 'v2/study/'
 
     old_data = load_old_results_json(filename)
 

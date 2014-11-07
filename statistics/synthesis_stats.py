@@ -108,13 +108,13 @@ def get_remote_otus(json_data):
     return otus
 
 DEFAULT_OUTPUT = 'synthesis.json'
-
+DEFAULT_SERVER = 'http://api.opentreeoflife.org/'
 
 def getargs():
     """reads command-line arguments"""
 
     filename = DEFAULT_OUTPUT
-    server = 'http://api.opentreeoflife.org/'
+    server = DEFAULT_SERVER
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--server',
                         help="specifies server to query as http URI")
@@ -136,6 +136,10 @@ def process():
     '''
 
     server, filename = getargs()
+    if not server.startswith('http://'):
+        server = 'http://' + server
+    if not server.endswith('/'):
+        server = server + '/'
     api_url = server + 'v2/'
     study_api_url = server + 'v2/study/'
     old_data = load_old_results_json(filename)
