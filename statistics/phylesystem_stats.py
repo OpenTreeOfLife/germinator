@@ -110,9 +110,13 @@ def load_study_json(study, study_api_url):
 def get_remote_otus(json_data):
     '''parses the nexson for a study to extract the OTU ids'''
     otus = []
-    for otu in json_data['data']['nexml']['otus']['otu']:
-        otus.append(otu['@id'])
-    return otus
+    if 'data' in json_data:
+        for otu in json_data['data']['nexml']['otus']['otu']:
+            otus.append(otu['@id'])
+        return otus
+    else:
+        # print json_data
+        return []
 
 
 def _is_nominated(json_data):
@@ -190,19 +194,22 @@ def process():
 
     # Get list of all studies, and process for aotus '''
 
-    study_list = get_study_list(api_url)  # all studies
+    raw_study_list = get_study_list(api_url)  # all studies
+    study_list = []
     synth_nominated_list = []
     all_unique_otus = []
     all_otus = []
     all_nominated_otus = []
-    for study_id in study_list:
+    for study_id in raw_study_list:
         json_study = load_study_json(study_id, study_api_url)
         otus = get_remote_otus(json_study)
-        if _is_nominated(json_study):
-            synth_nominated_list.append(study_id)
-        all_otus.extend(otus)
-        if study_id in synth_nominated_list:
-            all_nominated_otus.extend(otus)
+        if len(otus)>0:
+            study_list.append(study_id)
+            if _is_nominated(json_study):
+                synth_nominated_list.append(study_id)
+                all_otus.extend(otus)
+                if study_id in synth_nominated_list:
+                    all_nominated_otus.extend(otus)
 
     all_unique_otus = set(all_otus)  # keep only unique values in all otus
     total_otus = len(all_otus)
@@ -218,6 +225,7 @@ def process():
     results['nominated_study_count'] = len(synth_nominated_list)
     results['nominated_study_OTU_count'] = len(all_nominated_otus)
     results['nominated_study_unique_OTU_count'] = len(unique_nominated_otus)
+    results['reported_study_count'] = len(raw_study_list)
     results['run_time'] = stop_time - start_time
 
     save_results_to_json(filename, results, old_data)

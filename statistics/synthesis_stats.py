@@ -103,12 +103,16 @@ def load_study_json(study, study_api_url):
 def get_remote_otus(json_data):
     '''parses the nexson for a study to extract the OTU ids'''
     otus = []
-    for otu in json_data['data']['nexml']['otus']['otu']:
-        otus.append(otu['@id'])
-    return otus
+    if 'data' in json_data:
+        for otu in json_data['data']['nexml']['otus']['otu']:
+            otus.append(otu['@id'])
+        return otus
+    else:
+        return []
 
 DEFAULT_OUTPUT = 'synthesis.json'
 DEFAULT_SERVER = 'http://api.opentreeoflife.org/'
+
 
 def getargs():
     """reads command-line arguments"""
@@ -144,13 +148,17 @@ def process():
     study_api_url = server + 'v2/study/'
     old_data = load_old_results_json(filename)
     start_time = timeit.default_timer()  # used to calc run time
-    synth_study_list = get_synth_study_list(api_url)  # studies in synthesis
+    # reported studies
+    raw_study_list = get_synth_study_list(api_url)  
 
     all_synth_otus = []
     unique_synth_otus = []
-    for study_id in synth_study_list:
+    synth_study_list = []
+    for study_id in raw_study_list:
         json_study = load_study_json(study_id, study_api_url)
         otus = get_remote_otus(json_study)
+        if len(otus) > 0:
+            synth_study_list.append(study_id)
         for otu_id in otus:
             all_synth_otus.append(otu_id)
 
@@ -163,6 +171,7 @@ def process():
     results['unique_OTU_count'] = len(unique_synth_otus)
     results['total_OTU_count'] = len(all_synth_otus)
     results['study_count'] = len(synth_study_list)
+    results['reported_study_count'] = len(raw_study_list)
     results['run_time'] = stop_time - start_time
 
     save_results_to_json(filename, results, old_data)
