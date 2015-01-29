@@ -1,9 +1,15 @@
 #!/bin/sh
 
-. /home/opentree/venv/bin/activate
+# parameterized script to create/update a synthesis stats file and push to a web2py server
+# parameters $1 = local folder to save stats history file
+#            $2 = api url (e.g., devapi.opentreeoflife.org)
+#            $3 = target host machine  (e.g., devtree.opentreeoflife.org)
 
-cd /home/opentree/statistics
 
-python synthesis_stats.py -f synthesis.json -s devapi.opentreeoflife.org
+. $HOME/venv/bin/activate
 
-scp synthesis.json devtree.opentreeoflife.org:/home/opentree/repo/opentree/webapp/static/stats/synthesis.json
+cd $HOME/statistics
+
+python synthesis_stats.py -f $1/synthesis.json -s $2
+
+rsync -e "ssh -i $HOME/.ssh/id_statistics_push" -ptv $HOME/statistics/devstats/synthesis.json opentree@$3:/statistics

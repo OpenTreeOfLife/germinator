@@ -1,9 +1,16 @@
 #!/bin/sh
 
-. /home/opentree/venv/bin/activate
+# parameterized script to create/update a phylesystem stats file and push to a web2py server
+# parameters $1 = local folder to save stats history file
+#            $2 = api url (e.g., devapi.opentreeoflife.org)
+#            $3 = target host machine  (e.g., devtree.opentreeoflife.org)
 
-cd /home/opentree/statistics
 
-python phylesystem_stats.py -f phylesystem.json -s devapi.opentreeoflife.org
+. $HOME/venv/bin/activate
 
-scp phylesystem.json devtree.opentreeoflife.org:/home/opentree/repo/opentree/webapp/static/stats/phylesystem.json
+cd $HOME/statistics
+
+python phylesystem_stats.py -f $1/phylesystem.json -s $2
+
+rsync -e "ssh -i $HOME/.ssh/id_statistics_push" -ptv $HOME/statistics/devstats/phylesystem.json opentree@$3:/statistics
+
