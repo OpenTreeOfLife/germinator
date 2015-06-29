@@ -16,7 +16,7 @@ curl_prefix = "curl -X POST http://devapi.opentreeoflife.org/v2/graph/node_info 
 
 ## monophyly tests ##
 if (os.path.isfile("monophyly.csv") == False):
-    print "Cannot find file 'monophyly3.csv'"
+    print "Cannot find file 'monophyly.csv'"
     sys.exit(0)
     
 infile = open("monophyly.csv","r")
