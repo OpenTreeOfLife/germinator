@@ -112,7 +112,7 @@ def get_remote_otus(json_data):
     otus = []
     if 'data' in json_data:
         for otu in json_data['data']['nexml']['otus']['otu']:
-            otus.append(otu['@id'])
+            otus.append(otu)
         return otus
     else:
         # print json_data
@@ -200,32 +200,57 @@ def process():
     all_unique_otus = []
     all_otus = []
     all_nominated_otus = []
+    ott_id_set = set()
+    nominated_ott_id_set = set()
+    unmapped_OTU_count = 0
+    nominated_study_unmapped_OTU_count = 0
     for study_id in raw_study_list:
         json_study = load_study_json(study_id, study_api_url)
         otus = get_remote_otus(json_study)
-        if len(otus)>0:
+        if len(otus) > 0:
             study_list.append(study_id)
             if _is_nominated(json_study):
                 synth_nominated_list.append(study_id)
-                all_otus.extend(otus)
-                if study_id in synth_nominated_list:
-                    all_nominated_otus.extend(otus)
-
-    all_unique_otus = set(all_otus)  # keep only unique values in all otus
-    total_otus = len(all_otus)
+        for otu in otus:
+            #print "Counts: ({}, {})".format(len(ott_id_set),unmapped_OTU_count)
+            otu_id = otu['@id']
+            all_otus.append(otu_id)
+            ott_id = None
+            otu_meta = otu['meta']
+            intended_for_synth = (study_id in synth_nominated_list)
+            ott_id = None
+            for item in otu_meta:
+                if "@property" in item:
+                    if item['@property'] == 'ot:ottId':
+                        ott_id = item['$']
+                        break;
+            if ott_id:
+                ott_id_set.add(ott_id)
+                if intended_for_synth:
+                    nominated_ott_id_set.add(ott_id)
+            else:
+                unmapped_OTU_count += 1
+                if intended_for_synth:
+                    nominated_study_unmapped_OTU_count += 1
+            if intended_for_synth:
+                all_nominated_otus.append(otu_id)
+    unique_OTU_count = len(set(all_otus))  # keep only unique values in all otus
+    OTU_count = len(all_otus)
     unique_nominated_otus = set(all_nominated_otus)
 
     # process it all, and save it to to a json file
     stop_time = timeit.default_timer()
 
     results = {}
-    results['unique_OTU_count'] = len(all_unique_otus)
-    results['OTU_count'] = total_otus
+    results['reported_study_count'] = len(raw_study_list)
     results['study_count'] = len(study_list)
+    results['OTU_count'] = OTU_count
+    results['unmapped_OTU_count'] = unmapped_OTU_count
+    results['unique_OTU_count'] = unique_OTU_count
     results['nominated_study_count'] = len(synth_nominated_list)
     results['nominated_study_OTU_count'] = len(all_nominated_otus)
     results['nominated_study_unique_OTU_count'] = len(unique_nominated_otus)
-    results['reported_study_count'] = len(raw_study_list)
+    results['nominated_study_unmapped_OTU_count'] = nominated_study_unmapped_OTU_count
     results['run_time'] = stop_time - start_time
 
     save_results_to_json(filename, results, old_data)
