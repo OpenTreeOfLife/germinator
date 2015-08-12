@@ -56,7 +56,7 @@ def load_old_results_json(in_name):
     else:
         return {}
 
-DATE_FORMAT = '%Y-%m-%dT%HZ'
+DATE_FORMAT = '%Y-%m-%d'
 
 
 def save_results_to_json(out_name, new_result, results):
