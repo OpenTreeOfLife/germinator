@@ -3,7 +3,6 @@
 import requests
 import json
 import time
-import timeit
 import os.path
 import argparse
 
@@ -56,41 +55,47 @@ def load_old_results_json(in_name):
         return {}
 
 
-DATE_FORMAT = '%Y-%m-%dT%HZ'
+DATE_FORMAT = '%Y-%m-%d'
 
 
 def save_results_to_json(out_name, new_result, results):
     """adds new_result to the results, keyed by the current time as parsed
-    by DATE_FORMAT and saves the results to the file specified by out_name"""
+    by DATE_FORMAT and saves the results to the file specified by out_name.
+    Code now writes json object to tempfile first, then copies"""
+    import tempfile
+    import os
     datestamp = time.strftime(DATE_FORMAT)
     results[datestamp] = new_result
-    with open(out_name, 'w') as jsonfile:
+    tempf = tempfile.NamedTemporaryFile(delete=False, dir='.')
+    with tempf as jsonfile:
         json.dump(results, jsonfile)
+    os.rename(tempf.name, out_name)
 
 
-def parse_synth_study_ids(synthesis_list):
+def parse_synth_query_results(synthesis_list):
     """parses the return from getSynthesisSourceList, returns
     list of study ids """
     synth_study_list = []
     for study in synthesis_list['study_list']:
         study_id = study['study_id']
+        tree_id = study['tree_id']
         if 'taxonomy' not in study_id:  # exclude 'taxonomy'
             prefix = study_id.split("_")[0]
             if prefix not in ["ot", "pg"]:
                 study_id = "pg_" + str(study_id)
-            synth_study_list.append(study_id)
+            synth_study_list.append((study_id, tree_id))
     return synth_study_list
 
 
-def get_synth_study_list(api_url):
-    '''queries for list of synthesis studies'''
+def get_synth_tree_list(api_url):
+    '''queries for list of synthesis trees'''
     url = "%s/tree_of_life/about" % api_url
     synth_response = requests.post(url,
                                    headers={'content-type':
                                             'application/json'},
                                    params={'study_list': 'true'})
     synthesis_list = json.loads(synth_response.text, object_hook=_decode_dict)
-    return parse_synth_study_ids(synthesis_list)
+    return parse_synth_query_results(synthesis_list)
 
 
 def load_study_json(study, study_api_url):
@@ -110,8 +115,29 @@ def get_remote_otus(json_data):
     else:
         return []
 
+
+def get_ott_version(study_api_url):
+    """returns (as a string) the version id for ott (taxonomy)
+    that the current synthetic tree was built with"""
+    url = '%sgraph/about/' % study_api_url
+    response = requests.post(url,
+                             headers={'content-type': 'application/json'})
+    graph_info = json.loads(response.text, object_hook=_decode_dict)
+    return str(graph_info['graph_taxonomy_version'])
+
+
+def get_tip_count(study_api_url):
+    """returns the number of tips in the tree"""
+    url = '%stree_of_life/about/' % study_api_url
+    response = requests.post(url,
+                             headers={'content-type': 'application/json'})
+    tree_info = json.loads(response.text, object_hook=_decode_dict)
+    return str(tree_info['num_tips'])
+
 DEFAULT_OUTPUT = 'synthesis.json'
-DEFAULT_SERVER = 'http://api.opentreeoflife.org/'
+DEFAULT_SERVER = 'http://api.opentreeoflife.org/v2/'
+
+USER_PROMPT = "Enter a version string for the current synthesis build: "
 
 
 def getargs():
@@ -119,18 +145,26 @@ def getargs():
 
     filename = DEFAULT_OUTPUT
     server = DEFAULT_SERVER
+    synthesis_version = ''
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--server',
                         help="specifies server to query as http URI")
     parser.add_argument('-f',
                         '--filename',
                         help="file with json object to receive results object")
+    parser.add_argument('-v',
+                        '--synthesis_version',
+                        help="tag for the current synthesis version")
     args = parser.parse_args()
     if args.filename:
         filename = args.filename
     if args.server:
         server = args.server
-    return server, filename
+    if args.synthesis_version:
+        synthesis_version = args.synthesis_version
+    else:
+        synthesis_version = raw_input(USER_PROMPT)
+    return server, filename, synthesis_version
 
 
 def process():
@@ -139,7 +173,7 @@ def process():
     Though the functions may require minor tweaks if there are changes
     '''
 
-    server, filename = getargs()
+    server, filename, syn_version = getargs()
     if not server.startswith('http://'):
         server = 'http://' + server
     if not server.endswith('/'):
@@ -147,14 +181,14 @@ def process():
     api_url = server + 'v2/'
     study_api_url = server + 'v2/study/'
     old_data = load_old_results_json(filename)
-    start_time = timeit.default_timer()  # used to calc run time
+
     # reported studies
-    raw_study_list = get_synth_study_list(api_url)  
+    raw_tree_list = get_synth_tree_list(api_url)
 
     all_synth_otus = []
     unique_synth_otus = []
     synth_study_list = []
-    for study_id in raw_study_list:
+    for (study_id, tree_id) in raw_tree_list:
         json_study = load_study_json(study_id, study_api_url)
         otus = get_remote_otus(json_study)
         if len(otus) > 0:
@@ -164,16 +198,12 @@ def process():
 
     unique_synth_otus = set(all_synth_otus)  # keep unique values in synth otus
 
-    # process it all, and save it to to a json file
-    stop_time = timeit.default_timer()
-
     results = {}
-    results['unique_OTU_count'] = len(unique_synth_otus)
     results['total_OTU_count'] = len(all_synth_otus)
-    results['study_count'] = len(synth_study_list)
-    results['reported_study_count'] = len(raw_study_list)
-    results['run_time'] = stop_time - start_time
-
+    results['tree_count'] = len(raw_tree_list)
+    results['OTT_version'] = get_ott_version(api_url)
+    results['tip_count'] = int(get_tip_count(api_url))
+    results['version'] = syn_version
     save_results_to_json(filename, results, old_data)
 
 
