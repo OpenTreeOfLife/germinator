@@ -56,7 +56,22 @@ def load_old_results_json(in_name):
     else:
         return {}
 
-DATE_FORMAT = '%Y-%m-%dT%HZ'
+DATE_FORMAT = '%Y-%m-%d'
+
+
+def save_results_to_json(out_name, new_result, results):
+    """adds new_result to the results, keyed by the current time as parsed
+    by DATE_FORMAT and saves the results to the file specified by out_name.
+    Code now writes json object to tempfile first, then copies"""
+    import tempfile
+    import os
+    datestamp = time.strftime(DATE_FORMAT)
+    results[datestamp] = new_result
+
+    tempf = tempfile.NamedTemporaryFile(delete=False, dir='.')
+    with tempf as jsonfile:
+        json.dump(results, jsonfile)
+    os.rename(tempf.name, out_name)
 
 
 def save_results_to_json(out_name, new_result, results):
@@ -203,7 +218,7 @@ def process():
     for study_id in raw_study_list:
         json_study = load_study_json(study_id, study_api_url)
         otus = get_remote_otus(json_study)
-        if len(otus)>0:
+        if len(otus) > 0:
             study_list.append(study_id)
             if _is_nominated(json_study):
                 synth_nominated_list.append(study_id)
