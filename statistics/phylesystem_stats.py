@@ -56,16 +56,22 @@ def load_old_results_json(in_name):
     else:
         return {}
 
-DATE_FORMAT = '%Y-%m-%dT%HZ'
+DATE_FORMAT = '%Y-%m-%d'
 
 
 def save_results_to_json(out_name, new_result, results):
     """adds new_result to the results, keyed by the current time as parsed
-    by DATE_FORMAT and saves the results to the file specified by out_name"""
+    by DATE_FORMAT and saves the results to the file specified by out_name.
+    Code now writes json object to tempfile first, then copies"""
+    import tempfile
+    import os
     datestamp = time.strftime(DATE_FORMAT)
     results[datestamp] = new_result
-    with open(out_name, 'w') as jsonfile:
+
+    tempf = tempfile.NamedTemporaryFile(delete=False, dir='.')
+    with tempf as jsonfile:
         json.dump(results, jsonfile)
+    os.rename(tempf.name, out_name)
 
 
 def parse_synth_study_ids(synthesis_list):
@@ -190,8 +196,6 @@ def process():
 
     old_data = load_old_results_json(filename)
 
-    start_time = timeit.default_timer()  # used to calc run time
-
     # Get list of all studies, and process for aotus '''
 
     raw_study_list = get_study_list(api_url)  # all studies
@@ -203,7 +207,7 @@ def process():
     for study_id in raw_study_list:
         json_study = load_study_json(study_id, study_api_url)
         otus = get_remote_otus(json_study)
-        if len(otus)>0:
+        if len(otus) > 0:
             study_list.append(study_id)
             if _is_nominated(json_study):
                 synth_nominated_list.append(study_id)
@@ -216,7 +220,6 @@ def process():
     unique_nominated_otus = set(all_nominated_otus)
 
     # process it all, and save it to to a json file
-    stop_time = timeit.default_timer()
 
     results = {}
     results['unique_OTU_count'] = len(all_unique_otus)
@@ -226,7 +229,6 @@ def process():
     results['nominated_study_OTU_count'] = len(all_nominated_otus)
     results['nominated_study_unique_OTU_count'] = len(unique_nominated_otus)
     results['reported_study_count'] = len(raw_study_list)
-    results['run_time'] = stop_time - start_time
 
     save_results_to_json(filename, results, old_data)
 
