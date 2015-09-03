@@ -74,15 +74,6 @@ def save_results_to_json(out_name, new_result, results):
     os.rename(tempf.name, out_name)
 
 
-def save_results_to_json(out_name, new_result, results):
-    """adds new_result to the results, keyed by the current time as parsed
-    by DATE_FORMAT and saves the results to the file specified by out_name"""
-    datestamp = time.strftime(DATE_FORMAT)
-    results[datestamp] = new_result
-    with open(out_name, 'w') as jsonfile:
-        json.dump(results, jsonfile)
-
-
 def parse_synth_study_ids(synthesis_list):
     '''parses the return from getSynthesisSourceList'''
     synth_study_list = []
@@ -205,8 +196,6 @@ def process():
 
     old_data = load_old_results_json(filename)
 
-    start_time = timeit.default_timer()  # used to calc run time
-
     # Get list of all studies, and process for aotus '''
 
     raw_study_list = get_study_list(api_url)  # all studies
@@ -231,7 +220,6 @@ def process():
     unique_nominated_otus = set(all_nominated_otus)
 
     # process it all, and save it to to a json file
-    stop_time = timeit.default_timer()
 
     results = {}
     results['unique_OTU_count'] = len(all_unique_otus)
@@ -241,7 +229,6 @@ def process():
     results['nominated_study_OTU_count'] = len(all_nominated_otus)
     results['nominated_study_unique_OTU_count'] = len(unique_nominated_otus)
     results['reported_study_count'] = len(raw_study_list)
-    results['run_time'] = stop_time - start_time
 
     save_results_to_json(filename, results, old_data)
 
