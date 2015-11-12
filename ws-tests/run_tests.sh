@@ -18,7 +18,7 @@ PHYLESYSTEM_API_HOME=$REPOS/phylesystem-api
 # The python test scripts all use the opentreetesting.py library,
 # so its location has to be on PYTHONPATH.
 
-PYTHONPATH=PHYLESYSTEM_API_HOME:$PYTHONPATH
+export PYTHONPATH=PHYLESYSTEM_API_HOME:$PYTHONPATH
 
 # The following runs the run_tests.sh script in each repository.
 
