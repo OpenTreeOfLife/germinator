@@ -26,7 +26,7 @@ To run all tests for all components, do this in the germinator
 repository:
 
     cd ws-tests
-    run_tests.sh devapi.opentreeoflife.org
+    run_tests.sh https://devapi.opentreeoflife.org
 
 substituting the actual name of the API server you'd like to test.
 Some setup is required for germinator's run_test.sh script; it assumes
@@ -63,7 +63,7 @@ for instructions.  E.g. the following runs the oti tests:
     export PYTHONPATH=../../phylesystem-api/ws-tests:$PYTHONPATH
     sh ../../phylesystem-api/ws-tests/run_tests.sh \
        host:allowwrite=false \
-       host:apihost=http://devapi.opentreeoflife.org
+       host:apihost=https://devapi.opentreeoflife.org
 
 It is also possible to run individual tests (ws-tests/test_*.py),
 again with PYTHONPATH set as above and with current directory = ws-tests.
