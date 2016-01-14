@@ -9,11 +9,16 @@ if [ x$apihost = x ]; then
     exit 1
 fi
 
+baseurl=$apihost
+if [ "${baseurl:0:4}" != "http" ]; then
+    baseurl="https://$baseurl"
+fi
+
 function simple_curl_test {
     method="$1"
     args="$2"
     checkfor="$3"
-    if curl --silent -X POST "http://$apihost/v2/$method" -H "content-type:application/json" -d "$args" > curl.out; then
+    if curl --silent -X POST "$baseurl/v2/$method" -H "content-type:application/json" -d "$args" > curl.out; then
 	if grep -q "$checkfor" curl.out; then
 	    successes=$((successes + 1))
 	else
