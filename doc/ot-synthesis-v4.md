@@ -1,4 +1,4 @@
-# Open Tree of Life synthetic draft tree version 3
+# Open Tree of Life synthetic draft tree version 4
 
 Version 4 was generated on 24 October 2015.
 
