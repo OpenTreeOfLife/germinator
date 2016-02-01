@@ -18,9 +18,9 @@ Note that this script requires `wget` or `curl`, as well as `openssl` to run.
 The result is a new file `STAR_opentreeoflife_org.pem`. This includes the full
 chain of public certificates, and it's the file we actually specify in our
 apache configuration file `001-opentree-ssl`. (See
-[template](https://github.com/OpenTreeOfLife/opentree/blob/master/deploy/setup/opentree-ssl.conf)
+[template](https://github.com/OpenTreeOfLife/germinator/blob/master/deploy/setup/opentree-ssl.conf)
 and 
-[installation script](https://github.com/OpenTreeOfLife/opentree/blob/master/deploy/restart-apache.sh)
+[installation script](https://github.com/OpenTreeOfLife/germinator/blob/master/deploy/restart-apache.sh)
 for details.)
 
 Since this combined certificate file is all we need, I'm leaving the other
