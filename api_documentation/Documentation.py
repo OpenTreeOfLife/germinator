@@ -104,7 +104,7 @@ class Builder(object):
         out.write(_DOC_PREAMBLE_TEMPLATE.format(method_groups=mgm))
 
 _DOC_PREAMBLE_TEMPLATE = """ Do not edit this page! The API documentation is automatically generated using code 
-in [the opentree repo](http://github.com/OpenTreeOfLife/opentree/tree/master/api_documentation). If you have 
+in [the germinator repo](http://github.com/OpenTreeOfLife/germinator/tree/master/api_documentation). If you have 
 a suggestion to improve this documentation, please submit an issue on the
 [feedback repo](http://github.com/OpenTreeOfLife/feedback/issues).
 
@@ -166,10 +166,10 @@ _DOC_POSTAMBLE_TEMPLATE = """## Other API docs
 The following links provide information about ongoing development: methods being tested, developed or discussed.  
 
 * [documentation of the datastore API](https://github.com/OpenTreeOfLife/phylesystem-api/blob/master/docs/README.md)
-* [list of neo4j methods](https://github.com/OpenTreeOfLife/opentree/blob/master/neo4j_services_docs.md)
+* [list of neo4j methods](https://github.com/OpenTreeOfLife/germinator/blob/master/neo4j_services_docs.md)
 * [Python library for interacting with OpenTree APIs](https://github.com/OpenTreeOfLife/peyotl)
 * [Overview of methods used internally between OpenTree components](https://github.com/OpenTreeOfLife/phylesystem-api/wiki/overview-of-open-tree-of-life-api-calls)
 
 If you have questions or feedback, leave an[issue on GitHub](https://github.com/OpenTreeOfLife/feedback/issues)
-or join us on IRC on the #opentreeoflife channel on [Freenode](http://freenode.net/).
+or join us on IRC on the OpenTreeOfLife/public channel on [Gitter](https://gitter.im/OpenTreeOfLife/public).
 """
