@@ -12,17 +12,8 @@ tests, initialization scripts, maintenance tasks - do not properly
 belong in any of the subsystem repositories, so the 'germinator'
 repository exists to give these things a home.
 
-At least that is the theory.  Currently there are a number of things
-that properly belong in the germinator repository, but for historical
-reasons have ended up in the [opentree repository](https://github.com/OpenTreeOfLife/opentree).
-
-1. [Deployment system](https://github.com/OpenTreeOfLife/opentree/blob/master/deploy/README.md)
-1. [API documentation](https://github.com/OpenTreeOfLife/opentree/wiki/Open-Tree-of-Life-APIs)
-1. Most of the other wiki pages in the opentree repository: a few are specific to the web client, a few are about taxonomy (and should be moved to the reference-taxonomy repo), but most are about cross-subsystem concerns.
-
-The opentree repository should be reserved for use by the web client subsystem (synthetic 
-tree browser and curator application).
-At some point we may move the non-web content to the germinator repository.
+The starting point for Open Tree documentation is the 
+[germinator wiki home page](https://github.com/OpenTreeOfLife/germinator/wiki).
 
 Tests
 -----
