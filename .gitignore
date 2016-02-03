@@ -1,2 +1,6 @@
 .DS_Store
 *~
+*.pem
+deploy/janrain.key
+deploy/GITHUB_CLIENT_SECRET
+deploy/setup/CONFIG
