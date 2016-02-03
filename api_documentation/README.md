@@ -6,4 +6,6 @@ python make_documentation.py
 
 This will print the docs (in github markdown format) to standard output.
 
+It requires pycurl.
+
 If you found this page because you want to read the API docs, rather than install and build them, see https://github.com/OpenTreeOfLife/opentree/wiki/Open-Tree-of-Life-APIs . 
