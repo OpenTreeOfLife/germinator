@@ -25,38 +25,29 @@ set -e
 
 # $0 -h <hostname> -u <username> -i <identityfile> -n <hostname>
 
+# This function can be used in config files
+
 function opentree_branch {
     # Ignore on this end, in case the currently executing bash doesn't
     # have associative arrays.  See functions.sh for the 'real' definition.
     true
 }
 
+# Command line argument processing
+
 # declare -A OPENTREE_BRANCHES  - doesn't work in bash 3.2.48
 #  but associative arrays seem to work without the declaration in
 #  3.2.48 and in 4.2.37, contrary to documentation on web
 
-# The host must always be specified
-# OPENTREE_HOST=dev.opentreeoflife.org
-# OPENTREE_NEO4J_HOST=dev.opentreeoflife.org
-
-# The following defaults; they can be overridden by the config file
-OPENTREE_ADMIN=admin
-OPENTREE_IDENTITY=opentree.pem
-OPENTREE_DOCSTORE=phylesystem
-COLLECTIONS_REPO=collections
-FAVORITES_REPO=favorites-1
-OPENTREE_GH_IDENTITY=opentree-gh.pem
-OPENTREE_COMPONENTS=most
-OPENTREE_USER=opentree
 DRYRUN=no
 FORCE_COMPILE=no
 
+# The user that is controlling the whole deployment business.  This gets recorded in the log.
 if [ x$CONTROLLER = x ]; then
     CONTROLLER=`whoami`
 fi
 
-# On ubuntu, the admin user is called 'ubuntu'
-
+# Process command line flags; load config file (-c)
 while [ $# -gt 0 ]; do
     if [ ${1:0:1} != - ]; then
         break
@@ -65,71 +56,97 @@ while [ $# -gt 0 ]; do
     shift
     if [ "x$flag" = "x-c" ]; then
         # Config file overrides default parameter settings
-        configfile=$1
-        source "$configfile"; shift
-        cp -pf $configfile setup/CONFIG    # Will get copied during 'sync'
+        CONFIGFILE=$1
+        source "$CONFIGFILE"; shift
     elif [ "x$flag" = "x-f" ]; then
         #echo "Forcing recompile!"
         FORCE_COMPILE=yes;
     elif [ "$flag" = "--dry-run" ]; then
         #echo "Dry run only!"
         DRYRUN=yes;
-    # The following are all legacy; do not add cases to this 'while'.
-    # Configuration should now be done in the config file.
-    elif [ "x$flag" = "x-h" ]; then
-        OPENTREE_HOST="$1"; shift
-    elif [ "x$flag" = "x-p" ]; then
-        OPENTREE_PUBLIC_DOMAIN="$1"; shift
-    elif [ "x$flag" = "x-u" ]; then
-        OPENTREE_ADMIN="$1"; shift
-    elif [ "x$flag" = "x-i" ]; then
-        OPENTREE_IDENTITY="$1"; shift
-    elif [ "x$flag" = "x-n" ]; then
-        OPENTREE_NEO4J_HOST="$1"; shift
     else
         err "Unrecognized flag: $flag"
     fi
 done
 
-if [ "x$OPENTREE_HOST" = x ] ; then err "OPENTREE_HOST not specified"; fi
-if [ "x$OPENTREE_IDENTITY" = x ]; then err "OPENTREE_IDENTITY not specified"; fi
-if [ ! -r $OPENTREE_IDENTITY ]; then err "$OPENTREE_IDENTITY not found"; fi
-[ "x$OPENTREE_NEO4J_HOST" != x ] || OPENTREE_NEO4J_HOST=$OPENTREE_HOST
-[ "x$OPENTREE_PUBLIC_DOMAIN" != x ] || OPENTREE_PUBLIC_DOMAIN=$OPENTREE_HOST
+# Configurable parameters
 
+# OPENTREE_HOST (the server being set up) must always be specified, e.g.
+# OPENTREE_HOST=devapi.opentreeoflife.org
+[ "x$OPENTREE_HOST" != x ] || err "OPENTREE_HOST not specified"
+
+# On ubuntu, the admin user is called 'ubuntu'; on debian it's 'admin'
+[ "x$OPENTREE_ADMIN" != x ] || OPENTREE_ADMIN=admin
+
+# Unprivileged user that runs all the services
+[ "x$OPENTREE_USER" != x ] || OPENTREE_USER=opentree
+
+# OPENTREE_SECRETS is the *local* directory where .pem and other
+# private files are kept
+[ "x$OPENTREE_SECRETS" != x ] || OPENTREE_SECRETS=~/.ssh/opentree
+[ -d ${OPENTREE_SECRETS} ] || err "Directory ${OPENTREE_SECRETS} not found"
+
+# ssh private key for unprivileged
+[ "x$OPENTREE_IDENTITY" != x ] || OPENTREE_IDENTITY=${OPENTREE_SECRETS}/opentree.pem
+
+# ssh private key admin user (taking a shortcut here)
+[ "x$ADMIN_IDENTITY" != x ] || ADMIN_IDENTITY=${OPENTREE_IDENTITY}
+
+# for github
+[ "x$OPENTREE_GH_IDENTITY" != x ] || OPENTREE_GH_IDENTITY=${OPENTREE_SECRETS}/opentree-gh.pem
+
+# Which components to install on this server
+[ "x$OPENTREE_COMPONENTS" != x ] || OPENTREE_COMPONENTS=most
+
+# Which web2py application gets control of the site's home page
+[ "x$OPENTREE_DEFAULT_APPLICATION" != x ] || OPENTREE_DEFAULT_APPLICATION=opentree
+
+# Used by oauth
+[ "x$OPENTREE_PUBLIC_DOMAIN" != x ] || OPENTREE_PUBLIC_DOMAIN=$OPENTREE_HOST
 [ "x$CURATION_GITHUB_CLIENT_ID" != x ] || CURATION_GITHUB_CLIENT_ID=ID_NOT_PROVIDED
 [ "x$CURATION_GITHUB_REDIRECT_URI" != x ] || CURATION_GITHUB_REDIRECT_URI=$OPENTREE_PUBLIC_DOMAIN/webapp/user/login
 [ "x$TREEVIEW_GITHUB_CLIENT_ID" != x ] || TREEVIEW_GITHUB_CLIENT_ID=ID_NOT_PROVIDED
 [ "x$TREEVIEW_GITHUB_REDIRECT_URI" != x ] || TREEVIEW_GITHUB_REDIRECT_URI=$OPENTREE_PUBLIC_DOMAIN/curator/user/login
 
-[ "x$TREEMACHINE_BASE_URL" != x ] || TREEMACHINE_BASE_URL=$OPENTREE_NEO4J_HOST/treemachine
-[ "x$TAXOMACHINE_BASE_URL" != x ] || TAXOMACHINE_BASE_URL=$OPENTREE_NEO4J_HOST/taxomachine
-# Extraneous http:// is needed for now, but should get phased out
-[ "x$OTI_BASE_URL" != x ] || OTI_BASE_URL=http://$OPENTREE_NEO4J_HOST/oti
+# How the webapps access the API
+[ "x$TREEMACHINE_BASE_URL" != x ] || err "TREEMACHINE_BASE_URL not configured"
+[ "x$TAXOMACHINE_BASE_URL" != x ] || err "TAXOMACHINE_BASE_URL not configured"
+[ "x$OTI_BASE_URL"         != x ] || err "OTI_BASE_URL not configured"
+
 [ "x$OPENTREE_API_BASE_URL" != x ] || OPENTREE_API_BASE_URL=$OPENTREE_PUBLIC_DOMAIN/api/v1
 [ "x$COLLECTIONS_API_BASE_URL" != x ] || COLLECTIONS_API_BASE_URL=$OPENTREE_PUBLIC_DOMAIN/v2
 [ "x$FAVORITES_API_BASE_URL" != x ] || FAVORITES_API_BASE_URL=$OPENTREE_PUBLIC_DOMAIN/v2
 
-[ "x$OPENTREE_DEFAULT_APPLICATION" != x ] || OPENTREE_DEFAULT_APPLICATION=opentree
+# End of configuration processing.
 
-# abbreviations... no good reason for these, they just make the commands shorter
-
+# Local abbreviation... no good reason for this, just makes commands shorter
 ADMIN=$OPENTREE_ADMIN
 
+# Local abbreviation
 SSH="ssh -i ${OPENTREE_IDENTITY}"
+ASSH="ssh -i ${ADMIN_IDENTITY}"
 
-# For unprivileged actions
+# For unprivileged actions to server
 OT_USER=$OPENTREE_USER
 
-echo "host=$OPENTREE_HOST, admin=$ADMIN, pem=$OPENTREE_IDENTITY, controller=$CONTROLLER, command=$1"
+echo "host=$OPENTREE_HOST, admin=$OPENTREE_ADMIN, pem=$OPENTREE_IDENTITY, controller=$CONTROLLER"
 
 restart_apache=no
+
+function process_arguments {
+    sync_system
+    docommand $*
+    if [ $restart_apache = "yes" ]; then
+        restart_apache
+    fi
+}
 
 function docommand {
 
     if [ $# -eq 0 ]; then
-        if [ $DRYRUN = yes ]; then echo "[no command]"; fi
+        if [ $DRYRUN = yes ]; then echo "[no component or command]"; fi
         for component in $OPENTREE_COMPONENTS; do
+            echo "Component list: $OPENTREE_COMPONENTS"
             docomponent $component
         done
         return
@@ -140,17 +157,14 @@ function docommand {
     case $command in
     # Commands
     push-db | pushdb)
-        push_db $*
+        push_neo4j_db $*
             ;;
     install-db)
-        install_db $*
+        install_neo4j_db $*
         ;;
     index  | indexoti | index-db)
-        index
+        index_doc_store
             ;;
-    files)
-        install_files
-        ;;
     apache)
         restart_apache=yes
             ;;
@@ -166,8 +180,9 @@ EOF
 
     *)
         if ! in_list $command $OPENTREE_COMPONENTS; then
-	    err "Unrecognized command, or component not in OPENTREE_COMPONENTS: $command";
+	    err "Unrecognized command, or component not in OPENTREE_COMPONENTS: $command"
 	fi
+        # Default if not a recognized command: treat as component name
         docomponent $command
     esac
 }
@@ -176,14 +191,13 @@ EOF
 
 function docomponent {
     component=$1
-    # 'api' option is for backward compatibility
-    if [ $component = api ]; then component=phylesystem-api; fi
     case $component in
     opentree)
-        push_opentree
+        push_webapps
         restart_apache=yes
         ;;
-    phylesystem-api)
+    phylesystem-api | api)
+        # 'api' option is for backward compatibility
         push_phylesystem_api
         restart_apache=yes
         ;;
@@ -200,15 +214,17 @@ function docomponent {
         # restart apache to clear the RAM cache (stale results)
         restart_apache=yes
         ;;
-
+    smasher)
+        push_smasher
+        ;;
     *)
-        echo "Unrecognized component: $command"
+        echo "Unrecognized component: $component"
         ;;
     esac 
 }
 
 # list="w x y"; in_list x $list; echo $?
-# kjetil v halvorsen via stackoverflow
+# kjetil v halvorsen via stackoverflow - thank you
 function in_list() {
        local search="$1"
        shift
@@ -219,30 +235,57 @@ function in_list() {
        return 1
     }
 
+# Common setup utilities
+
 function sync_system {
     echo "Syncing"
     if [ $DRYRUN = "yes" ]; then echo "[sync]"; return; fi
     # Do privileged stuff
     # Don't use rsync - might not be installed yet
-    scp -p -i "${OPENTREE_IDENTITY}" as-admin.sh "$ADMIN@$OPENTREE_HOST":
-    ${SSH} "$ADMIN@$OPENTREE_HOST" ./as-admin.sh "$OPENTREE_HOST" "$OPENTREE_USER"
+    scp -p -i "${ADMIN_IDENTITY}" as-admin.sh "$OPENTREE_ADMIN@$OPENTREE_HOST":
+    ${ASSH} "$ADMIN@$OPENTREE_HOST" ./as-admin.sh "$OPENTREE_HOST" "$OPENTREE_USER"
     # Copy files over
     rsync -pr -e "${SSH}" "--exclude=*~" "--exclude=#*" setup "$OT_USER@$OPENTREE_HOST":
+    # Bleh
+    rsync -p -e "${SSH}" $CONFIGFILE "$OT_USER@$OPENTREE_HOST":setup/CONFIG
     }
-
-function push_neo4j {
-    if [ $DRYRUN = "yes" ]; then echo "[neo4j app: $1]"; return; fi
-    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-neo4j-app.sh $CONTROLLER $1 $FORCE_COMPILE
-}
 
 # The install scripts modify the apache config files, so do this last
 function restart_apache {
     if [ $DRYRUN = "yes" ]; then echo "[restarting apache]"; return; fi
-    scp -p -i "${OPENTREE_IDENTITY}" restart-apache.sh "$ADMIN@$OPENTREE_HOST":
-    ${SSH} "$ADMIN@$OPENTREE_HOST" bash restart-apache.sh "$OT_USER" "$OPENTREE_HOST"
+    scp -p -i "${ADMIN_IDENTITY}" restart-apache.sh "$ADMIN@$OPENTREE_HOST":
+    ${ASSH} "$ADMIN@$OPENTREE_HOST" bash restart-apache.sh "$OT_USER" "$OPENTREE_HOST"
 }
 
-function push_opentree {
+# Commands
+
+function push_neo4j_db {
+    if [ $DRYRUN = "yes" ]; then echo "[push_neo4j_db]"; return; fi
+    # E.g. ./push.sh push-db localnewdb.db.tgz taxomachine
+    TARBALL=$1
+    APP=$2
+    if [ x$APP = x -o x$TARBALL = x ]; then
+        err "Usage: $0 -c {configfile} push-db {tarball} {application}"
+    fi
+    HEREBALL=downloads/$APP.db.tgz
+    time rsync -vax -e "${SSH}" $TARBALL "$OT_USER@$OPENTREE_HOST":$HEREBALL
+    install_neo4j_db $HEREBALL $APP
+}
+
+function install_neo4j_db {
+    HEREBALL=$1
+    APP=$2
+    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-db.sh $HEREBALL $APP $CONTROLLER
+}
+
+function index_doc_store {
+    if [ $DRYRUN = "yes" ]; then echo "[index_doc_store]"; return; fi
+    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/index-doc-store.sh $OPENTREE_API_BASE_URL $CONTROLLER
+}
+
+# Component installation
+
+function push_webapps {
 
     if [ $CURATION_GITHUB_CLIENT_ID = ID_NOT_PROVIDED ]; then echo "WARNING: Missing GitHub client ID! Curation UI will be disabled."; fi
     if [ $TREEVIEW_GITHUB_CLIENT_ID = ID_NOT_PROVIDED ]; then echo "WARNING: Missing GitHub client ID! Tree-view feedback will be disabled."; fi
@@ -251,13 +294,13 @@ function push_opentree {
     ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-web2py-apps.sh "$OPENTREE_HOST" "${OPENTREE_PUBLIC_DOMAIN}" "${OPENTREE_DEFAULT_APPLICATION}" "$CONTROLLER" "${CURATION_GITHUB_CLIENT_ID}" "${CURATION_GITHUB_REDIRECT_URI}" "${TREEVIEW_GITHUB_CLIENT_ID}" "${TREEVIEW_GITHUB_REDIRECT_URI}" "${TREEMACHINE_BASE_URL}" "${TAXOMACHINE_BASE_URL}" "${OTI_BASE_URL}" "${OPENTREE_API_BASE_URL}" "${COLLECTIONS_API_BASE_URL}" "${FAVORITES_API_BASE_URL}"
     # place the files with secret GitHub API keys for curator and webapp (tree browser feedback) apps
     # N.B. This includes the final domain name, since we'll need different keys for dev.opentreeoflife.org, www.opentreeoflife.org, etc.
-    keyfile=~/.ssh/opentree/treeview-GITHUB_CLIENT_SECRET-$OPENTREE_PUBLIC_DOMAIN
+    keyfile=${OPENTREE_SECRETS}/treeview-GITHUB_CLIENT_SECRET-$OPENTREE_PUBLIC_DOMAIN
     if [ -r $keyfile ]; then
         rsync -pr -e "${SSH}" $keyfile "$OT_USER@$OPENTREE_HOST":repo/opentree/webapp/private/GITHUB_CLIENT_SECRET
     else
         echo "Cannot find GITHUB_CLIENT_SECRET file $keyfile"
     fi
-    keyfile=~/.ssh/opentree/curation-GITHUB_CLIENT_SECRET-$OPENTREE_PUBLIC_DOMAIN
+    keyfile=${OPENTREE_SECRETS}/curation-GITHUB_CLIENT_SECRET-$OPENTREE_PUBLIC_DOMAIN
     if [ -r $keyfile ]; then
         rsync -pr -e "${SSH}" $keyfile "$OT_USER@$OPENTREE_HOST":repo/opentree/curator/private/GITHUB_CLIENT_SECRET
     else
@@ -268,11 +311,12 @@ function push_opentree {
     push_bot_identity
 }
 
+# Utility for all the webapps.
 # See "getting a github oauth token" in the phylesystem-api documentation.
 
 function push_bot_identity {
     # place an OAuth token for GitHub API by bot user 'opentreeapi'
-    tokenfile=~/.ssh/opentree/OPENTREEAPI_OAUTH_TOKEN
+    tokenfile=${OPENTREE_SECRETS}/OPENTREEAPI_OAUTH_TOKEN
     if [ -r $tokenfile ]; then
         rsync -pr -e "${SSH}" $tokenfile "$OT_USER@$OPENTREE_HOST":.ssh/OPENTREEAPI_OAUTH_TOKEN
         ${SSH} "$OT_USER@$OPENTREE_HOST" chmod 600 .ssh/OPENTREEAPI_OAUTH_TOKEN
@@ -281,8 +325,14 @@ function push_bot_identity {
     fi
 }
 
+# Set up server's clone of phylesystem repo, and the web API
 function push_phylesystem_api {
-    if [ $DRYRUN = "yes" ]; then echo "[api]"; return; fi
+    if [ $DRYRUN = "yes" ]; then echo "[phylesystem-api]"; return; fi
+
+    echo "Doc store is $OPENTREE_DOCSTORE"
+    [ "x$OPENTREE_DOCSTORE" = "x" ] || err "OPENTREE_DOCSTORE not configured"
+    [ "x$COLLECTIONS_REPO" = "x" ] || err "COLLECTIONS_REPO not configured"
+    [ "x$FAVORITES_REPO" = "x" ] || err "FAVORITES_REPO not configured"
 
     push_bot_identity
 
@@ -297,7 +347,7 @@ function push_phylesystem_api {
     fi
 
     # Try to place an OAuth token for GitHub API by bot user 'opentreeapi'
-    tokenfile=~/.ssh/opentree/OPENTREEAPI_OAUTH_TOKEN
+    tokenfile=${OPENTREE_SECRETS}/OPENTREEAPI_OAUTH_TOKEN
     if [ -r $tokenfile ]; then
         rsync -p -e "${SSH}" $tokenfile "$OT_USER@$OPENTREE_HOST":.ssh/OPENTREEAPI_OAUTH_TOKEN
         ${SSH} "$OT_USER@$OPENTREE_HOST" chmod 600 .ssh/OPENTREEAPI_OAUTH_TOKEN
@@ -305,57 +355,19 @@ function push_phylesystem_api {
         echo "****************************\n  OAuth token file (${tokenfile}) not found!\n  Falling back to any existing token on the server, OR a prompt for manual creation of webhooks.\n****************************"
     fi
 
-    echo "Doc store is $OPENTREE_DOCSTORE"
     ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-api.sh "$OPENTREE_HOST" \
            $OPENTREE_DOCSTORE $COLLECTIONS_REPO $FAVORITES_REPO $CONTROLLER $OTI_BASE_URL $OPENTREE_API_BASE_URL $COLLECTIONS_API_BASE_URL $FAVORITES_API_BASE_URL $OPENTREE_DEFAULT_APPLICATION
 }
 
-function index {
-    if [ $DRYRUN = "yes" ]; then echo "[index]"; return; fi
-    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/index-doc-store.sh $OPENTREE_API_BASE_URL $CONTROLLER
+function push_neo4j {
+    APP=$1
+    if [ $DRYRUN = "yes" ]; then echo "[neo4j app: $APP]"; return; fi
+    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-neo4j-app.sh $CONTROLLER $APP $FORCE_COMPILE
 }
 
-function push_db {
-    if [ $DRYRUN = "yes" ]; then echo "[push_db]"; return; fi
-        # E.g. ./push.sh push-db localnewdb.db.tgz taxomachine
-        TARBALL=$1
-        APP=$2
-    if [ x$APP = x -o x$TARBALL = x ]; then
-        err "Usage: $0 -c {configfile} push-db {tarball} {application}"
-    fi
-    HEREBALL=downloads/$APP.db.tgz
-    time rsync -vax -e "${SSH}" $TARBALL "$OT_USER@$OPENTREE_HOST":$HEREBALL
-    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-db.sh $HEREBALL $APP $CONTROLLER
+function push_smasher {
+    if [ $DRYRUN = "yes" ]; then echo "[push_smasher]"; return; fi
+    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-smasher.sh $CONTROLLER
 }
 
-function install_db {
-    HEREBALL=$1
-    APP=$2
-    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-db.sh $HEREBALL $APP $CONTROLLER
-}
-
-# Copy smallish files over from opentree repo into the webroot for the
-# files.opentreeoflife.org vhost
-
-function install_files {
-    if [ x$FILES_HOST = x ]; then 
-        echo "FILES_HOST not defined"
-    else
-        # Transfer content
-        rsync -prv -e "${SSH}" "--exclude=*~" "--exclude=#*" \
-	      --backup --backup-dir=files.opentreeoflife.org.backup \
-	      files.opentreeoflife.org "$OT_USER@$FILES_HOST":
-    fi
-}
-
-sync_system
-docommand $*
-if [ $restart_apache = "yes" ]; then
-    restart_apache
-fi
-
-# Test: 
-# Ubuntu micro:
-#  open http://ec2-54-202-160-175.us-west-2.compute.amazonaws.com/
-# Debian small:
-#  open http://ec2-54-202-237-199.us-west-2.compute.amazonaws.com/
+process_arguments
