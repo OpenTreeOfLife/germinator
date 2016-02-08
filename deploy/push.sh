@@ -102,21 +102,27 @@ done
 [ "x$OPENTREE_DEFAULT_APPLICATION" != x ] || OPENTREE_DEFAULT_APPLICATION=opentree
 
 # Used by oauth
-[ "x$OPENTREE_PUBLIC_DOMAIN" != x ] || OPENTREE_PUBLIC_DOMAIN=$OPENTREE_HOST
+if [ "x$OPENTREE_PUBLIC_DOMAIN" == x ]; then
+    echo "Defaulting OPENTREE_PUBLIC_DOMAIN (webapp base URL) to $OPENTREE_HOST"
+    OPENTREE_PUBLIC_DOMAIN=$OPENTREE_HOST
+fi
+WEBAPP_BASE_URL=$OPENTREE_PUBLIC_DOMAIN
 [ "x$CURATION_GITHUB_CLIENT_ID" != x ] || CURATION_GITHUB_CLIENT_ID=ID_NOT_PROVIDED
-[ "x$CURATION_GITHUB_REDIRECT_URI" != x ] || CURATION_GITHUB_REDIRECT_URI=$OPENTREE_PUBLIC_DOMAIN/webapp/user/login
+[ "x$CURATION_GITHUB_REDIRECT_URI" != x ] || CURATION_GITHUB_REDIRECT_URI=$WEBAPP_BASE_URL/webapp/user/login
 [ "x$TREEVIEW_GITHUB_CLIENT_ID" != x ] || TREEVIEW_GITHUB_CLIENT_ID=ID_NOT_PROVIDED
-[ "x$TREEVIEW_GITHUB_REDIRECT_URI" != x ] || TREEVIEW_GITHUB_REDIRECT_URI=$OPENTREE_PUBLIC_DOMAIN/curator/user/login
+[ "x$TREEVIEW_GITHUB_REDIRECT_URI" != x ] || TREEVIEW_GITHUB_REDIRECT_URI=$WEBAPP_BASE_URL/curator/user/login
 
-# How the webapps access the API
-[ "x$TREEMACHINE_BASE_URL" != x ] || err "TREEMACHINE_BASE_URL not configured"
-[ "x$TAXOMACHINE_BASE_URL" != x ] || err "TAXOMACHINE_BASE_URL not configured"
-[ "x$OTI_BASE_URL"         != x ] || err "OTI_BASE_URL not configured"
+# The part of an API URL before the 'v2'.  Used by webapps
+if [ "x$OPENTREE_WEBAPI_BASE_URL" == x ]; then
+    echo "Defaulting OPENTREE_WEBAPI_BASE_URL to $OPENTREE_HOST"
+    OPENTREE_WEBAPI_BASE_URL=$OPENTREE_HOST
+fi
 
-[ "x$OPENTREE_API_BASE_URL" != x ] || OPENTREE_API_BASE_URL=$OPENTREE_PUBLIC_DOMAIN/api/v1
-[ "x$COLLECTIONS_API_BASE_URL" != x ] || COLLECTIONS_API_BASE_URL=$OPENTREE_PUBLIC_DOMAIN/v2
-[ "x$FAVORITES_API_BASE_URL" != x ] || FAVORITES_API_BASE_URL=$OPENTREE_PUBLIC_DOMAIN/v2
-[ "x$CONFLICT_API_BASE_URL" != x ] || CONFLICT_API_BASE_URL=$OPENTREE_PUBLIC_DOMAIN/v2/conflict
+# "API" in the following is short for "Phylesystem API"
+[ "x$OPENTREE_API_BASE_URL" != x ] || OPENTREE_API_BASE_URL=$OPENTREE_WEBAPI_BASE_URL/api/v1
+[ "x$COLLECTIONS_API_BASE_URL" != x ] || COLLECTIONS_API_BASE_URL=$OPENTREE_WEBAPI_BASE_URL/v2
+[ "x$FAVORITES_API_BASE_URL" != x ] || FAVORITES_API_BASE_URL=$OPENTREE_WEBAPI_BASE_URL/v2
+[ "x$CONFLICT_API_BASE_URL" != x ] || CONFLICT_API_BASE_URL=$OPENTREE_WEBAPI_BASE_URL/v2/conflict
 
 # End of configuration processing.
 
@@ -146,8 +152,8 @@ function docommand {
 
     if [ $# -eq 0 ]; then
         if [ $DRYRUN = yes ]; then echo "[no component or command]"; fi
+        echo "No command. Deploying these components: $OPENTREE_COMPONENTS"
         for component in $OPENTREE_COMPONENTS; do
-            echo "Component list: $OPENTREE_COMPONENTS"
             docomponent $component
         done
         return
@@ -290,6 +296,10 @@ function push_webapps {
 
     if [ $CURATION_GITHUB_CLIENT_ID = ID_NOT_PROVIDED ]; then echo "WARNING: Missing GitHub client ID! Curation UI will be disabled."; fi
     if [ $TREEVIEW_GITHUB_CLIENT_ID = ID_NOT_PROVIDED ]; then echo "WARNING: Missing GitHub client ID! Tree-view feedback will be disabled."; fi
+    # We could default these (used by webapps), but for some reason we don't
+    [ "x$TREEMACHINE_BASE_URL" != x ] || err "TREEMACHINE_BASE_URL not configured"
+    [ "x$TAXOMACHINE_BASE_URL" != x ] || err "TAXOMACHINE_BASE_URL not configured"
+    [ "x$OTI_BASE_URL"         != x ] || err "OTI_BASE_URL not configured"
 
     if [ $DRYRUN = "yes" ]; then echo "[opentree]"; return; fi
     ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-web2py-apps.sh "$OPENTREE_HOST" "${OPENTREE_PUBLIC_DOMAIN}" "${OPENTREE_DEFAULT_APPLICATION}" "$CONTROLLER" "${CURATION_GITHUB_CLIENT_ID}" "${CURATION_GITHUB_REDIRECT_URI}" "${TREEVIEW_GITHUB_CLIENT_ID}" "${TREEVIEW_GITHUB_REDIRECT_URI}" "${TREEMACHINE_BASE_URL}" "${TAXOMACHINE_BASE_URL}" "${OTI_BASE_URL}" "${OPENTREE_API_BASE_URL}" "${COLLECTIONS_API_BASE_URL}" "${FAVORITES_API_BASE_URL}" "${CONFLICT_API_BASE_URL}"
@@ -299,13 +309,13 @@ function push_webapps {
     if [ -r $keyfile ]; then
         rsync -pr -e "${SSH}" $keyfile "$OT_USER@$OPENTREE_HOST":repo/opentree/webapp/private/GITHUB_CLIENT_SECRET
     else
-        echo "Cannot find GITHUB_CLIENT_SECRET file $keyfile"
+        echo "** Cannot find GITHUB_CLIENT_SECRET file $keyfile"
     fi
     keyfile=${OPENTREE_SECRETS}/curation-GITHUB_CLIENT_SECRET-$OPENTREE_PUBLIC_DOMAIN
     if [ -r $keyfile ]; then
         rsync -pr -e "${SSH}" $keyfile "$OT_USER@$OPENTREE_HOST":repo/opentree/curator/private/GITHUB_CLIENT_SECRET
     else
-        echo "Cannot find GITHUB_CLIENT_SECRET file $keyfile"
+        echo "** Cannot find GITHUB_CLIENT_SECRET file $keyfile"
     fi
 
     # we’re using the bot for “anonymous” comments in the synth-tree explorer
@@ -322,7 +332,7 @@ function push_bot_identity {
         rsync -pr -e "${SSH}" $tokenfile "$OT_USER@$OPENTREE_HOST":.ssh/OPENTREEAPI_OAUTH_TOKEN
         ${SSH} "$OT_USER@$OPENTREE_HOST" chmod 600 .ssh/OPENTREEAPI_OAUTH_TOKEN
     else
-        echo "Cannot find OPENTREEAPI_OAUTH_TOKEN file $tokenfile"
+        echo "** Cannot find OPENTREEAPI_OAUTH_TOKEN file $tokenfile"
     fi
 }
 
@@ -331,9 +341,10 @@ function push_phylesystem_api {
     if [ $DRYRUN = "yes" ]; then echo "[phylesystem-api]"; return; fi
 
     echo "Doc store is $OPENTREE_DOCSTORE"
-    [ "x$OPENTREE_DOCSTORE" = "x" ] || err "OPENTREE_DOCSTORE not configured"
-    [ "x$COLLECTIONS_REPO" = "x" ] || err "COLLECTIONS_REPO not configured"
-    [ "x$FAVORITES_REPO" = "x" ] || err "FAVORITES_REPO not configured"
+    [ "x$OPENTREE_DOCSTORE" != "x" ] || err "OPENTREE_DOCSTORE not configured"
+    [ "x$COLLECTIONS_REPO"  != "x" ] || err "COLLECTIONS_REPO not configured"
+    [ "x$FAVORITES_REPO"    != "x" ] || err "FAVORITES_REPO not configured"
+    [ "x$OTI_BASE_URL"      != "x" ] || err "OTI_BASE_URL not configured"
 
     push_bot_identity
 
@@ -371,4 +382,4 @@ function push_smasher {
     ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-smasher.sh $CONTROLLER
 }
 
-process_arguments
+process_arguments $*

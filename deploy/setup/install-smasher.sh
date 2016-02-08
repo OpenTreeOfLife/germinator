@@ -1,5 +1,7 @@
 #!/bin/bash
 
+CONTROLLER=$1
+
 set -e
 . setup/functions.sh
 
