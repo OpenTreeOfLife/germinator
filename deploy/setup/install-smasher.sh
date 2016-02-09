@@ -1,6 +1,8 @@
 #!/bin/bash
 
 CONTROLLER=$1 
+# with a /
+WEBAPI_BASE_URL=$2
 
 # We expect the taxonomy to be in taxonomy.tgz, and
 # the synthetic tree to be in synth.tre.gz (or synth.tgz).
@@ -51,6 +53,9 @@ function deal {
 
 deal taxonomy
 deal synth
+
+# Create config file
+echo STUDY_BASE_URL="${WEBAPI_BASE_URL}"v2/study/ >repo/reference-taxonomy/service/service.config
 
 # Stop the HTTP server, if running
 repo/reference-taxonomy/bin/smasher stop || true
