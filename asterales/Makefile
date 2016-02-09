@@ -86,13 +86,13 @@ PUSH=./push.sh -c $(PWD)/subset.config
 deploy_services: subset.config
 	(cd ../deploy; $(PUSH))
 deploy_taxomachine: taxomachine.db.tgz
-	(cd ../deploy; $(PUSH) push-db    taxomachine.db.tgz taxomachine)
+	(cd ../deploy; $(PUSH) push-db    $(PWD)/taxomachine.db.tgz taxomachine)
 deploy_oti: taxomachine.db.tgz
 	(cd ../deploy; $(PUSH) install-db downloads/taxomachine.db.tgz oti)
 deploy_index:
 	(cd ../deploy; $(PUSH) index)
 deploy_treemachine: treemachine.db.tgz
-	(cd ../deploy; $(PUSH) push-db    treemachine.db.tgz treemachine)
+	(cd ../deploy; $(PUSH) push-db    $(PWD)/treemachine.db.tgz treemachine)
 deploy_smasher: taxonomy.tgz synth.tre.gz
 	scp -p taxonomy.tgz asterales:repo/reference-taxonomy/service/
 	scp -p synth.tre.gz asterales:repo/reference-taxonomy/service/
