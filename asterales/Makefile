@@ -104,4 +104,4 @@ taxonomy.tgz: subset
 synth.tre.gz: synth.tre
 	gzip -c synth.tre >synth.tre.gz
 
-deploy: deploy_services deploy_taxomachine deploy_oti deploy_index deploy_treemachine
+deploy: deploy_services deploy_taxomachine deploy_oti deploy_index deploy_treemachine deploy_smasher
