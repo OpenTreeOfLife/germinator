@@ -102,20 +102,23 @@ done
 [ "x$OPENTREE_DEFAULT_APPLICATION" != x ] || OPENTREE_DEFAULT_APPLICATION=opentree
 
 # Used by oauth
-if [ "x$OPENTREE_PUBLIC_DOMAIN" == x ]; then
-    echo "Defaulting OPENTREE_PUBLIC_DOMAIN (webapp base URL) to $OPENTREE_HOST"
+if [ "x$OPENTREE_PUBLIC_DOMAIN" = x ]; then
+    echo "Defaulting OPENTREE_PUBLIC_DOMAIN to $OPENTREE_HOST"
     OPENTREE_PUBLIC_DOMAIN=$OPENTREE_HOST
 fi
-WEBAPP_BASE_URL=$OPENTREE_PUBLIC_DOMAIN
+# WEBAPP_BASE_URL is only needed for defaulting other things
+if [ "x$WEBAPP_BASE_URL" = x ]; then
+    WEBAPP_BASE_URL=https://$OPENTREE_PUBLIC_DOMAIN
+fi
 [ "x$CURATION_GITHUB_CLIENT_ID" != x ] || CURATION_GITHUB_CLIENT_ID=ID_NOT_PROVIDED
 [ "x$CURATION_GITHUB_REDIRECT_URI" != x ] || CURATION_GITHUB_REDIRECT_URI=$WEBAPP_BASE_URL/webapp/user/login
 [ "x$TREEVIEW_GITHUB_CLIENT_ID" != x ] || TREEVIEW_GITHUB_CLIENT_ID=ID_NOT_PROVIDED
 [ "x$TREEVIEW_GITHUB_REDIRECT_URI" != x ] || TREEVIEW_GITHUB_REDIRECT_URI=$WEBAPP_BASE_URL/curator/user/login
 
+# WEBAPI_BASE_URL is only needed for defaulting other things
 # The part of an API URL before the 'v2'.  Used by webapps
-if [ "x$OPENTREE_WEBAPI_BASE_URL" == x ]; then
-    echo "Defaulting OPENTREE_WEBAPI_BASE_URL to $OPENTREE_HOST"
-    OPENTREE_WEBAPI_BASE_URL=$OPENTREE_HOST
+if [ "x$OPENTREE_WEBAPI_BASE_URL" = x ]; then
+    OPENTREE_WEBAPI_BASE_URL=$WEBAPP_BASE_URL
 fi
 
 # "API" in the following is short for "Phylesystem API"
@@ -379,7 +382,8 @@ function push_neo4j {
 
 function push_smasher {
     if [ $DRYRUN = "yes" ]; then echo "[push_smasher]"; return; fi
-    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-smasher.sh $CONTROLLER
+    echo push_smasher: ${OPENTREE_WEBAPI_BASE_URL}
+    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-smasher.sh ${CONTROLLER} ${OPENTREE_API_BASE_URL}
 }
 
 process_arguments $*

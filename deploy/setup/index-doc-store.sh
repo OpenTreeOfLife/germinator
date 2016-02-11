@@ -34,6 +34,10 @@ if false; then
     ./neo4j-$APP/bin/neo4j start
 fi
 
+if [ ${OPENTREE_API_BASE_URL:0:2} = '//' ]; then
+    OPENTREE_API_BASE_URL=https:$OPENTREE_API_BASE_URL
+fi
+
 echo "Indexing studies from API at $OPENTREE_API_BASE_URL"
 
 # We need to pass in the doc store repo name here
