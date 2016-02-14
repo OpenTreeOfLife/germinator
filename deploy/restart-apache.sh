@@ -4,6 +4,9 @@
 
 OPENTREE_USER=$1
 OPENTREE_HOST=$2
+CERTIFICATE_FILE=$3
+CERTIFICATE_KEY_FILE=$4
+
 OPENTREE_HOME=$(bash <<< "echo ~$OPENTREE_USER")
 
 if apt-cache policy apache2 | egrep -q "Installed: 2.2"; then
@@ -13,20 +16,27 @@ exit 1
 
 else
 
-# Modern code, apache 2.4+
+# Apache 2.4+
 
 if [ ! -r /etc/apache2/sites-available/opentree.conf ] || \
    ! cmp -s "$OPENTREE_HOME/setup/opentree.conf" /etc/apache2/sites-available/opentree; then
     echo "Installing opentree vhost config"
-    sudo cp -p "$OPENTREE_HOME/setup/opentree.conf" /etc/apache2/sites-available/ || "Sudo failed"
+    sudo cp -p "$OPENTREE_HOME/setup/opentree.conf" /etc/apache2/sites-available/ || \
+      "opentree.conf install failed"
 fi
 
-if [ ! -r /etc/apache2/sites-available/opentree-ssl ] || \
+if [ ! -r /etc/apache2/sites-available/opentree-ssl.conf ] || \
    ! cmp -s "$OPENTREE_HOME/setup/opentree-ssl.conf" /etc/apache2/sites-available/opentree-ssl.conf; then
     echo "Installing opentree ssl vhost config"
-    sudo cp -p "$OPENTREE_HOME/setup/opentree-ssl.conf" /etc/apache2/sites-available/ || "Sudo failed"
+    # This will overwrite the letsencrypt configuration
+    sudo cp -p "$OPENTREE_HOME/setup/opentree-ssl.conf" /etc/apache2/sites-available/ || \
+      "opentree-ssl.conf install failed"
     sudo sed -i -e s/SERVERNAME_REPLACEME/$OPENTREE_HOST/ \
-      /etc/apache2/sites-available/opentree-ssl.conf  || "Sudo failed"
+      /etc/apache2/sites-available/opentree-ssl.conf  || "Edit hostname in opentree-ssl failed"
+    sudo sed -i -e s+CERTIFICATE_FILE+$CERTIFICATE_FILE+ \
+      /etc/apache2/sites-available/opentree-ssl.conf  || "Edit cert file in opentree-ssl failed"
+    sudo sed -i -e s+CERTIFICATE_KEY_FILE+$CERTIFICATE_KEY_FILE+ \
+      /etc/apache2/sites-available/opentree-ssl.conf  || "Edit cert key file in opentree-ssl failed"
 fi
 
 TMP=/tmp/$$.tmp
@@ -40,7 +50,7 @@ rm $TMP
 fi
 
 echo "Restarting apache httpd..."
-sudo apache2ctl graceful || "Sudo failed"
+sudo apache2ctl graceful || echo "apache2ctl failed"
 
 # One of these commands hangs after printing "(Re)starting web2py session sweeper..."
 # so for now I'm going to disable this code.  See 

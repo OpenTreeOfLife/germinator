@@ -69,7 +69,11 @@ while [ $# -gt 0 ]; do
     fi
 done
 
+[ "x$CONFIGFILE" != x ] || err "No configuration file given (need -c {filename})"
+
 # Configurable parameters
+[ "x$CERTIFICATE_FILE" != x ] || CERTIFICATE_FILE=/etc/ssl/certs/opentree/STAR_opentreeoflife_org.pem
+[ "x$CERTIFICATE_KEY_FILE" != x ] || CERTIFICATE_KEY_FILE=/etc/ssl/private/opentreeoflife.org.key
 
 # OPENTREE_HOST (the server being set up) must always be specified, e.g.
 # OPENTREE_HOST=devapi.opentreeoflife.org
@@ -253,7 +257,8 @@ function sync_system {
     # Do privileged stuff
     # Don't use rsync - might not be installed yet
     scp -p -i "${ADMIN_IDENTITY}" as-admin.sh "$OPENTREE_ADMIN@$OPENTREE_HOST":
-    ${ASSH} "$ADMIN@$OPENTREE_HOST" ./as-admin.sh "$OPENTREE_HOST" "$OPENTREE_USER"
+    ${ASSH} "$ADMIN@$OPENTREE_HOST" ./as-admin.sh "$OPENTREE_HOST" "$OPENTREE_USER" \
+       "$CERTIFICATE_FILE" "$CERTIFICATE_KEY_FILE"
     # Copy files over
     rsync -pr -e "${SSH}" "--exclude=*~" "--exclude=#*" setup "$OT_USER@$OPENTREE_HOST":
     # Bleh
@@ -264,7 +269,8 @@ function sync_system {
 function restart_apache {
     if [ $DRYRUN = "yes" ]; then echo "[restarting apache]"; return; fi
     scp -p -i "${ADMIN_IDENTITY}" restart-apache.sh "$ADMIN@$OPENTREE_HOST":
-    ${ASSH} "$ADMIN@$OPENTREE_HOST" bash restart-apache.sh "$OT_USER" "$OPENTREE_HOST"
+    ${ASSH} "$ADMIN@$OPENTREE_HOST" bash restart-apache.sh "$OT_USER" "$OPENTREE_HOST" \
+      "$CERTIFICATE_FILE" "$CERTIFICATE_KEY_FILE"
 }
 
 # Commands

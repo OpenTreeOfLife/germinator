@@ -43,8 +43,8 @@ your ~/.ssh/config file with IdentityFile set to the location of the ssh
 private key and User set to 'opentree'.
 
 To support secure (HTTPS) web connections to Open Tree, put the required files on the server:
- - Our Apache config currently expects to find the **SSL private keyfile** (from your local filesystem) at `/etc/ssl/private/opentreeoflife.org.key`. 
- - You'll also need to push the **combined public SSL cert file** (setup/ssl-certs/STAR_opentreeoflife_org.pem) to its expected location `/etc/ssl/certs/opentree/STAR_opentreeoflife_org.pem`.
+ - Our Apache config currently expects to find the **SSL private keyfile** (from your local filesystem) at `/etc/ssl/private/opentreeoflife.org.key` (or location configured by CERTIFICATE_KEY_FILE).
+ - You'll also need to push the **combined public SSL cert file** (setup/ssl-certs/STAR_opentreeoflife_org.pem) to its expected location `/etc/ssl/certs/opentree/STAR_opentreeoflife_org.pem` (or location configured by CERTIFICATE_FILE).
 
 If running the phylesystem API, put the private key for the github account somewhere (e.g. in ~/.ssh/opentree/), so that the API can push changes to study files out to github.
 

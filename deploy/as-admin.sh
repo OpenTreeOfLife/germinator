@@ -9,13 +9,19 @@
 set -e
 # Current directory = home dir for admin user
 
-sudo test -r /etc/ssl/private/opentreeoflife.org.key || \
-    echo "** Missing /etc/ssl/private/opentreeoflife.org.key - must be copied manually"
-
 OPENTREE_HOST=$1
 OPENTREE_USER=$2
+CERTIFICATE_FILE=$3
+CERTIFICATE_KEY_FILE=$4
+
 if [ x$OPENTREE_USER = x ]; then
     OPENTREE_USER=opentree
+fi
+
+if ! sudo test -r "$CERTIFICATE_FILE"; then
+    echo "** Missing "$CERTIFICATE_FILE" - must be copied manually"
+elif ! sudo test -r "$CERTIFICATE_KEY_FILE"; then
+    echo "** Missing "$CERTIFICATE_KEY_FILE" - must be copied manually"
 fi
 
 APTGET="sudo apt-get -q --assume-yes --no-install-recommends"
@@ -222,23 +228,31 @@ if [ ! -e /etc/apache2/sites-enabled/000-opentree.conf ]; then
 fi
 
 # Enable the HTTPS site only if our SSL certs are found; else disable it
-if [ -r /etc/ssl/certs/opentree/STAR_opentreeoflife_org.pem ]; then
-    if [ ! -r /etc/apache2/sites-enabled/001-opentree-ssl.conf ]; then
-        (cd /etc/apache2/sites-enabled; \
-         sudo ln -sf ../sites-available/opentree-ssl.conf ./001-opentree-ssl.conf)
+# TBD: Make this work with letsencrypt
+if sudo test -e "${CERTIFICATE_FILE}" ; then
+    if sudo test -e "${CERTIFICATE_KEY_FILE}"; then
+
+        # Create apache symlink first time
+        if [ ! -r /etc/apache2/sites-enabled/001-opentree-ssl.conf ]; then
+            (cd /etc/apache2/sites-enabled; \
+             sudo ln -sf ../sites-available/opentree-ssl.conf ./001-opentree-ssl.conf)
+        fi
+
+        sudo chmod o-r "${CERTIFICATE_KEY_FILE}"
+        if egrep -q ssl-cert /etc/group; then
+            sudo chgrp ssl-cert "${CERTIFICATE_KEY_FILE}"
+        fi
+    else
+        echo "Note: missing certificate file ${CERTIFICATE_KEY_FILE}.  Attempting non-ssl configuration"
+        sudo rm -f /etc/apache2/sites-enabled/001-opentree-ssl.conf
     fi
 else
-     sudo rm -f /etc/apache2/sites-enabled/001-opentree-ssl.conf
+    echo "Note: missing certificate file ${CERTIFICATE_FILE}.  Attempting non-ssl configuration"
+    sudo rm -f /etc/apache2/sites-enabled/001-opentree-ssl.conf
 fi
 
 # Apache 2.4 is finicky about protection of the key file
 
-if sudo test -e /etc/ssl/private/opentreeoflife.org.key; then
-    sudo chmod o-r /etc/ssl/private/opentreeoflife.org.key
-    if egrep -q ssl-cert /etc/group; then
-        sudo chgrp ssl-cert /etc/ssl/private/opentreeoflife.org.key
-    fi
-fi
 
 # ---------- UNPRIVILEGED USER ----------
 
