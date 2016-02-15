@@ -5,3 +5,8 @@ deploy/janrain.key
 deploy/GITHUB_CLIENT_SECRET
 deploy/setup/CONFIG
 *.pyc
+*gz
+*.tre
+*.out
+*.jar
+*.tmp

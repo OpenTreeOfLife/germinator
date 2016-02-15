@@ -74,3 +74,5 @@ repo/reference-taxonomy/bin/smasher stop || true
 # Restart the HTTP server
 echo Starting smasher
 repo/reference-taxonomy/bin/smasher start
+
+log "Started smasher"

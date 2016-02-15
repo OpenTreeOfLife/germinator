@@ -1,5 +1,8 @@
 #!/bin/bash
 
+. functions.sh
+set -e
+
 # ---------- WEB2PY ----------
 
 # Install or upgrade web2py, based on a pinned release. (See
