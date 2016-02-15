@@ -56,7 +56,7 @@ directory as the current directory.
 
 The run_tests.sh scripts require either a configuration file
 or command line arguments.
-See [the phylesystem-api documentation](https://github.com/OpenTreeOfLife/phylesystem-api/blob/master/TESTING.md)
+See [the phylesystem-api documentation](https://github.com/OpenTreeOfLife/phylesystem-api/blob/master/ws-tests/README.md)
 for instructions.  E.g. the following runs the oti tests:
 
     cd repo/oti/ws-tests
