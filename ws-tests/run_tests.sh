@@ -22,7 +22,7 @@ export PYTHONPATH=PHYLESYSTEM_API_HOME/ws-tests:$PYTHONPATH
 
 # The following runs the run_tests.sh script in each repository.
 
-for repo in phylesystem-api treemachine taxomachine oti ; do
+for repo in phylesystem-api treemachine taxomachine oti reference-taxonomy ; do
     testdir=$REPOS/$repo/ws-tests
     if [ -d $testdir ]; then
         echo Running tests in $testdir

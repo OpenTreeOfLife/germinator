@@ -29,7 +29,7 @@ if git_refresh OpenTreeOfLife reference-taxonomy; then
 
 fi
 
-(cd repo/reference-taxonomy; rm bin/smasher; make bin/smasher)
+(cd repo/reference-taxonomy; rm -f bin/smasher; make bin/smasher)
 
 # Uncompress if necessary
 function deal {

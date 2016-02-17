@@ -1,5 +1,7 @@
 # Try out some v2 API methods
 
+set -e
+
 failures=0
 successes=0
 
