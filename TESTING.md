@@ -4,20 +4,11 @@ This repository holds integration tests, intended to answer the
 question, is a new version of the web site good enough to go to
 production?
 
-### Web service (API) testing (old method) 
-
-Use the test.sh script, in the root level directory of the repository.
-This can be run on an Internet-connected computer, with no setup.
-It takes one command line argument, the name of the api server to be tested.
-
-This runs a small number of tests (about ten) as simple curl calls.
-It is far from comprehensive, but is better than nothing.
-
 ### Web service (API) testing (new method)
 
 Tests for particular components of the API reside in the ws-tests
-directory of the respective repositories (oti, taxomachine,
-treemachine, phylesystem-api).
+directory of the respective repositories (phylesystem-api, treemachine,
+taxomachine, oti, and reference-taxonomy).
 
 One can run all tests, tests for a single API component, or individual
 tests.
@@ -30,7 +21,7 @@ repository:
 
 substituting the actual name of the API server you'd like to test.
 Some setup is required for germinator's run_test.sh script; it assumes
-there are clones of all four repositories, and that all the repository
+there are clones of all five repositories, and that all the repository
 clones are siblings (i.e. all are subdirectories of a common
 directory).  If this is not the case, you'll have to manually set up a
 directory of symbolic links simulating this situation:
@@ -38,7 +29,7 @@ directory of symbolic links simulating this situation:
     mkdir repo
     ln -s {location of germinator repo clone} repo/germinator
     ln -s {location of phylesystem-api repo clone} repo/taxomachine
-    # etc. for all four API component repositories
+    # etc. for all five API component repositories
 
 Individual API components (OTI, etc.) can be tested using the
 ws-tests/run_tests.sh scripts in the phylesystem-api repository.
@@ -76,10 +67,20 @@ right design is.  The problem is that a utility in one repository is
 being used by scripts in another repository, and we have no standard
 approach for cross-repository dependencies.)
 
-* API documentation [here](https://github.com/OpenTreeOfLife/opentree/wiki/Open-Tree-of-Life-APIs)
+* API v2 documentation [here](https://github.com/OpenTreeOfLife/opentree/wiki/Open-Tree-of-Life-APIs)
+* API v3 documentation [here](https://github.com/OpenTreeOfLife/germinator/wiki/Open-Tree-of-Life-Web-APIs)
 * Mark H has a [script](http://phylo.bio.ku.edu/status/status.html).
 
-### Taxonomy and phylogeny testing 
+### Web service (API) testing (old method)
+
+Use the test.sh script, in the root level directory of the repository.
+This can be run on an Internet-connected computer, with no setup.
+It takes one command line argument, the name of the api server to be tested.
+
+This runs a small number of tests (about ten) as simple curl calls.
+It is far from comprehensive, but is better than nothing.
+
+### Taxonomy and phylogeny testing
 
 Lists of inclusion and monophyly tests are in the taxa/ directory.
 They can be run against either the taxonomy or the synthetic tree.
@@ -88,7 +89,7 @@ Scripts for doing so may be found in the respective repositories.
 There are some progress tests (see below) in these lists.  They are not currently
 marked as such except in comments, so expect a few failures.  This should be fixed.
 
-### Testing the overall open tree application 
+### Testing the overall open tree application
 
 Here are some manual tests we sometimes do to kick the tires:
 
@@ -113,11 +114,11 @@ Here are some manual tests we sometimes do to kick the tires:
     * Save more substantive changes to a (throwaway) study...
          * Map one or more OTUs (tests validation and taxon assignment)
          * Set ingroup clade
-         * Update DOI or reference text via CrossRef.org lookup 
+         * Update DOI or reference text via CrossRef.org lookup
          * Test for tree MRCA
     * Confirm these changes in the main study list (tests save and "live" oti).
 
-### Deployed system operation checks 
+### Deployed system operation checks
 
 We run a nagios process on a server (varela.csail.mit.edu), which
 sends email to a short list of people if the application fails to
@@ -140,4 +141,3 @@ Tests are of two kinds: regression tests, and progress tests.
 
 * Regression tests are tests that have passed in the past
 * Progress tests are tests that we hope will pass one day, but don't currently
-
