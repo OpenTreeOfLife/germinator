@@ -87,9 +87,9 @@ cp -p $configtemplate $configfile
 
 # Append /cached to some API base URLs (for faster retrieval of common method calls)
 # N.B. We now expect these base URLs to be simple domain names, with no trailing path!
-CACHED_TREEMACHINE_BASE_URL=$(sed "s+$+/cached+" <<< $TREEMACHINE_BASE_URL)
-CACHED_TAXOMACHINE_BASE_URL=$(sed "s+$+/cached+" <<< $TAXOMACHINE_BASE_URL)
-CACHED_OTI_BASE_URL=$(sed "s+$+/cached+" <<< $OTI_BASE_URL)
+CACHED_TREEMACHINE_BASE_URL=$(sed "s+$+/phylesystem/cached+" <<< $TREEMACHINE_BASE_URL)
+CACHED_TAXOMACHINE_BASE_URL=$(sed "s+$+/phylesystem/cached+" <<< $TAXOMACHINE_BASE_URL)
+CACHED_OTI_BASE_URL=$(sed "s+$+/phylesystem/cached+" <<< $OTI_BASE_URL)
 
 sed "s+github_client_id = .*+github_client_id = $TREEVIEW_GITHUB_CLIENT_ID+;
      s+github_redirect_uri = .*+github_redirect_uri = $TREEVIEW_GITHUB_REDIRECT_URI+
