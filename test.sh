@@ -48,7 +48,7 @@ simple_curl_test tree_of_life/subtree '{"ott_id":876342}' "Alseuosmia_macrophyll
 
 simple_curl_test tree_of_life/induced_subtree '{"ott_ids":[901642, 55033]}' "Wittsteinia_panderi"
 
-simple_curl_test graph/about '{}' "graph_root_ott_id"
+simple_curl_test tree_of_life/about '{}' "root_ott_id"
 
 # Requires commit sha, which is hard to get
 if false; then
