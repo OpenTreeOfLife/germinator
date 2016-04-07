@@ -11,4 +11,4 @@ Version 5.0 was generated on 28 March 2016.
 
 This version of the tree was generated with a completely new synthesis method. There is a [make-based pipeline](https://github.com/OpenTreeOfLife/propinquity) that uses functions from the [otcetera library](https://github.com/OpenTreeOfLife/otcetera).
 
-The method is currently unpublished, but the [documentation pages](http://files.opentreeoflife.org/synthesis/opentree5.0/output/index.html) have detailed descriptions of all steps, with links to inputs and outputs. There is also a [draft manuscript]{https://github.com/OpenTreeOfLife/otcetera/blob/master/doc/summarizing-taxonomy-plus-trees.tex) (tex format).
+The method is currently unpublished, but the [documentation pages](http://files.opentreeoflife.org/synthesis/opentree5.0/output/index.html) have detailed descriptions of all steps, with links to inputs and outputs. There is also a [draft manuscript](https://github.com/OpenTreeOfLife/otcetera/blob/master/doc/summarizing-taxonomy-plus-trees.tex) (tex format).
