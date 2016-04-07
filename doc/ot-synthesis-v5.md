@@ -1,11 +1,11 @@
-# Open Tree of Life synthetic tree version 4
+# Open Tree of Life synthetic tree version 5.0
 
-Version 5 was generated on 28 March 2016.
+Version 5.0 was generated on 28 March 2016.
 
 ## Downloads
 
-* [Synthetic tree]() : includes the full tree, annotations file, and a phylo-only tree (tips only from taxonomy pruned off). See the enclosed README for details. (compressed archive; ## Mbytes)
-* [All pipeline outputs]() : Outputs and documentation from all stages of the synthesis pipeline. You can also [browse this contents]() rather than downloading. (compressed archive; ## Mbyes)
+* [Synthetic tree](http://files.opentreeoflife.org/synthesis/opentree5.0/opentree5.0_tree.tgz) : includes the full tree, annotations file, and a phylo-only tree (tips only from taxonomy pruned off). See the enclosed README for details. (compressed tar archive; 9 Mbytes)
+* [All pipeline outputs](http://files.opentreeoflife.org/synthesis/opentree5.0/opentree5.0_output.tgz) : Outputs and documentation from all stages of the synthesis pipeline. You can also [browse this contents]() rather than downloading. (compressed tar archive; 68 Mbyes)
 
 ## Release notes
 
