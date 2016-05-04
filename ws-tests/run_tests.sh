@@ -12,6 +12,11 @@ if [ x$baseurl = x ]; then
     exit 1
 fi
 
+if [[ $baseurl =~ ^http: ]]; then
+    echo "Base URL must start with https"
+    exit 1
+fi
+
 REPOS=`cd ../..; pwd`
 PHYLESYSTEM_API_HOME=$REPOS/phylesystem-api
 
