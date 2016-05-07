@@ -1,0 +1,36 @@
+[phylesystem]
+# parent of the phylesystem, or phylesystem-1, phylesystem-2 directories...
+#   if you have multiple phylesystem repositories not contained in the same
+#   directory
+parent = shards
+# Valid repo_nexml2json values are
+#       0.0.0 (Badgerfish)
+#       1.0.0 ("direct" HoneyBadgerFish)
+#       1.2.1 ("byId" HoneyBadgerFish)
+repo_nexml2json = 1.2.1
+
+# The max_file_size is specified in bytes. the default is no size limit
+#max_file_size = 20000000
+
+
+[ott]
+# directory of holding ott. The directory name
+#   is expected to have the form:
+#       ottVERSION_NUMBER_HERE
+parent = ../../repo/reference-taxonomy/old/ott2.9
+#cache = redis:localhost:6379
+
+[logging]
+level = debug
+filepath = /tmp/peyotl-log
+formatter = rich
+
+[apis]
+# The "api.opentree..." URLs are the default endpoints for services
+#   (as specified in the peyotl/api/wrapper.py APIDomains class)
+# You can uncomment one of the lines below if you would like to 
+#   run services against one of the dev servers. 
+phylesystem_api = https://devapi.opentreeoflife.org
+oti_api = https://devapi.opentreeoflife.org/api
+taxomachine = https://devapi.opentreeoflife.org/
+treemachine = https://devapi.opentreeoflife.org/
