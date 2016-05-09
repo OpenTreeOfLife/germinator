@@ -15,7 +15,7 @@ SYNTH=/Users/karen/Documents/opentreeoflife/data/synthesis/opentree5.0/output
 all: trees_report.csv
 
 trees_report.csv: shards/phylesystem-1 trees_report.py \
-	   work/conflict.csv synthesis_tree_list.csv taxa_in_synthesis.txt
+	   work/conflict.csv work/synthesis_tree_list.csv work/taxa_in_synthesis.txt
 	PEYOTL_CONFIG_FILE=dot_peyotl python trees_report.py $@
 
 shards/phylesystem-1:
@@ -25,6 +25,7 @@ shards/phylesystem-1:
 conflict: work/conflict.csv
 
 work/conflict.csv: conflict.py
+	@mkdir -p work
 	$(JYTHON) conflict.py \
 	  --out $@ \
 	  --shard $(REPOS)/phylesystem-1 \
@@ -32,15 +33,18 @@ work/conflict.csv: conflict.py
 
 # smaller, for testing
 work/conflict_small.csv: conflict.py
+	@mkdir -p work
 	$(JYTHON) conflict.py \
 	  --out $@ \
 	  --shard $(REPOS)/asterales-phylesystem \
 	  --ref $(REPOS)/reference-taxonomy/registry/aster-synth4/
 
 work/synthesis_tree_list.csv: make_synthesis_tree_list.py
+	@mkdir -p work
 	python make_synthesis_tree_list.py $(REPOS)/collections-1 work/synthesis_tree_list.csv
 
 work/taxa_in_synthesis.txt:
+	@mkdir -p work
 	$(JYTHON) taxa_in_synthesis.py \
 	  $(SYNTH)/grafted_solution/grafted_solution.tre \
 	  $@
