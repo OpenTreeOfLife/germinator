@@ -9,8 +9,8 @@ REPOS=../..
 JYTHON=$(REPOS)/reference-taxonomy/bin/jython
 
 # Location of synthesis products (output/ directory)
-SYNTH=$(REPOS)/files.opentreeoflife.org/synthesis/opentree5.0/opentree5.0/output
-
+#SYNTH=$(REPOS)/files.opentreeoflife.org/synthesis/opentree5.0/opentree5.0/output
+SYNTH=/Users/karen/Documents/opentreeoflife/data/synthesis/opentree5.0/output
 
 all: trees_report.csv
 
