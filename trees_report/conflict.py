@@ -4,10 +4,6 @@ import sys, os, json, argparse, csv
 from org.opentreeoflife.taxa import Taxonomy, Nexson, Flag
 from org.opentreeoflife.conflict import ConflictAnalysis, Disposition
 
-repo_dir = '../repo'              # directory containing repo clones
-
-default_shard = os.path.join(repo_dir, 'phylesystem-1')
-
 # Report generation
 
 # Report on every tree in every study
@@ -19,6 +15,7 @@ def report_on_trees(study_ids, shard, refs, outfile):
     count = 0
     for study_id in study_ids:
         study = get_study(study_id, shard)
+        if study == None: continue
         for tree in tree_iter_nexson_proxy(study):
             row = report_on_tree(tree, study, refs)
             writer.writerow(row)
@@ -154,7 +151,7 @@ class NexsonTreeProxy(object):
 
 # shard is the path to the root of the repository (or shard) clone
 
-def study_id_to_path(study_id, shard=default_shard):
+def study_id_to_path(study_id, shard):
     (prefix, number) = study_id.split('_', 1)
     if len(number) == 1:
         residue = '_' + number
@@ -183,44 +180,12 @@ def gobble_study(study_id, phylesystem):
     # should do try/catch for file-not-found
     if not os.path.exists(filepath):
         # foo, should be using try/catch
-        print '** Not found:', self.filepath
+        print '** Not found:', filepath
         return None
     return NexsonProxy(filepath)
 
 def import_tree(tree):
     return Nexson.importTree(tree.nexson_tree, tree._nexson_proxy.reftax_otus, tree.tree_id)
-
-# Study/tree ids in a collection
-
-def collection_treespecs(path):
-    with open(path, 'r') as infile:
-        collection_json = json.load(infile)
-        return map(lambda coll: (coll[u'studyID'], coll[u'treeID']),
-                   collection_json[u'decisions'])
-
-synthesis_treespecs = []        # rank order
-trees_in_synthesis = {}
-
-def read_synthesis_collections():
-    if len(synthesis_treespecs) > 0: return
-    for collection_name in ['fungi',
-                            'safe-microbes',
-                            'metazoa',
-                            'plants']:
-        path = os.path.join(repo_dir, 'collections-1/collections-by-owner/opentreeoflife', collection_name + '.json')
-        print 'reading', path
-        for treespec in collection_treespecs(path):
-            synthesis_treespecs.append(treespec)
-            trees_in_synthesis[treespec] = True
-
-def in_synthesis(study_id, tree_id):
-    if len(trees_in_synthesis) == 0:
-        read_synthesis_collections()
-    treespec = (study_id, tree_id)
-    if treespec in trees_in_synthesis:
-        return trees_in_synthesis[treespec]
-    else:
-        return False
 
 # Utilities associated with obtaining study and tree lists for reporting
 
@@ -231,12 +196,13 @@ def all_study_ids(shard):
     top = os.path.join(shard, 'study')
     hundreds = os.listdir(top)
     for dir in hundreds:
-        dir2 = os.path.join(top, dir)
-        if os.path.isdir(dir2):
-            dirs = os.listdir(dir2)
-            for study_dir in dirs:
-                # if os.path.isdir(study_dir): ... ? ...
-                ids.append(study_dir)
+        if not dir.startswith('.'):
+            dir2 = os.path.join(top, dir)
+            if os.path.isdir(dir2):
+                dirs = os.listdir(dir2)
+                for study_dir in dirs:
+                    # if os.path.isdir(study_dir): ... ? ...
+                    ids.append(study_dir)
     print len(ids), 'studies'
     return ids
 
@@ -263,6 +229,7 @@ def load_tree(path):
     print count, 'ids'
     return tree
 
+repo_dir = '../..'              # directory containing repo clones
 registry_dir = os.path.join(repo_dir, 'reference-taxonomy', 'registry')
 
 # consider comparing the "^ot:focalClade" to the induced root
@@ -274,7 +241,7 @@ if __name__ == '__main__':
     argparser.add_argument('--out', dest='outfile', default='-')
 
     argparser.add_argument('--shard', dest='shard',
-                           default=default_shard,
+                           default=os.path.join(repo_dir, 'phylesystem-1'),
                            help='root directory of repository (shard) containing nexsons')
     argparser.add_argument('--ref', dest='refs', nargs='+',
                            default=os.path.join(registry_dir, 'draftversion4.tre'), # synthetic tree is a newick...
