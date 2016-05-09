@@ -69,10 +69,17 @@ def write_tree_list(outpath):
                 row.conflict_count = int(analysis[1])
                 row.resolve_count = int(analysis[2])
 
+            row.score = ((row.new_count + row.resolve_count) -
+                         (row.conflict_count * 20) +
+                         (row.n_ingroup * 10) +
+                         (row.n_preferred * 50) +
+                         (row.n_intended * 100))
+
             table.append(row)
             if tree_count % 500 == 0:
                 print tree_count, long_id, ctype
-    table.sort(key=lambda row:(-row.n_intended == 0,   # whether intended for synthesis
+    table.sort(key=lambda row:(-row.score,
+                               row.n_intended == 0,   # whether intended for synthesis
                                -row.n_preferred,   # whether preferred
                                -row.n_ingroup,   # whether ingroup is designated
                                row.conflict_count,    # number of synth tree conflicts
@@ -83,13 +90,17 @@ def write_tree_list(outpath):
     with codecs.open(outpath, 'w', encoding='utf-8') as outfile:
         writer = csv.writer(outfile)
         writer.writerow(['tree', 'intended', 'preferred', 'has ingroup',
-                         'has method', 'in synth', '#mapped',
-                         '#tips', '#conflicts', '#resolved', '#new'])
+                         'has method', 'in synth', '#tips',
+                         '#mapped', '#new', '#resolved', '#conflicts',
+                         'score'])
         for row in table:
             writer.writerow([row.id, row.n_intended, row.n_preferred, row.n_ingroup,
-                             row.n_ctype, row.n_synth, row.ott_count,
-                             row.tip_count, row.conflict_count,
-                             row.resolve_count, row.new_count])
+                             row.n_ctype, row.n_synth, 
+                             row.tip_count, row.ott_count,
+                             row.new_count,
+                             row.resolve_count,
+                             row.conflict_count,
+                             row.score])
     print 'studies:', study_count
     print 'trees:', tree_count
     print 'preferred:', preferred_count
@@ -124,7 +135,7 @@ def examine_tree(tree, otu_group, ingroup_node_id, taxa_in_synthesis):
 
 def read_conflict_analyses():
     conflict_analyses = {}
-    with open('conflict.csv', 'r') as infile:
+    with open('work/conflict.csv', 'r') as infile:
         reader = csv.reader(infile)
         reader.next()
         for row in reader:
@@ -134,7 +145,7 @@ def read_conflict_analyses():
 
 def read_synthesis_list():
     trees_in_synthesis = {}
-    with open('synthesis_tree_list.csv', 'r') as infile:
+    with open('work/synthesis_tree_list.csv', 'r') as infile:
         reader = csv.reader(infile)
         reader.next()
         for row in reader:
@@ -143,7 +154,7 @@ def read_synthesis_list():
     
 def read_synthesis_taxa():
     ids = {}
-    with open('taxa_in_synthesis.txt', 'r') as infile:
+    with open('work/taxa_in_synthesis.txt', 'r') as infile:
         for line in infile:
             ids[int(line.strip())] = True
     print len(ids), 'synthesis taxa'
