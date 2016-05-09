@@ -24,11 +24,11 @@ shards/phylesystem-1:
 
 conflict: work/conflict.csv
 
-work/conflict.csv: conflict.py
+work/conflict.csv: conflict.py shards/phylesystem-1
 	@mkdir -p work
 	$(JYTHON) conflict.py \
 	  --out $@ \
-	  --shard $(REPOS)/phylesystem-1 \
+	  --shard shards/phylesystem-1 \
 	  --ref $(SYNTH)/labelled_supertree/labelled_supertree.tre
 
 # smaller, for testing
@@ -48,3 +48,6 @@ work/taxa_in_synthesis.txt:
 	$(JYTHON) taxa_in_synthesis.py \
 	  $(SYNTH)/grafted_solution/grafted_solution.tre \
 	  $@
+
+clean:
+	rm -f work/* trees_report.csv
