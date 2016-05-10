@@ -58,8 +58,8 @@ def write_tree_list(outpath):
             root = tree.get('^ot:specifiedRoot')
             root_confirmed = 0
             if root != None and root != '':
-                root = 1
-            row.root_confirmed = root
+                root_confirmed = 1
+            row.root_confirmed = root_confirmed
 
             row.n_synth = 1 if long_id in trees_in_synthesis else 0
 
