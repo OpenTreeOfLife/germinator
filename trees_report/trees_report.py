@@ -54,6 +54,13 @@ def write_tree_list(outpath):
                 n_ctype = 1
             row.n_ctype = n_ctype
 
+            # whether a curator has confirmed the root
+            root = tree.get('^ot:specifiedRoot')
+            root_confirmed = 0
+            if root != None and root != '':
+                root = 1
+            row.root_confirmed = root
+
             row.n_synth = 1 if long_id in trees_in_synthesis else 0
 
             ingroup_node_id = tree.get('^ot:inGroupClade')
@@ -90,12 +97,13 @@ def write_tree_list(outpath):
     with codecs.open(outpath, 'w', encoding='utf-8') as outfile:
         writer = csv.writer(outfile)
         writer.writerow(['tree', 'intended', 'preferred', 'has ingroup',
-                         'has method', 'in synth', '#tips',
+                         'has method', 'root confirmed', 'in synth', '#tips',
                          '#mapped', '#new', '#resolved', '#conflicts',
                          'score'])
         for row in table:
-            writer.writerow([row.id, row.n_intended, row.n_preferred, row.n_ingroup,
-                             row.n_ctype, row.n_synth, 
+            writer.writerow([row.id, row.n_intended, row.n_preferred,
+                             row.n_ingroup, row.n_ctype,
+                             row.root_confirmed, row.n_synth,
                              row.tip_count, row.ott_count,
                              row.new_count,
                              row.resolve_count,
@@ -151,7 +159,7 @@ def read_synthesis_list():
         for row in reader:
             trees_in_synthesis[row[0]] = True
     return trees_in_synthesis
-    
+
 def read_synthesis_taxa():
     ids = {}
     with open('work/taxa_in_synthesis.txt', 'r') as infile:
