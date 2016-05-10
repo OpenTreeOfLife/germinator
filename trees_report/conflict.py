@@ -42,7 +42,7 @@ def tree_report_header(refs):
     return row
 
 def report_on_tree(tree, study, refs):
-    input = import_tree(tree)
+    input = import_tree(tree, study)
 
     # One row per tree
     row = ['%s@%s' % (study.id, tree.tree_id)]
@@ -184,8 +184,10 @@ def gobble_study(study_id, phylesystem):
         return None
     return NexsonProxy(filepath)
 
-def import_tree(tree):
-    return Nexson.importTree(tree.nexson_tree, tree._nexson_proxy.reftax_otus, tree.tree_id)
+def import_tree(tree, study):
+    return Nexson.importTree(tree.nexson_tree,
+                             tree._nexson_proxy.reftax_otus,
+                             '%s@%s' % (study.id, tree.tree_id))
 
 # Utilities associated with obtaining study and tree lists for reporting
 
@@ -201,8 +203,9 @@ def all_study_ids(shard):
             if os.path.isdir(dir2):
                 dirs = os.listdir(dir2)
                 for study_dir in dirs:
-                    # if os.path.isdir(study_dir): ... ? ...
-                    ids.append(study_dir)
+                    dir3 = os.path.join(dir2, study_dir)
+                    if os.path.isdir(dir3):
+                        ids.append(study_dir)
     print len(ids), 'studies'
     return ids
 
