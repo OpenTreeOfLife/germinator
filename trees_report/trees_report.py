@@ -64,7 +64,7 @@ def write_tree_list(outpath):
             row.n_synth = 1 if long_id in trees_in_synthesis else 0
 
             ingroup_node_id = tree.get('^ot:inGroupClade')
-            row.n_ingroup = (1 if (ingroup_node_id == None) else 0)
+            row.n_ingroup = (1 if (ingroup_node_id != None) else 0)
 
             (row.tip_count, row.ott_count, row.new_count) = \
                 examine_tree(tree, otu_group, ingroup_node_id, taxa_in_synthesis)
