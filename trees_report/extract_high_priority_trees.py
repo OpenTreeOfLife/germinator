@@ -7,6 +7,13 @@ def fraction_mapped(row):
     fmapped = round(nmapped/float(ntips),2)
     return fmapped
 
+def sufficiently_curated(frame):
+    curated = frame[
+        (frame['has ingroup']==1) &
+        (frame['root confirmed']==1)
+    ]
+    return curated
+
 def get_high_priority_trees(frame,mapped,conflicts,new):
     high_priority = frame[
         (frame['frac_map']>mapped) &
@@ -49,6 +56,9 @@ if __name__ == "__main__":
     df = pd.read_csv(args.inputfile)
     print "read {n} trees".format(n=len(df.index))
 
+    curated = sufficiently_curated(df)
+    print "{n} trees are sufficently curated".format(n=len(curated.index))
+
     # get just the trees not in synth, and drop some columns we don't
     # care about right now
     not_in_synth = df[
@@ -77,5 +87,6 @@ if __name__ == "__main__":
         t=len(high_priority.index)
     )
 
+    #print high_priority
     #high_priority.apply(lambda row: split_tree_string(row),axis=1)
     #print high_priority[['tree','#tips','#new','#mapped','#conflicts','#resolved']]
