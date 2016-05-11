@@ -130,9 +130,6 @@ def get_obj_from_http(url,
         raise_for_status(resp)
     return resp.json()
 
-# Returns two results if return_bool_data.
-# Otherwise returns one result.
-
 def test_http_json_method(url,
                      verb='GET',
                      data=None,
@@ -147,7 +144,7 @@ def test_http_json_method(url,
          has the expected status code, AND
          has the expected content (if expected_response is not None)
     '''
-    fail_return = (False, None) if return_bool_data else False
+    fail_return = (False, None, False) if return_bool_data else False
     if headers is None:
         headers = {
             'content-type' : 'application/json',
@@ -167,14 +164,14 @@ def test_http_json_method(url,
         debug('Sent {v} to {s}\n'.format(v=verb, s=resp.url))
     debug('Got status code {c} (expecting {e})\n'.format(c=resp.status_code,e=expected_status))
     if resp.status_code != expected_status:
-        debug('Did not get expect response status. Got:\n{s}'.format(s=resp.status_code))
+        debug('Did not get expected response status. Got:\n{s}'.format(s=resp.status_code))
         debug('Full response: {r}\n'.format(r=resp.text))
         raise_for_status(resp)
         # this is required for the case when we expect a 4xx/5xx but a successful return code is returned
         return fail_return
     if expected_response is not None:
         if not is_json:
-             return (True, resp.text) if return_bool_data else True
+             return (True, resp.text, True) if return_bool_data else True
         try:
             results = resp.json()
             if results != expected_response:
@@ -188,8 +185,8 @@ def test_http_json_method(url,
     elif _VERBOSITY_LEVEL > 1:
         debug('Full response: {r}\n'.format(r=resp.text))
     if not is_json:
-             return (True, resp.text) if return_bool_data else True
-    return (True, resp.json()) if return_bool_data else True
+             return (True, resp.text, True) if return_bool_data else True
+    return (True, resp.json(), True) if return_bool_data else True
 
 def raise_for_status(resp):
     try:
@@ -220,14 +217,13 @@ def exit_if_api_is_readonly(fn):
 
 
 # Mimic the behavior of apache so that services can be tested without
-# having apache running.  See ../deploy/setup/opentree-shared.conf
+# having apache running.  See opentree/deploy/setup/opentree-shared.conf
 
 translations = [('/v2/study/', '/phylesystem/v1/study/'),
                 ('/cached/', '/phylesystem/default/cached/'),
                 # treemachine
-                ('/v2/graph/', '/db/data/ext/graph/graphdb/'),
                 ('/v2/tree_of_life/', '/db/data/ext/tree_of_life/graphdb/'),
-                ('/v3/tree_of_life/', '/db/data/ext/tree_of_life_v3/graphdb/'),
+                ('/v2/graph/', '/db/data/ext/graph/graphdb/'),
                 # taxomachine
                 ('/taxomachine/v1/', '/db/data/ext/TNRS/graphdb/'),
                 ('/v2/tnrs/', '/db/data/ext/tnrs_v2/graphdb/'),
