@@ -59,15 +59,14 @@ if __name__ == "__main__":
     curated = sufficiently_curated(df)
     print "{n} trees are sufficently curated".format(n=len(curated.index))
 
-    # get just the trees not in synth, and drop some columns we don't
-    # care about right now
-    not_in_synth = df[
-        (df['in synth']==0)
+    # get just the trees not in synth, and drop some columns for simplicity
+    not_in_synth = curated[
+        (curated['in synth']==0)
     ].drop([
         'in synth','has ingroup','score',
         'has method','intended','root confirmed'
         ],1)
-    print "{n} trees not in synthesis".format(n=len(not_in_synth))
+    print "{n} curated trees not in synthesis".format(n=len(not_in_synth))
 
     not_in_synth.loc[:,'frac_map']=not_in_synth.apply(
         lambda row: fraction_mapped(row),axis=1
@@ -80,7 +79,7 @@ if __name__ == "__main__":
         args.min_new_otus
         )
 
-    print "{t} trees with:\n\tfraction mapped>{m}\n\tconflict<{c}\n\tnew taxa>{n}".format(
+    print "{t} curated trees with:\n\tfraction mapped>{m}\n\tconflict<{c}\n\tnew taxa>{n}".format(
         m=args.min_mapped,
         c=args.max_conflict,
         n=args.min_new_otus,
