@@ -17,23 +17,8 @@ if [[ $baseurl =~ ^http: ]]; then
     exit 1
 fi
 
-REPOS=`cd ../..; pwd`
-PHYLESYSTEM_API_HOME=$REPOS/phylesystem-api
-
-# The python test scripts all use the opentreetesting.py library,
-# so its location has to be on PYTHONPATH.
-
-export PYTHONPATH=PHYLESYSTEM_API_HOME/ws-tests:$PYTHONPATH
-
-# The following runs the run_tests.sh script in each repository.
+args="host:apihost=$baseurl host:allowwrite=false"
 
 for repo in phylesystem-api treemachine taxomachine oti reference-taxonomy ; do
-    testdir=$REPOS/$repo/ws-tests
-    if [ -d $testdir ]; then
-        echo Running tests in $testdir
-        cd $testdir
-        $PHYLESYSTEM_API_HOME/ws-tests/run_tests.sh \
-           host:apihost=$baseurl \
-           host:allowwrite=false
-    fi
+    ./repo_tests.sh $repo $args
 done
