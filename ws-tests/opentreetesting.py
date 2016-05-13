@@ -101,9 +101,10 @@ def summarize_gzipped_json_response(resp):
         return False
 
 def get_obj_from_http(url,
-                     verb='GET',
-                     data=None,
-                     headers=None):
+                      verb='GET',
+                      data=None,
+                      params=None,
+                      headers=None):
     '''Call `url` with the http method of `verb`. 
     If specified `data` is passed using json.dumps
     returns the json content of the web service or raise an HTTP error
@@ -118,11 +119,13 @@ def get_obj_from_http(url,
                                 translate(url),
                                 headers=headers,
                                 data=json.dumps(data),
+                                params=params,
                                 allow_redirects=True)
     else:
         resp = requests.request(verb,
                                 translate(url),
                                 headers=headers,
+                                params=params,
                                 allow_redirects=True)
     debug('Sent {v} to {s}\n'.format(v=verb, s=resp.url))
     debug('Got status code {c}\n'.format(c=resp.status_code))

@@ -13,14 +13,14 @@
 
 # Find directory containing opentreetesting.py
 
-if [ -e opentreetesting.py ]; then
+if [ -e ../germinator/ws-tests/opentreetesting.py ]; then
+    gdir=../germinator/ws-tests
+elif [ -e ../../germinator/ws-tests/opentreetesting.py ]; then
+    gdir=../../germinator/ws-tests
+elif [ -e opentreetesting.py ]; then
     gdir=.
 elif [ -e ws-tests/opentreetesting.py ]; then
     gdir=ws-tests
-elif [ -e ../germinator/ws-tests/opentreetesting.py ]; then
-    gdir=../germinator/ws-tests/opentreetesting.py
-elif [ -e ../../germinator/ws-tests/opentreetesting.py ]; then
-    gdir=../../germinator/ws-tests/opentreetesting.py
 else
     echo "Cannot find opentreetesting.py"
     exit 1
@@ -79,6 +79,8 @@ function do_tests {
     fi
 
     gabs=`cd $gdir; pwd`
+    echo $gabs:
+    ls $gabs
     num_tried=0
     num_passed=0
     num_failed=0
