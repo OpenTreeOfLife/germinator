@@ -79,8 +79,6 @@ function do_tests {
     fi
 
     gabs=`cd $gdir; pwd`
-    echo $gabs:
-    ls $gabs
     num_tried=0
     num_passed=0
     num_failed=0
