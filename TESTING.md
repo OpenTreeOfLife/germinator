@@ -19,25 +19,25 @@ To run all tests for all components:
     ws-tests/run_tests.sh https://devapi.opentreeoflife.org
 
 substituting the actual name of the API server you'd like to test.
-(You can also run it from the germinator/ws-tests directory.)
+(You can also run it from the germinator/ws-tests directory if you prefer.)
 
 Some setup is required for the run_test.sh script.  It assumes there
 are clones of all five component repositories, and that all the
 repository clones are siblings (i.e. all are subdirectories of a
-common directory).  If this is not the case, you'll have to manually
-set up a directory of symbolic links simulating this situation:
+common directory).  If this is not the case, you'll have to
+create symbolic links in germinator's parent simulating this situation:
 
     cd germinator/..
     ln -s {location of phylesystem-api repo clone} taxomachine
     ln -s {location of oti repo clone} oti
     # etc. for all five API component repositories
 
-A few of the phylesystem-api tests require that peyotl be installed,
-but if it isn't they will just fail.
+A few of the phylesystem-api tests require that peyotl be installed.
+If it isn't, they will just fail, which is distracting but OK.
 
 Individual API components (OTI, etc.) can be tested either using the
--t flag, or by running `run_tests.sh` from the appropriate ws-tests
-directory.  The argument to -t is the ws-tests directory for the
+`-t` flag, or by running `run_tests.sh` from the appropriate ws-tests
+directory.  The argument to `-t` is the ws-tests directory for the
 component in question, e.g.
 
     ../germinator/ws-tests/run_tests.sh -t . https://devapi.opentreeoflife.org
@@ -46,7 +46,7 @@ or
 
     ../germinator/ws-tests/run_tests.sh -t ../oti/ws-tests https://devapi.opentreeoflife.org
 
-It is also possible to run individual tests (*/ws-tests/test_*.py).
+It is also possible to run individual tests (\*/ws-tests/test_\*.py).
 These require the `opentreetesting` module, so
 PYTHONPATH has to contain the `germinator/ws-tests` directory.
 To set the API 
