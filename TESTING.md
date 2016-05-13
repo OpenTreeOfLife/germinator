@@ -4,81 +4,65 @@ This repository holds integration tests, intended to answer the
 question, is a new version of the web site good enough to go to
 production?
 
-### Web service (API) testing (new method)
+### Web service (API) testing
 
-Tests for particular components of the API reside in the ws-tests
-directory of the respective repositories (phylesystem-api, treemachine,
-taxomachine, oti, and reference-taxonomy).
+Tests for the Open Tree APIs reside in the ws-tests directories of the
+respective repositories (phylesystem-api, treemachine, taxomachine,
+oti, and reference-taxonomy).
 
 One can run all tests, tests for a single API component, or individual
 tests.
 
-To run all tests for all components, do this in the germinator
-repository:
+To run all tests for all components:
 
-    cd ws-tests
-    run_tests.sh https://devapi.opentreeoflife.org
+    cd germinator
+    ws-tests/run_tests.sh https://devapi.opentreeoflife.org
 
 substituting the actual name of the API server you'd like to test.
-Some setup is required for germinator's run_test.sh script; it assumes
-there are clones of all five repositories, and that all the repository
-clones are siblings (i.e. all are subdirectories of a common
-directory).  If this is not the case, you'll have to manually set up a
-directory of symbolic links simulating this situation:
+(You can also run it from the germinator/ws-tests directory.)
 
-    mkdir repo
-    ln -s {location of germinator repo clone} repo/germinator
-    ln -s {location of phylesystem-api repo clone} repo/taxomachine
+Some setup is required for the run_test.sh script.  It assumes there
+are clones of all five component repositories, and that all the
+repository clones are siblings (i.e. all are subdirectories of a
+common directory).  If this is not the case, you'll have to manually
+set up a directory of symbolic links simulating this situation:
+
+    cd germinator/..
+    ln -s {location of phylesystem-api repo clone} taxomachine
+    ln -s {location of oti repo clone} oti
     # etc. for all five API component repositories
 
-Individual API components (OTI, etc.) can be tested using the
-ws-tests/run_tests.sh scripts in the phylesystem-api repository.
-You will need to do
+A few of the phylesystem-api tests require that peyotl be installed,
+but if it isn't they will just fail.
 
-    export PYTHONPATH={path to phylesystem-api repo}/ws-tests:$PYTHONPATH
+Individual API components (OTI, etc.) can be tested either using the
+-t flag, or by running `run_tests.sh` from the appropriate ws-tests
+directory.  The argument to -t is the ws-tests directory for the
+component in question, e.g.
 
-because the test scripts refer to the opentreetesting.py library,
-which is defined in the phylesystem-api repository.  You may want to
-set up a subshell or virtualenv if you don't want this setting to be
-persistent.
+    ../germinator/ws-tests/run_tests.sh -t . https://devapi.opentreeoflife.org
 
-It is necessary to run the run_tests.sh script with the ws-tests
-directory as the current directory.
+or
 
-The run_tests.sh scripts require either a configuration file
-or command line arguments.
-See [the phylesystem-api documentation](https://github.com/OpenTreeOfLife/phylesystem-api/blob/master/ws-tests/README.md)
-for instructions.  E.g. the following runs the oti tests:
+    ../germinator/ws-tests/run_tests.sh -t ../oti/ws-tests https://devapi.opentreeoflife.org
 
-    cd repo/oti/ws-tests
-    export PYTHONPATH=../../phylesystem-api/ws-tests:$PYTHONPATH
-    sh ../../phylesystem-api/ws-tests/run_tests.sh \
-       host:allowwrite=false \
-       host:apihost=https://devapi.opentreeoflife.org
-
-It is also possible to run individual tests (ws-tests/test_*.py),
-again with PYTHONPATH set as above and with current directory = ws-tests.
-The configuration file and/or command line arguments to the individual
-test scripts are the same as for run_tests.sh.
+It is also possible to run individual tests (*/ws-tests/test_*.py).
+These require the `opentreetesting` module, so
+PYTHONPATH has to contain the `germinator/ws-tests` directory.
+To set the API 
+URL you have to say `host:apihost=URL` instead of just URL.
 See [the phylesystem-api documentation](https://github.com/OpenTreeOfLife/phylesystem-api/blob/master/TESTING.md).
+E.g.
 
-(This could be made more convenient, but it's not obvious what the
-right design is.  The problem is that a utility in one repository is
-being used by scripts in another repository, and we have no standard
-approach for cross-repository dependencies.)
+    cd oti/ws-tests
+    export PYTHONPATH=$PWD/../../germinator/ws-tests:$PYTHONPATH
+    python test-basic.py host:apihost=https://devapi.opentreeoflife.org
 
-* API v2 documentation [here](https://github.com/OpenTreeOfLife/opentree/wiki/Open-Tree-of-Life-APIs)
-* API v3 documentation [here](https://github.com/OpenTreeOfLife/germinator/wiki/Open-Tree-of-Life-Web-APIs)
-* Mark H has a [script](http://phylo.bio.ku.edu/status/status.html).
-
-### Web service (API) testing (old method)
-
-Use the test.sh script, in the root level directory of the repository.
-This can be run on an Internet-connected computer, with no setup.
-It takes one command line argument, the name of the api server to be tested.
-
-This runs a small number of tests (about ten) as simple curl calls.
-It is far from comprehensive, but is better than nothing.
+There are optional configuration directives for the tests.  These can
+be set either from a configuration file or on the command line using
+the syntax section:parameter=value.  See [the phylesystem-api
+documentation](https://github.com/OpenTreeOfLife/phylesystem-api/blob/master/ws-tests/README.md)
+for instructions.
 
 ### Taxonomy and phylogeny testing
 
