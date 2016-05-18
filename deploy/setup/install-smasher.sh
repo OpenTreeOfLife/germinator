@@ -2,8 +2,7 @@
 
 CONTROLLER=$1 
 
-# Phylesystem API, the part you put before "/study/..."
-OPENTREE_API_BASE_URL=$2
+OPENTREE_WEBAPI_BASE_URL=$2
 
 # We expect the taxonomy to be in taxonomy.tgz, and
 # the synthetic tree to be in synth.tre.gz (or synth.tgz).
@@ -61,12 +60,12 @@ deal taxonomy
 deal synth
 
 # Cf. index-doc-store.sh
-if [ ${OPENTREE_API_BASE_URL:0:2} = '//' ]; then
-    OPENTREE_API_BASE_URL=https:$OPENTREE_API_BASE_URL
+if [ ${OPENTREE_WEBAPI_BASE_URL:0:2} = '//' ]; then
+    OPENTREE_WEBAPI_BASE_URL=https:$OPENTREE_WEBAPI_BASE_URL
 fi
 
 # Create config file
-echo STUDY_BASE_URL="${OPENTREE_API_BASE_URL}"/study/ >repo/reference-taxonomy/service/service.config
+echo STUDY_BASE_URL="${OPENTREE_WEBAPI_BASE_URL}"/v3/study/ >repo/reference-taxonomy/service/service.config
 
 # Stop the HTTP server, if running
 repo/reference-taxonomy/bin/smasher stop || true

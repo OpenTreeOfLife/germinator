@@ -174,7 +174,11 @@ function docommand {
         push_neo4j_db $*
             ;;
     install-db)
-        install_neo4j_db $*
+        if [ $# = 2 ]; then
+            install_neo4j_db $*
+        else
+            err "Wrong number of arguments to install-db" $*
+        fi
         ;;
     index  | indexoti | index-db)
         index_doc_store
@@ -390,7 +394,7 @@ function push_neo4j {
 function push_smasher {
     if [ $DRYRUN = "yes" ]; then echo "[push_smasher]"; return; fi
     echo push_smasher: ${OPENTREE_WEBAPI_BASE_URL}
-    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-smasher.sh ${CONTROLLER} ${OPENTREE_API_BASE_URL}
+    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-smasher.sh ${CONTROLLER} ${OPENTREE_WEBAPI_BASE_URL}
 }
 
 process_arguments $*
