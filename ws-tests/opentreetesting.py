@@ -240,6 +240,8 @@ translations = [('/v2/study/', '/phylesystem/v1/study/'),
                 # oti
                 ('/v3/studies/', '/db/data/ext/studies/graphdb/'),
                 ('/v2/studies/', '/db/data/ext/studies/graphdb/'),
+                # smasher (port 8081)
+                ('/v2/conflict/', '/')
 ]
 
 def translate(s):
