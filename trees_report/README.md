@@ -30,8 +30,8 @@ work/conflict.csv and work/synthesis_tree_list.csv.
      * phylesystem-1
  * Install peyotl
  * Go to the reference-taxonomy repo and say `make compile bin/jython` (as of 2016-05-09, 
-   the `amendments` branch of the reference-taxonomy repo is required, but
-   I expect this to get merged to master in the future)
+   the `cleanups-for-writeup` branch of the reference-taxonomy repo is required, but
+   I expect this to get merged to master in the near future)
  * Adjust SYNTH in the Makefile or put synthesis files in that location.  It 
    needs the files `output/labelled_supertree/labelled_supertree.tre` and
    `output/grafted_solution/grafted_solution.tre`
