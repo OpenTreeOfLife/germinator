@@ -120,16 +120,16 @@ fi
 [ "x$TREEVIEW_GITHUB_REDIRECT_URI" != x ] || TREEVIEW_GITHUB_REDIRECT_URI=$WEBAPP_BASE_URL/curator/user/login
 
 # WEBAPI_BASE_URL is only needed for defaulting other things
-# The part of an API URL before the 'v2'.  Used by webapps
+# The part of an API URL before the 'v2' (bare host URL).  Used by webapps
 if [ "x$OPENTREE_WEBAPI_BASE_URL" = x ]; then
     OPENTREE_WEBAPI_BASE_URL=$WEBAPP_BASE_URL
 fi
 
 # "API" in the following is short for "Phylesystem API"
-[ "x$OPENTREE_API_BASE_URL" != x ] || OPENTREE_API_BASE_URL=$OPENTREE_WEBAPI_BASE_URL/api/v1
-[ "x$COLLECTIONS_API_BASE_URL" != x ] || COLLECTIONS_API_BASE_URL=$OPENTREE_WEBAPI_BASE_URL/v2
-[ "x$FAVORITES_API_BASE_URL" != x ] || FAVORITES_API_BASE_URL=$OPENTREE_WEBAPI_BASE_URL/v2
-[ "x$CONFLICT_API_BASE_URL" != x ] || CONFLICT_API_BASE_URL=$OPENTREE_WEBAPI_BASE_URL/v2/conflict
+[ "x$OPENTREE_API_BASE_URL" != x ] || OPENTREE_API_BASE_URL=$OPENTREE_WEBAPI_BASE_URL
+[ "x$COLLECTIONS_API_BASE_URL" != x ] || COLLECTIONS_API_BASE_URL=$OPENTREE_WEBAPI_BASE_URL
+[ "x$FAVORITES_API_BASE_URL" != x ] || FAVORITES_API_BASE_URL=$OPENTREE_WEBAPI_BASE_URL
+[ "x$CONFLICT_API_BASE_URL" != x ] || CONFLICT_API_BASE_URL=$OPENTREE_WEBAPI_BASE_URL
 
 # End of configuration processing.
 
@@ -174,7 +174,11 @@ function docommand {
         push_neo4j_db $*
             ;;
     install-db)
-        install_neo4j_db $*
+        if [ $# = 2 ]; then
+            install_neo4j_db $*
+        else
+            err "Wrong number of arguments to install-db" $*
+        fi
         ;;
     index  | indexoti | index-db)
         index_doc_store
@@ -390,7 +394,7 @@ function push_neo4j {
 function push_smasher {
     if [ $DRYRUN = "yes" ]; then echo "[push_smasher]"; return; fi
     echo push_smasher: ${OPENTREE_WEBAPI_BASE_URL}
-    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-smasher.sh ${CONTROLLER} ${OPENTREE_API_BASE_URL}
+    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-smasher.sh ${CONTROLLER} ${OPENTREE_WEBAPI_BASE_URL}
 }
 
 process_arguments $*
