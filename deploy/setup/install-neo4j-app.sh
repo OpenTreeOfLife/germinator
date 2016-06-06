@@ -97,8 +97,6 @@ function make_neo4j_instance {
 	if ./neo4j-$APP/bin/neo4j status; then
 	    echo "Stopping $APP neo4j server"
 	    ./neo4j-$APP/bin/neo4j stop
-            # Voodoo
-            sleep 3
 	fi
     else
         # There was some question as to whether the above code worked.
