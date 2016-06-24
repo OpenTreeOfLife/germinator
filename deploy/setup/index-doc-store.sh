@@ -43,6 +43,6 @@ echo "Indexing studies from API at $OPENTREE_API_BASE_URL"
 # We need to pass in the doc store repo name here
 # Need to explicitly run python since ours is different from what you get from #!/usr/bin/env
 
-time python repo/${APP}/index_current_repo.py http://127.0.0.1:7478/db/data/ext/studies_v3/graphdb ${OPENTREE_API_BASE_URL}v3
+time python repo/${APP}/index_current_repo.py http://127.0.0.1:7478/db/data/ext/studies_v3/graphdb ${OPENTREE_API_BASE_URL}phylesystem/v1
 
 log "$APP database indexed via $OPENTREE_API_BASE_URL"
