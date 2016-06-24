@@ -317,7 +317,7 @@ function push_webapps {
     [ "x$CONFLICT_BASE_URL"    != x ] || err "CONFLICT_BASE_URL not configured"
 
     if [ $DRYRUN = "yes" ]; then echo "[opentree]"; return; fi
-    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-web2py-apps.sh "$OPENTREE_HOST" "${OPENTREE_PUBLIC_DOMAIN}" "${OPENTREE_DEFAULT_APPLICATION}" "$CONTROLLER" "${CURATION_GITHUB_CLIENT_ID}" "${CURATION_GITHUB_REDIRECT_URI}" "${TREEVIEW_GITHUB_CLIENT_ID}" "${TREEVIEW_GITHUB_REDIRECT_URI}" "${TREEMACHINE_BASE_URL}" "${TAXOMACHINE_BASE_URL}" "${OTI_BASE_URL}" "${OPENTREE_API_BASE_URL}" "${COLLECTIONS_API_BASE_URL}" "${AMENDMENTS_API_BASE_URL}""${FAVORITES_API_BASE_URL}" "${CONFLICT_API_BASE_URL}"
+    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-web2py-apps.sh "$OPENTREE_HOST" "${OPENTREE_PUBLIC_DOMAIN}" "${OPENTREE_DEFAULT_APPLICATION}" "$CONTROLLER" "${CURATION_GITHUB_CLIENT_ID}" "${CURATION_GITHUB_REDIRECT_URI}" "${TREEVIEW_GITHUB_CLIENT_ID}" "${TREEVIEW_GITHUB_REDIRECT_URI}" "${TREEMACHINE_BASE_URL}" "${TAXOMACHINE_BASE_URL}" "${OTI_BASE_URL}" "${OPENTREE_API_BASE_URL}" "${COLLECTIONS_API_BASE_URL}" "${AMENDMENTS_API_BASE_URL}" "${FAVORITES_API_BASE_URL}" "${CONFLICT_API_BASE_URL}"
     # place the files with secret GitHub API keys for curator and webapp (tree browser feedback) apps
     # N.B. This includes the final domain name, since we'll need different keys for dev.opentreeoflife.org, www.opentreeoflife.org, etc.
     keyfile=${OPENTREE_SECRETS}/treeview-GITHUB_CLIENT_SECRET-$OPENTREE_PUBLIC_DOMAIN
