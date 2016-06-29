@@ -3,7 +3,7 @@
 # Some of this repeats what's found in install-api.sh.  Keep in sync.
 
 # Lots of arguments to make this work.. check to see if we have them all.
-if [ "$#" -ne 16 ]; then
+if [ "$#" -ne 17 ]; then
     echo "install-web2py-apps.sh missing required parameters (expecting 16)"
     exit 1
 fi
@@ -23,6 +23,7 @@ OTI_BASE_URL=${11}
 OPENTREE_API_BASE_URL=${12}
 COLLECTIONS_API_BASE_URL=${13}
 AMENDMENTS_API_BASE_URL=${14}
+ILLUSTRATIONS_API_BASE_URL=${14}
 FAVORITES_API_BASE_URL=${15}
 CONFLICT_BASE_URL=${16}
 
@@ -101,6 +102,7 @@ sed "s+github_client_id = .*+github_client_id = $TREEVIEW_GITHUB_CLIENT_ID+;
      s+opentree_api = .*+opentree_api = $OPENTREE_API_BASE_URL+
      s+collections_api_base_url = .*+collections_api_base_url = $COLLECTIONS_API_BASE_URL+
      s+amendments_api_base_url = .*+amendments_api_base_url = $AMENDMENTS_API_BASE_URL+
+     s+illustrations_api_base_url = .*+illustrations_api_base_url = $ILLUSTRATIONS_API_BASE_URL+
      s+favorites_api_base_url = .*+favorites_api_base_url = $FAVORITES_API_BASE_URL+
      s+conflict_api = .*+conflict_api = $CONFLICT_BASE_URL+
      s+CACHED_treemachine = .*+CACHED_treemachine = $CACHED_TREEMACHINE_BASE_URL+
@@ -125,6 +127,7 @@ sed "s+github_client_id = .*+github_client_id = $CURATION_GITHUB_CLIENT_ID+;
      s+opentree_api = .*+opentree_api = $OPENTREE_API_BASE_URL+
      s+collections_api_base_url = .*+collections_api_base_url = $COLLECTIONS_API_BASE_URL+
      s+amendments_api_base_url = .*+amendments_api_base_url = $AMENDMENTS_API_BASE_URL+
+     s+illustrations_api_base_url = .*+illustrations_api_base_url = $ILLUSTRATIONS_API_BASE_URL+
      s+favorites_api_base_url = .*+favorites_api_base_url = $FAVORITES_API_BASE_URL+
      s+conflict_api = .*+conflict_api = $CONFLICT_BASE_URL+
      s+CACHED_treemachine = .*+CACHED_treemachine = $CACHED_TREEMACHINE_BASE_URL+
