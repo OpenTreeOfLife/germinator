@@ -9,6 +9,7 @@ def fraction_mapped(row):
 
 def sufficiently_curated(frame):
     curated = frame[
+        #(frame['preferred']==1) &
         (frame['has ingroup']==1) &
         (frame['root confirmed']==1)
     ]
@@ -68,6 +69,7 @@ if __name__ == "__main__":
         ],1)
     print "{n} curated trees not in synthesis".format(n=len(not_in_synth))
 
+    # add a column for fraction of otus mapped
     not_in_synth.loc[:,'frac_map']=not_in_synth.apply(
         lambda row: fraction_mapped(row),axis=1
     )
@@ -88,4 +90,6 @@ if __name__ == "__main__":
 
     #print high_priority
     #high_priority.apply(lambda row: split_tree_string(row),axis=1)
+    print "printing results to high_priority.csv"
     #print high_priority[['tree','#tips','#new','#mapped','#conflicts','#resolved']]
+    high_priority.to_csv('high_priority.csv',index=False,columns=['tree','#tips','#new','#mapped','#conflicts','#resolved'])
