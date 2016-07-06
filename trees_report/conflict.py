@@ -227,7 +227,7 @@ def get_refs(paths):
 def load_tree(path):
     tree = Taxonomy.getTaxonomy(path, 'ott')
     count = 0
-    for id in tree.idIndex.keySet():
+    for id in tree.allIds():
         count += 1
     print count, 'ids'
     return tree
