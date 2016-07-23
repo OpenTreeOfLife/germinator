@@ -61,3 +61,4 @@ Stuff that still needs documentation
 * where to put tarball of synthesis outputs
 * how to update webapp (release page, version in URL)
 * how to update statistics.json
+* Bibliographic references page
