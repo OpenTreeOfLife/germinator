@@ -14,7 +14,11 @@ The steps to build and deploy a new version of the synthetic tree are:
 
 Building the tree takes minimal resources, so you can do this locally or on a
 server. Build the tree and html docs using the pipeline in
-[propinquity](https://github.com/OpenTreeOfLife/propinquity). As of version 6.0,
+[propinquity](https://github.com/OpenTreeOfLife/propinquity). 
+Specifically, the "[how the open tree of life synthetic tree is built](https://github.com/OpenTreeOfLife/propinquity#how-the-open-tree-of-life-synthetic-tree-is-built)"
+section of the README describes the way that the propinquity tool was used 
+in synthesis version 5.0.
+As of version 6.0,
 the `[synthesis]` section of the config is:
 
 ```
