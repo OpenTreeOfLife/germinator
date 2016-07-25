@@ -14,9 +14,9 @@ The steps to build and deploy a new version of the synthetic tree are:
 
 Building the tree takes minimal resources, so you can do this locally or on a
 server. Build the tree and html docs using the pipeline in
-[propinquity](https://github.com/OpenTreeOfLife/propinquity). 
+[propinquity](https://github.com/OpenTreeOfLife/propinquity).
 Specifically, the "[how the open tree of life synthetic tree is built](https://github.com/OpenTreeOfLife/propinquity#how-the-open-tree-of-life-synthetic-tree-is-built)"
-section of the README describes the way that the propinquity tool was used 
+section of the README describes the way that the propinquity tool was used
 in synthesis version 5.0.
 As of version 6.0,
 the `[synthesis]` section of the config is:
@@ -94,7 +94,7 @@ Using propinquity output, create two tarballs for inclusion on the release page:
   * `grafted_solution/grafted_solution.tre`
   * `grafted_solution/grafted_solution_ottnames.tre`
   * `annotated_supertree/annotations.json`
-  * a README.html file that describes the files
+  * a README file that describes the files
 * a large archive called `opentree{#}_output.tgz` of all synthesis outputs, including `*.html` files
 
 Create a version-specific subdirectory of the `synthesis` directory on `files.opentreeoflife.org` server. Then, copy these files there, e.g.:
@@ -102,12 +102,13 @@ Create a version-specific subdirectory of the `synthesis` directory on `files.op
     scp -p opentree6.0_*.tgz files.opentreeoflife.org:synthesis/opentree6.0/
 
 Log into `files.opentreeoflife.org` and extract the `opentree{#}_output.tgz` file
-Finally, delete the contents of the `current` directory on `files.opentreeoflife.org` and create three symbolic links in this directory:
+
+Finally, *when you are ready to have the tree show up on production*, delete the contents of the `current` directory on `files.opentreeoflife.org` and create three symbolic links in this directory:
 
     cd synthesis
-    ln current/current_output.tgz opentree{#}/opentree{#}_output.tgz
-    ln current/current_tree.tgz opentree{#}/opentree{#}_tree.tgz
-    ln current/output opentree{#}/output
+    ln -sf current/current_output.tgz opentree{#}/opentree{#}_output.tgz
+    ln -sf current/current_tree.tgz opentree{#}/opentree{#}_tree.tgz
+    ln -sf current/output opentree{#}/output
 
 Where `#` is the release number, e.g. `6.0`.
 
@@ -117,4 +118,4 @@ Create a file in `doc` called  `ot-synthesis-v{#}.md` where `#` is an integer ve
 
 **Progress statistics**
 
-Manually edit the [statistics file](https://github.com/OpenTreeOfLife/opentree/blob/master/webapp/static/statistics/synthesis.json) with the following statistics about the tree: version, OTT_version, tree_count, total, and tip_count. These stats will then show up on the [progress page](https://tree.opentreeoflife.org/about/progress).
+Manually edit the [statistics file](https://github.com/OpenTreeOfLife/opentree/blob/master/webapp/static/statistics/synthesis.json) on the appropriate branch, adding the following statistics about the tree: version, OTT_version, tree_count, total, and tip_count. These stats will then show up on the [progress page](https://tree.opentreeoflife.org/about/progress). Note that changes on the development branch will affect devtree, and changes on master will affect tree (production).
