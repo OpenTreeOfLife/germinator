@@ -50,15 +50,67 @@ repo](https://github.com/OpenTreeOfLife/treemachine).
 
 ## Deploying the database
 
-Follow the instructions about [pushing a neo4j
+These instructions are based on [pushing a neo4j
 database](https://github.com/OpenTreeOfLife/germinator/tree/master/deploy#how-to-push-a-neo4j-database)
-in the [germinator repo](https://github.com/OpenTreeOfLife/germinator).
+in `deploy/README.md`. See that file for instructions on setting up a server and managing credentials. Test the database on the development server, `devapi`, before pushing to production.
 
-## To document
+Create a compressed tar file of the neo4j database directory:
 
-Stuff that still needs documentation
+    tar -C {txxxmachine}/data/newlocaldb.db -czf newlocaldb.db.tgz .
 
-* where to put tarball of synthesis outputs
-* how to update webapp (release page, version in URL)
-* how to update statistics.json
-* Bibliographic references page
+Then copy it to the server using rsync or scp, e.g:
+
+    scp -p newlocaldb.db.tgz {host}:downloads/treemachine-{20151104}.db.tgz
+
+where {host} is either the `devapi` or `api` server, depending on whether you
+are testing or deploying; and and {20151104} is date on which the database was
+generated (for identification purposes). Make sure there is adequate disk space before copying.
+
+Next, use the `push.sh` script in the `deploy` directory to unpack the database, make it available to neo4j, and restart the
+neo4j service.  Again, before doing this, make sure there is adequate
+disk space.
+
+    ./push.sh -c {configfile} install-db downloads/treemachine-{20151104}.db.tgz treemachine
+
+Check that the database is running with the correct version by calling the `tree_of_life/about` method:
+
+    curl -X POST {host}/v3/tree_of_life/about -H "content-type:application/json" -d '{"include_source_list":false}'
+
+## Updating web pages
+
+The tree browser and bibliographic references pages will update automatically based on results from the api server. The following tasks need to be done manually:
+
+**Files for downloads**
+
+Using propinquity output, create two tarballs for inclusion on the release page:
+
+* a small summary archive called `opentree{#}_tree.tgz`, containing these files:
+  * `labelled_supertree/labelled_supertree.tre`
+  * `labelled_supertree/labelled_supertree_ottnames.tre`
+  * `grafted_solution/grafted_solution.tre`
+  * `grafted_solution/grafted_solution_ottnames.tre`
+  * `annotated_supertree/annotations.json`
+  * a README.html file that describes the files
+* a large archive called `opentree{#}_output.tgz` of all synthesis outputs, including `*.html` files
+
+Create a version-specific subdirectory of the `synthesis` directory on `files.opentreeoflife.org` server. Then, copy these files there, e.g.:
+
+    scp -p opentree6.0_*.tgz files.opentreeoflife.org:synthesis/opentree6.0/
+
+Log into `files.opentreeoflife.org` and extract the `opentree{#}_output.tgz` file
+Finally, delete the contents of the `current` directory on `files.opentreeoflife.org` and create three symbolic links in this directory:
+
+    cd synthesis
+    ln current/current_output.tgz opentree{#}/opentree{#}_output.tgz
+    ln current/current_tree.tgz opentree{#}/opentree{#}_tree.tgz
+    ln current/output opentree{#}/output
+
+Where `#` is the release number, e.g. `6.0`.
+
+**Release notes**
+
+Create a file in `doc` called  `ot-synthesis-v{#}.md` where `#` is an integer version number. Edit this file, including links to the files for download and differences in this version of the tree. At this point, we are creating these notes manually, but plan to automate this in the future, likely some code from the propinquity `compare_synthesis_outputs.py`  script. Once the release notes file exists, the release will show up on the [releases page](https://tree.opentreeoflife.org/about/synthesis-release/).
+
+**Progress statistics**
+
+Manually edit the [statistics file](https://github.com/OpenTreeOfLife/opentree/blob/master/webapp/static/statistics/synthesis.json) with the following statistics about the tree: version, OTT_version, tree_count, total, and tip_count. These stats will then show up on the [progress page](https://tree.opentreeoflife.org/about/progress).
