@@ -65,8 +65,8 @@ Create a compressed tar file of the neo4j database directory:
 
     tar -C {treemachine}/data/graph.db -czf treemachine-{20151104}.db.tgz .
 
-This assumes that the graph database was built (as above) in the default location `graph.db`.
-`{20151104}` is the date on which the database was generated (for identification purposes).
+This assumes that the graph database was built in the default location `graph.db`.
+Replace `{20151104}` with the ISO 8601 (YYYYMMDD) date on which the database was generated (for identification purposes).
 
 Then copy it to the server using rsync or scp, e.g:
 
