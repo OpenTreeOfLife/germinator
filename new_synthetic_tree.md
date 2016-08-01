@@ -90,7 +90,7 @@ Check that the database is running with the correct version by calling the `tree
 Every time the conflict service starts up, it loads the synthetic tree
 from the file `repo/reference-taxonomy/service/synth.tre` on the API
 server.  Updating it consists simply of replacing this file and restarting the service.
-This .tre file to use is
+The .tre file to use is
 `labelled_supertree/labelled_supertree.tre`, although `labelled_supertree_ottnames.tre` would 
 also work.  Here is one way to proceed:
 
@@ -107,7 +107,7 @@ Test the conflict service in the usual way (after waiting a minute or two for it
 
     (cd reference-taxonomy/ws-tests; ./run_tests.sh host:apihost=http://{host})
 
-Delete the backup file if everything seels to work:
+Delete the backup file if everything seems to work:
 
     ssh {host} rm repo/reference-taxonomy/service/synth.tre.backup
 
@@ -130,10 +130,10 @@ page](https://tree.opentreeoflife.org/about/synthesis-release/).
 
 Manually edit the [statistics
 file](https://github.com/OpenTreeOfLife/opentree/blob/master/webapp/static/statistics/synthesis.json)
-on the appropriate branch, adding
+on a feature branch of the `opentree` repository, adding
 the following statistics about the tree: `version`, `OTT_version`, `tree_count`,
 `total_OTU_count`, and `tip_count`. These stats will then show up on the [progress
-page](https://tree.opentreeoflife.org/about/progress). Use the
+page](https://tree.opentreeoflife.org/about/progress). Merge the feature branch to the
 `development` branch for testing devtree, and `master` for production.
 
 **Files for downloads**
@@ -150,8 +150,8 @@ Using propinquity output, create two tarballs for inclusion on the release page:
 * a large archive called `opentree{#}_output.tgz` of all synthesis
   outputs, including `*.html` files
 
-Create a version-specific subdirectory of the `synthesis` directory on
-`files.opentreeoflife.org` server. Then, copy these files there, e.g.:
+Create a version-specific subdirectory of the `synthesis` directory `opentree{#}` on the
+`files.opentreeoflife.org` server. Then, copy the tarballs there:
 
     scp -p opentree6.0_*.tgz files.opentreeoflife.org:synthesis/opentree6.0/
 
