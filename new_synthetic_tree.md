@@ -7,11 +7,13 @@ This is still a fairly manual process, although we aim to automate in the future
 
 The steps to build and deploy a new version of the synthetic tree are:
 
-* build a new synthetic tree using  
+* build a new synthetic tree using
 [propinquity](https://github.com/OpenTreeOfLife/propinquity)
 * load the synthetic tree into a neo4j database using code in [treemachine](https://github.com/OpenTreeOfLife/treemachine)
-* deploy the database using scripts in
+* deploy the database to development (devapi) using scripts in
 [germinator](https://github.com/OpenTreeOfLife/germinator) and manually update associated files. Test deployment on the development server before tackling production.
+* update the conflict service to use the new synthetic tree
+* deploy to production
 
 ## Building the tree
 
@@ -24,13 +26,11 @@ in synthesis version 5.0.
 As of version 6.0,
 the `[synthesis]` section of the config is:
 
-```
-collections = josephwb/hypocreales kcranston/barnacles opentreeoflife/plants
-opentreeoflife/metazoa opentreeoflife/fungi opentreeoflife/safe-microbes
-opentreeoflife/default
-root_ott_id = 93302
-synth_id = opentree6.0
-```
+    collections = josephwb/hypocreales kcranston/barnacles opentreeoflife/plants
+    opentreeoflife/metazoa opentreeoflife/fungi opentreeoflife/safe-microbes
+    opentreeoflife/default
+    root_ott_id = 93302
+    synth_id = opentree6.0
 
 Increment the id by whole numbers, unless the change is trivial.
 
@@ -63,69 +63,66 @@ in `deploy/README.md`. See that file for instructions on setting up a server and
 
 Create a compressed tar file of the neo4j database directory:
 
-    tar -C {txxxmachine}/data/newlocaldb.db -czf newlocaldb.db.tgz .
+    tar -C {treemachine}/data/graph.db -czf treemachine-{20151104}.db.tgz .
+
+This assumes that the graph database was built in the default location `graph.db`.
+Replace `{20151104}` with the ISO 8601 (YYYYMMDD) date on which the database was generated (for identification purposes).
 
 Then copy it to the server using rsync or scp, e.g:
 
-    scp -p newlocaldb.db.tgz {host}:downloads/treemachine-{20151104}.db.tgz
+    scp -p treemachine-{20151104}.db.tgz {host}:downloads/
 
 where {host} is either the `devapi` or `api` server, depending on whether you
-are testing or deploying; and and {20151104} is date on which the database was
-generated (for identification purposes). Make sure there is adequate disk space before copying.
+are testing or deploying.  Make sure there is adequate disk space before copying.
 
 Next, use the `push.sh` script in the `deploy` directory to unpack the database, make it available to neo4j, and restart the
-neo4j service.  Again, before doing this, make sure there is adequate
-disk space.
+neo4j service, as follows.  Again, before doing this, make sure there is adequate
+disk space to unpack:
 
     ./push.sh -c {configfile} install-db downloads/treemachine-{20151104}.db.tgz treemachine
 
 Check that the database is running with the correct version by calling the `tree_of_life/about` method:
 
-    curl -X POST {host}/v3/tree_of_life/about -H "content-type:application/json" -d '{"include_source_list":false}'
+    curl -X POST {host}:/v3/tree_of_life/about -H "content-type:application/json" -d '{"include_source_list":false}'
+
+## Updating the conflict service
+
+Every time the conflict service starts up, it loads the synthetic tree
+from the file `repo/reference-taxonomy/service/synth.tre` on the API
+server.  Updating it consists simply of replacing this file and restarting the service.
+The .tre file to use is
+`labelled_supertree/labelled_supertree.tre`, although `labelled_supertree_ottnames.tre` would 
+also work.  Here is one way to proceed:
+
+    ssh {host} mv repo/reference-taxonomy/service/synth.tre repo/reference-taxonomy/service/synth.tre.backup
+    scp -pC labelled_supertree/labelled_supertree.tre {host}:repo/reference-taxonomy/service/synth.tre
+    ./push.sh -c {configfile} smasher
+
+The `-C` flag tells `scp` to compress the Newick string for transmission.
+
+(If `labelled_supertree.tre` exists on the target server, then you
+can create a symbolic link, to avoid making a second copy of it; but generally this isn't the case.)
+
+Test the conflict service in the usual way (after waiting a minute or two for it to load):
+
+    (cd reference-taxonomy/ws-tests; ./run_tests.sh host:apihost=http://{host})
+
+Delete the backup file if everything seems to work:
+
+    ssh {host} rm repo/reference-taxonomy/service/synth.tre.backup
 
 ## Updating web pages
 
 The tree browser and bibliographic references pages will update automatically based on results from the api server. The following tasks need to be done manually:
 
-**Files for downloads**
-
-Using propinquity output, create two tarballs for inclusion on the release page:
-
-* a small summary archive called `opentree{#}_tree.tgz`, containing these files: *
-  * `labelled_supertree/labelled_supertree.tre` *
-  * `labelled_supertree/labelled_supertree_ottnames.tre` *
-  * `grafted_solution/grafted_solution.tre` *
-  * `grafted_solution/grafted_solution_ottnames.tre` *
-  * `annotated_supertree/annotations.json`
-  * a README file that describes the files a large archive called `opentree{#}_output.tgz` of all synthesis
-* outputs, including `*.html` files
-
-Create a version-specific subdirectory of the `synthesis` directory on
-`files.opentreeoflife.org` server. Then, copy these files there, e.g.:
-
-    scp -p opentree6.0_*.tgz files.opentreeoflife.org:synthesis/opentree6.0/
-
-Log into `files.opentreeoflife.org` and extract the `opentree{#}_output.tgz`
-file.
-
-Finally, *when you are ready to have the tree show up on production*, delete the
-contents of the `current` directory on `files.opentreeoflife.org` and create
-three symbolic links in this directory:
-
-    cd synthesis
-    ln -sf current/current_output.tgz opentree{#}/opentree{#}_output.tgz
-    ln -sf current/current_tree.tgz opentree{#}/opentree{#}_tree.tgz
-    ln -sf current/output opentree{#}/output
-
-Where `#` is the release number, e.g. `6.0`.
-
 **Release notes**
 
-Create a file in `doc` called  `ot-synthesis-v{#}.md` where `#` is an integer
-version number. Edit this file, including links to the files for download and
-differences in this version of the tree. At this point, we are creating these
-notes manually, but plan to automate this in the future, likely using simliar
-code as the propinquity `compare_synthesis_outputs.py`  script. Once the release
+Create a file in `doc` (in the `germinator` repository)
+called  `ot-synthesis-v{#}.md`, where `#` is the synthesis
+version number e.g. `6.0`. Edit this file, including links to the files for download and
+differences in this version of the tree. (At this point, we are creating these
+notes manually, but we plan to automate this in the future, likely using simliar
+code as the propinquity `compare_synthesis_outputs.py`  script.) Once the release
 notes file exists, the release will show up on the [releases
 page](https://tree.opentreeoflife.org/about/synthesis-release/).
 
@@ -133,8 +130,43 @@ page](https://tree.opentreeoflife.org/about/synthesis-release/).
 
 Manually edit the [statistics
 file](https://github.com/OpenTreeOfLife/opentree/blob/master/webapp/static/statistics/synthesis.json)
-on the appropriate branch, adding
+on a feature branch of the `opentree` repository, adding
 the following statistics about the tree: `version`, `OTT_version`, `tree_count`,
 `total_OTU_count`, and `tip_count`. These stats will then show up on the [progress
-page](https://tree.opentreeoflife.org/about/progress). Use the
+page](https://tree.opentreeoflife.org/about/progress). Merge the feature branch to the
 `development` branch for testing devtree, and `master` for production.
+
+**Files for downloads**
+
+Using propinquity output, create two tarballs for inclusion on the release page:
+
+* a small summary archive called `opentree{#}_tree.tgz`, containing these files: 
+  * `labelled_supertree/labelled_supertree.tre` 
+  * `labelled_supertree/labelled_supertree_ottnames.tre` 
+  * `grafted_solution/grafted_solution.tre` 
+  * `grafted_solution/grafted_solution_ottnames.tre` 
+  * `annotated_supertree/annotations.json`
+  * a README file that describes the files 
+* a large archive called `opentree{#}_output.tgz` of all synthesis
+  outputs, including `*.html` files
+
+Create a version-specific subdirectory of the `synthesis` directory `opentree{#}` on the
+`files.opentreeoflife.org` server. Then, copy the tarballs there:
+
+    scp -p opentree6.0_*.tgz files.opentreeoflife.org:synthesis/opentree6.0/
+
+Log in to `files.opentreeoflife.org` and extract the `opentree{#}_output.tgz`
+file, creating an `output` directory.
+
+Finally, *when you are ready to have the tree linked from the production system*, delete everything
+in the `current` directory on `files.opentreeoflife.org`, and create
+three symbolic links in this directory:
+
+    cd synthesis/current
+    rm -rf *
+    ln -sf ../opentree{#}/opentree{#}_output.tgz current_output.tgz 
+    ln -sf ../opentree{#}/opentree{#}_tree.tgz current_tree.tgz 
+    ln -sf ../opentree{#}/output output 
+
+where `#` is the release number, e.g. `6.0`.
+
