@@ -11,14 +11,15 @@ The steps to build and deploy a new version of the synthetic tree are:
 [propinquity](https://github.com/OpenTreeOfLife/propinquity)
 * load the synthetic tree into a neo4j database using code in [treemachine](https://github.com/OpenTreeOfLife/treemachine)
 * deploy the database to development (devapi) using scripts in
-[germinator](https://github.com/OpenTreeOfLife/germinator) and manually update associated files. Test deployment on the development server before tackling production.
+[germinator](https://github.com/OpenTreeOfLife/germinator). Test deployment on the development server before tackling production.
+* manually create the release notes, update the synthesis statistics and upload files for download
 * update the conflict service to use the new synthetic tree
 * deploy to production
 
 ## Building the tree
 
 Building the tree takes minimal resources, so you can do this locally or on a
-server. Build the tree and html docs using the pipeline in
+server. Build the tree, extras and html docs using the pipeline in
 [propinquity](https://github.com/OpenTreeOfLife/propinquity).
 Specifically, the "[how the open tree of life synthetic tree is built](https://github.com/OpenTreeOfLife/propinquity#how-the-open-tree-of-life-synthetic-tree-is-built)"
 section of the README describes the way that the propinquity tool was used
@@ -34,10 +35,19 @@ the `[synthesis]` section of the config is:
 
 Increment the id by whole numbers, unless the change is trivial.
 
-Assuming you have built the docs (`make html`, or by using one of the
-run-everything scripts), create a tarball of the results. If the outputs are in
-the top-level propinquity directory, there is a `move_outputs.sh` script in
-`bin` that will move all of the output to a specified output directory.
+Create tarballs using the `bin/make_tarballs.sh` script. If you don't already
+have all of the output in one directory, use the `bin/move_outputs.sh` script.  
+The `make_tarballs.sh` creates two archives:
+
+* a small summary archive called `opentree{#}_tree.tar.gz`, with files:
+  * `labelled_supertree/labelled_supertree.tre`
+  * `labelled_supertree/labelled_supertree_ottnames.tre`
+  * `grafted_solution/grafted_solution.tre`
+  * `grafted_solution/grafted_solution_ottnames.tre`
+  * `annotated_supertree/annotations.json`
+  * a README file that describes the files
+* a large archive called `opentree{#}_output.tar.gz` of all synthesis
+  outputs, including `*.html` files
 
 ## Loading the tree into neo4j
 
@@ -91,7 +101,7 @@ Every time the conflict service starts up, it loads the synthetic tree
 from the file `repo/reference-taxonomy/service/synth.tre` on the API
 server.  Updating it consists simply of replacing this file and restarting the service.
 The .tre file to use is
-`labelled_supertree/labelled_supertree.tre`, although `labelled_supertree_ottnames.tre` would 
+`labelled_supertree/labelled_supertree.tre`, although `labelled_supertree_ottnames.tre` would
 also work.  Here is one way to proceed:
 
     ssh {host} mv repo/reference-taxonomy/service/synth.tre repo/reference-taxonomy/service/synth.tre.backup
@@ -140,15 +150,6 @@ page](https://tree.opentreeoflife.org/about/progress). Merge the feature branch 
 
 Using propinquity output, create two tarballs for inclusion on the release page:
 
-* a small summary archive called `opentree{#}_tree.tgz`, containing these files: 
-  * `labelled_supertree/labelled_supertree.tre` 
-  * `labelled_supertree/labelled_supertree_ottnames.tre` 
-  * `grafted_solution/grafted_solution.tre` 
-  * `grafted_solution/grafted_solution_ottnames.tre` 
-  * `annotated_supertree/annotations.json`
-  * a README file that describes the files 
-* a large archive called `opentree{#}_output.tgz` of all synthesis
-  outputs, including `*.html` files
 
 Create a version-specific subdirectory of the `synthesis` directory `opentree{#}` on the
 `files.opentreeoflife.org` server. Then, copy the tarballs there:
@@ -164,9 +165,8 @@ three symbolic links in this directory:
 
     cd synthesis/current
     rm -rf *
-    ln -sf ../opentree{#}/opentree{#}_output.tgz current_output.tgz 
-    ln -sf ../opentree{#}/opentree{#}_tree.tgz current_tree.tgz 
-    ln -sf ../opentree{#}/output output 
+    ln -sf ../opentree{#}/opentree{#}_output.tgz current_output.tgz
+    ln -sf ../opentree{#}/opentree{#}_tree.tgz current_tree.tgz
+    ln -sf ../opentree{#}/output output
 
 where `#` is the release number, e.g. `6.0`.
-
