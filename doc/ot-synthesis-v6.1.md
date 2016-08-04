@@ -19,14 +19,10 @@ The major change in this version is the inclusion of 155 new phylogenies from th
 
 ### Changes in output
 
---------------------------------------------
-statistic | version5 | version6 | change 
-===========================================
-total tips | 2424255 | 2424255 | 0 
-tips from phylogeny | 41226 | 45406 | 4180 
-internal nodes | 235099 | 238398 | 3299 
-broken taxa | 2400 | 2646 | 206 
-subproblems | 5545 | 5858 | 313
---------------------------------------------
+* total tips:  2424255 in v5.0; 2424255 in v6.1; change = 0
+* tips from phylogeny: 41226 in 5.0; 45406 in v6.1; change = 4180 
+* internal nodes: 235099 in 5.0; 238398 in v6.1; change = 3299 
+* broken taxa: 2400 in 5.0; 2646 in v6.1; change = 206 
+* subproblems: 5545 in 5.0; 5858 in v6.1; change = 313
 
 Note that the 'change' may not be a simple addition. For example, the number of subproblems in common between v5.0 and v6 is only 5240, meaning that both versions contain *unique* subproblems.
