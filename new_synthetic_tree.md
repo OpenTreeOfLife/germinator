@@ -131,7 +131,7 @@ Create a file in `doc` (in the `germinator` repository)
 called  `ot-synthesis-v{#}.md`, where `#` is the synthesis
 version number e.g. `6.0`. Edit this file, including links to the files for download and
 differences in this version of the tree. (At this point, we are creating these
-notes manually, but we plan to automate this in the future, likely using simliar
+notes manually, but we plan to automate this in the future, likely using similiar
 code as the propinquity `compare_synthesis_outputs.py`  script.) Once the release
 notes file exists, the release will show up on the [releases
 page](https://tree.opentreeoflife.org/about/synthesis-release/).
