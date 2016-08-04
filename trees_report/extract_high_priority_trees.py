@@ -1,3 +1,6 @@
+# Parses the trees_report.csv output from trees_report.py to extract
+# trees with certain properties
+
 import pandas as pd
 import argparse
 
@@ -54,11 +57,14 @@ if __name__ == "__main__":
         )
     args = parser.parse_args()
 
+    # read input file
     df = pd.read_csv(args.inputfile)
     print "read {n} trees".format(n=len(df.index))
 
+    # get trees that are sufficently curated
     curated = sufficiently_curated(df)
     print "{n} trees are sufficently curated".format(n=len(curated.index))
+    curated.to_csv('curated_trees.csv',index=False)
 
     # get just the trees not in synth, and drop some columns for simplicity
     not_in_synth = curated[
