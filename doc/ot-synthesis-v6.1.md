@@ -19,13 +19,46 @@ The major change between version6.1 and version5.0 is the inclusion of 155 new p
 
 ### Changes in output
 
-| statistic | version5 | version6 | change |
-| --------- | -------- | -------- | ------ |
-| total tips | 2424255 | 2424255 | 0 |
-| tips from phylogeny | 41226 | 45397 | 4173 |
-| forking nodes in grafted tree |  37137 |  40990 | 3853 |
-| forking nodes in taxonomy |  127387 | 127387 | 0 |
-| broken taxa | 2400 | 2653 | 253 |
-| subproblems | 5545 | 5854 | 309 |
+<!-- 
+N.B. stats tables must use inline HTML, since web2py doesn't know how to render table markdown :-/ 
+-->
+<table class="table table-condensed">
+ <tr>
+  <th><!--statistic-->&nbsp;</th>
+  <th>version5.0</th>
+  <th>version6.1</th>
+  <th>change</th>
+ </tr>
+ <tr>
+  <th>total tips</th>
+  <td>2424255</td>
+  <td>2424255</td>
+  <td>0</td>
+ </tr>
+ <tr>
+  <th>tips from phylogeny</th>
+  <td>41226</td>
+  <td>45406</td>
+  <td>4180</td>
+ </tr>
+ <tr>
+  <th>internal nodes</th>
+  <td>235099</td>
+  <td>238398</td>
+  <td>3299</td>
+ </tr>
+ <tr>
+  <th>broken taxa</th>
+  <td>2400</td>
+  <td>2653</td>
+  <td>253</td>
+ </tr>
+ <tr>
+  <th>subproblems</th>
+  <td>5545</td>
+  <td>5858</td>
+  <td>313</td>
+ </tr>
+</table>
 
 Note that the 'change' may not be a simple addition. For example, the number of subproblems in common between v5.0 and v6 is only 5240, meaning that both versions contain *unique* subproblems.
