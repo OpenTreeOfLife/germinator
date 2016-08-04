@@ -26,3 +26,16 @@ The major change in this version is the inclusion of 155 new phylogenies from th
 * subproblems: 5545 in 5.0; 5858 in v6.1; change = 313
 
 Note that the 'change' may not be a simple addition. For example, the number of subproblems in common between v5.0 and v6 is only 5240, meaning that both versions contain *unique* subproblems.
+
+<table>
+ <tr>
+  <td>a</td>
+  <td>b</td>
+  <td>c</td>
+ </tr>
+ <tr>
+  <td>1</td>
+  <td>2</td>
+  <td>3</td>
+ </tr>
+</table>
