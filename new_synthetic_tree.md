@@ -7,14 +7,14 @@ This is still a fairly manual process, although we aim to automate in the future
 
 The steps to build and deploy a new version of the synthetic tree are:
 
-* build a new synthetic tree using
-[propinquity](https://github.com/OpenTreeOfLife/propinquity)
-* load the synthetic tree into a neo4j database using code in [treemachine](https://github.com/OpenTreeOfLife/treemachine)
-* deploy the database to development (devapi) using scripts in
-[germinator](https://github.com/OpenTreeOfLife/germinator). Test deployment on the development server before tackling production.
-* manually create the release notes, update the synthesis statistics and upload files for download
-* update the conflict service to use the new synthetic tree
-* deploy to production
+1. Build a new synthetic tree using
+[propinquity](https://github.com/OpenTreeOfLife/propinquity) and crate the tarballs for download.
+* Load the synthetic tree into a neo4j database using code in [treemachine](https://github.com/OpenTreeOfLife/treemachine)
+* Deploy the database to development (devapi) using scripts in
+[germinator](https://github.com/OpenTreeOfLife/germinator).
+* Manually create the release notes, update the synthesis statistics file, and upload tarballs for download
+* Update the conflict service to use the new synthetic tree
+* Deploy to production
 
 ## Building the tree
 
@@ -36,8 +36,7 @@ the `[synthesis]` section of the config is:
 Increment the id by whole numbers, unless the change is trivial.
 
 Create tarballs using the `bin/make_tarballs.sh` script. If you don't already
-have all of the output in one directory, use the `bin/move_outputs.sh` script.  
-The `make_tarballs.sh` creates two archives:
+have all of the output in one directory, use the `bin/move_outputs.sh` script.  Use the `make_tarballs.sh` to create two archives:
 
 * a small summary archive called `opentree{#}_tree.tar.gz`, with files:
   * `labelled_supertree/labelled_supertree.tre`
@@ -85,7 +84,7 @@ Then copy it to the server using rsync or scp, e.g:
 where {host} is either the `devapi` or `api` server, depending on whether you
 are testing or deploying.  Make sure there is adequate disk space before copying.
 
-Next, use the `push.sh` script in the `deploy` directory to unpack the database, make it available to neo4j, and restart the
+Next, use the `push.sh` script in the `deploy` directory of this repository (germinator) to unpack the database, make it available to neo4j, and restart the
 neo4j service, as follows.  Again, before doing this, make sure there is adequate
 disk space to unpack:
 
@@ -93,7 +92,7 @@ disk space to unpack:
 
 Check that the database is running with the correct version by calling the `tree_of_life/about` method:
 
-    curl -X POST {host}:/v3/tree_of_life/about -H "content-type:application/json" -d '{"include_source_list":false}'
+    curl -X POST {host}/v3/tree_of_life/about -H "content-type:application/json" -d '{"include_source_list":false}'
 
 ## Updating the conflict service
 

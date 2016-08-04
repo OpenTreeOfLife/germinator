@@ -1,26 +1,26 @@
-# Open Tree of Life synthetic tree version 6.0
+# Open Tree of Life synthetic tree version 6.1
 
-Version 6.0 of the synthetic tree was generated on 22 July 2016 using the [propinquity pipeline](https://github.com/OpenTreeOfLife/propinquity).
+Version 6.1 of the synthetic tree was generated on 2 August 2016 using the [propinquity pipeline](https://github.com/OpenTreeOfLife/propinquity).
 
 ## Downloads
-There are two downloads. The first (smaller download) is the tree and annotations file only. The second (larger download) is the full output from the synthesis procedure, including documentation. You can also browse the full output.
+There are two downloads. The first (smaller download) contain only tree and annotations files. The second (larger download) is the full output from the synthesis procedure, including documentation. You can also [browse the full output](http://files.opentreeoflife.org/synthesis/opentree6.1/output/index.html).
 
-* [Synthetic tree](http://files.opentreeoflife.org/synthesis/opentree6.0/opentree6.0_tree.tar.gz) : includes the full tree, annotations file, and a phylo-only tree (tips only from taxonomy pruned off). See the enclosed README for details. (compressed tar archive; 32 Mbytes)
-* [All pipeline outputs](http://files.opentreeoflife.org/synthesis/opentree6.0/opentree5.0_output.tgz) : Outputs and documentation from all stages of the synthesis pipeline. Or, you can [browse the output](http://files.opentreeoflife.org/synthesis/opentree6.0/output/index.html) rather than downloading. (compressed tar archive; 138 Mbytes)
+* [Tree and annotations](http://files.opentreeoflife.org/synthesis/opentree6.1/opentree6.1_tree.tar.gz) : Several versions of the synthetic tree, along with the annotations file. See the enclosed README for details. (compressed tar archive; 32 Mbytes)
+* [All pipeline outputs](http://files.opentreeoflife.org/synthesis/opentree6.1/opentree6.1_output.tgz) : Outputs and documentation from all stages of the synthesis pipeline. Or, you can [browse the output](http://files.opentreeoflife.org/synthesis/opentree6.1/output/index.html) rather than downloading. (compressed tar archive; 138 Mbytes)
 
 ## Release notes
 
-The major change in this version is the inclusion of 155 new phylogenies from the data store. This increases resolution of the tree, but also contradicts a larger number of named taxa.
+The major change between version6.1 and version5.0 is the inclusion of 155 new phylogenies from the data store. This gives 4173 more tips covered by phylogeny, increases resolution of the tree, and contradicts a larger number of named taxa.
 
 ### Changes in inputs
 
 * two additional tree collections, [josephwb/hypocreales](https://tree.opentreeoflife.org/curator/collections/josephwb/hypocreales) and [opentreeoflife/default](https://tree.opentreeoflife.org/curator/collections/opentreeoflife/default)
-* which add 155 new phylogenetic trees (677 trees total included)
+* 155 new phylogenetic trees (677 trees total included)
 
 ### Changes in output
 
-<!-- 
-N.B. stats tables must use inline HTML, since web2py doesn't know how to render table markdown :-/ 
+<!--
+N.B. stats tables must use inline HTML, since web2py doesn't know how to render table markdown :-/
 -->
 <table class="table table-condensed">
  <tr>
@@ -38,14 +38,20 @@ N.B. stats tables must use inline HTML, since web2py doesn't know how to render 
  <tr>
   <th>tips from phylogeny</th>
   <td>41226</td>
-  <td>45406</td>
-  <td>4180</td>
+  <td>45397</td>
+  <td>4171</td>
  </tr>
  <tr>
-  <th>internal nodes</th>
-  <td>235099</td>
-  <td>238398</td>
-  <td>3299</td>
+  <th>internal nodes in taxonomy</th>
+  <td>127387</td>
+  <td>127387</td>
+  <td>0</td>
+ </tr>
+ <tr>
+  <th>internal nodes from phylogeny</th>
+  <td>37137</td>
+  <td>40990</td>
+  <td>3853</td>
  </tr>
  <tr>
   <th>broken taxa</th>
@@ -56,8 +62,8 @@ N.B. stats tables must use inline HTML, since web2py doesn't know how to render 
  <tr>
   <th>subproblems</th>
   <td>5545</td>
-  <td>5858</td>
-  <td>313</td>
+  <td>5854</td>
+  <td>309</td>
  </tr>
 </table>
 
