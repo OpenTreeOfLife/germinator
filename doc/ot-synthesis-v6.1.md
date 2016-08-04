@@ -29,6 +29,11 @@ Note that the 'change' may not be a simple addition. For example, the number of 
 
 <table>
  <tr>
+  <th>TEST</th>
+  <th>Test</th>
+  <th>Another test</th>
+ </tr>
+ <tr>
   <td>a</td>
   <td>b</td>
   <td>c</td>
