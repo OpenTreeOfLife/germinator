@@ -21,6 +21,7 @@ The major change in this version is the inclusion of 155 new phylogenies from th
 
 --------------------------------------------
  statistic | version5 | version6 | change 
+ ===========================================
  total tips | 2424255 | 2424255 | 0 
  tips from phylogeny | 41226 | 45406 | 4180 
  internal nodes | 235099 | 238398 | 3299 
