@@ -2,16 +2,24 @@
 
 # Some of this repeats what's found in install-web2py-apps.sh.  Keep in sync.
 
+# Lots of arguments to make this work.. check to see if we have them all.
+if [ "$#" -ne 12 ]; then
+    echo "install-api.sh missing required parameters (expecting 12)"
+    exit 1
+fi
+
 OPENTREE_HOST=$1
 OPENTREE_DOCSTORE=$2
 COLLECTIONS_REPO=$3
-FAVORITES_REPO=$4
-CONTROLLER=$5
-OTI_BASE_URL=$6
-OPENTREE_API_BASE_URL=$7
-COLLECTIONS_API_BASE_URL=$8
-FAVORITES_API_BASE_URL=$9
-OPENTREE_DEFAULT_APPLICATION=${10}
+AMENDMENTS_REPO=$4
+FAVORITES_REPO=$5
+CONTROLLER=$6
+OTI_BASE_URL=$7
+OPENTREE_API_BASE_URL=$8
+COLLECTIONS_API_BASE_URL=$9
+AMENDMENTS_API_BASE_URL=${10}
+FAVORITES_API_BASE_URL=${11}
+OPENTREE_DEFAULT_APPLICATION=${12}
 
 . setup/functions.sh
 
@@ -116,6 +124,7 @@ pushd .
     sed -i -e "s+OTI_BASE_URL+$OTI_BASE_URL+" config
 
     sed -i -e "s+COLLECTIONS_API_BASE_URL+$COLLECTIONS_API_BASE_URL+" config
+    sed -i -e "s+AMENDMENTS_API_BASE_URL+$AMENDMENTS_API_BASE_URL+" config
     sed -i -e "s+FAVORITES_API_BASE_URL+$FAVORITES_API_BASE_URL+" config
 
     # Define the public URL of the docstore repo (used for updating oti)
@@ -141,10 +150,10 @@ pushd .
     cd $OTHOME/repo/$WEBAPP/bin
     tokenfile=~/.ssh/OPENTREEAPI_OAUTH_TOKEN
     if [ -r $tokenfile ]; then
-        python add_or_update_webhooks.py https://github.com/OpenTreeOfLife/$OPENTREE_DOCSTORE $OPENTREE_API_BASE_URL $tokenfile
+        python add_or_update_webhooks.py https://github.com/OpenTreeOfLife/$OPENTREE_DOCSTORE https://github.com/OpenTreeOfLife/$AMENDMENTS_REPO $OPENTREE_API_BASE_URL $tokenfile
     else
         echo "OPENTREEAPI_OAUTH_TOKEN not found (install-api.sh), prompting for manual handling of webhooks."
-        python add_or_update_webhooks.py https://github.com/OpenTreeOfLife/$OPENTREE_DOCSTORE $OPENTREE_API_BASE_URL
+        python add_or_update_webhooks.py https://github.com/OpenTreeOfLife/$OPENTREE_DOCSTORE https://github.com/OpenTreeOfLife/$AMENDMENTS_REPO $OPENTREE_API_BASE_URL
     fi
 popd
 
@@ -164,6 +173,19 @@ pushd .
     # ssh to use our deploy keys
     if ! grep "originssh" .git/config ; then
         git remote add originssh git@github.com:OpenTreeOfLife/$COLLECTIONS_REPO.git
+    fi
+popd
+
+echo "   ${AMENDMENTS_REPO}..."
+
+amendments=repo/${AMENDMENTS_REPO}_par/$AMENDMENTS_REPO
+mkdir -p repo/${AMENDMENTS_REPO}_par
+git_refresh OpenTreeOfLife $AMENDMENTS_REPO "$BRANCH" repo/${AMENDMENTS_REPO}_par || true
+
+pushd .
+    cd $amendments
+    if ! grep "originssh" .git/config ; then
+        git remote add originssh git@github.com:OpenTreeOfLife/$AMENDMENTS_REPO.git
     fi
 popd
 
@@ -188,11 +210,14 @@ pushd .
     cd $APPROOT/private
     sed -i -e "s+COLLECTIONS_REPO_PATH+$OTHOME/repo/${COLLECTIONS_REPO}_par/$COLLECTIONS_REPO+" config
     sed -i -e "s+COLLECTIONS_REPO_PAR+$OTHOME/repo/${COLLECTIONS_REPO}_par+" config
+    sed -i -e "s+AMENDMENTS_REPO_PATH+$OTHOME/repo/${AMENDMENTS_REPO}_par/$AMENDMENTS_REPO+" config
+    sed -i -e "s+AMENDMENTS_REPO_PAR+$OTHOME/repo/${AMENDMENTS_REPO}_par+" config
     sed -i -e "s+FAVORITES_REPO_PATH+$OTHOME/repo/${FAVORITES_REPO}_par/$FAVORITES_REPO+" config
     sed -i -e "s+FAVORITES_REPO_PAR+$OTHOME/repo/${FAVORITES_REPO}_par+" config
 
     # Specify our remotes to push to (added to local repos above)
     sed -i -e "s+COLLECTIONS_REPO_REMOTE+originssh+" config
+    sed -i -e "s+AMENDMENTS_REPO_REMOTE+originssh+" config
     sed -i -e "s+FAVORITES_REPO_REMOTE+originssh+" config
 
     # N.B. Assume we're using the same ssh keys as for the main OPENTREE_DOCSTORE
@@ -201,6 +226,7 @@ pushd .
     # N.B. Because of limitations oti's index_current_repo.py, this is
     # always one of our public repos on GitHub.
     sed -i -e "s+COLLECTIONS_REPO_URL+https://github.com/OpenTreeOfLife/$COLLECTIONS_REPO+" config
+    sed -i -e "s+AMENDMENTS_REPO_URL+https://github.com/OpenTreeOfLife/$AMENDMENTS_REPO+" config
     sed -i -e "s+FAVORITES_REPO_URL+https://github.com/OpenTreeOfLife/$FAVORITES_REPO+" config
 popd
 
