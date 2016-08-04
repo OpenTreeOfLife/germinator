@@ -115,7 +115,7 @@ can create a symbolic link, to avoid making a second copy of it; but generally t
 
 Test the conflict service in the usual way (after waiting a minute or two for it to load):
 
-    (cd reference-taxonomy/ws-tests; ./run_tests.sh host:apihost=http://{host})
+    (cd reference-taxonomy/ws-tests; ./run_tests.sh host:apihost=https://{host})
 
 Delete the backup file if everything seems to work:
 
@@ -151,13 +151,13 @@ page](https://tree.opentreeoflife.org/about/progress). Merge the feature branch 
 Using propinquity output, create two tarballs for inclusion on the release page:
 
 
-Create a version-specific subdirectory of the `synthesis` directory `opentree{#}` on the
+Create a version-specific subdirectory of the `files.opentreeoflife.org/synthesis` directory `opentree{#}` on the
 `files.opentreeoflife.org` server. Then, copy the tarballs there:
 
-    scp -p opentree6.0_*.tgz files.opentreeoflife.org:synthesis/opentree6.0/
+    scp -p opentree6.0_*.tar.gz files.opentreeoflife.org:files.opentreeoflife.org/synthesis/opentree6.0/
 
-Log in to `files.opentreeoflife.org` and extract the `opentree{#}_output.tgz`
-file, creating an `output` directory.
+Log in to `files.opentreeoflife.org` and extract the `opentree{#}_output.tar.gz`
+file, creating an `output` directory. Also extract the `opentree{#}_tree.tar.gz file`.
 
 Finally, *when you are ready to have the tree linked from the production system*, delete everything
 in the `current` directory on `files.opentreeoflife.org`, and create
