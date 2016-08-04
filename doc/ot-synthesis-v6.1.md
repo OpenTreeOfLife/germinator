@@ -19,8 +19,8 @@ The major change between version6.1 and version5.0 is the inclusion of 155 new p
 
 ### Changes in output
 
-<!-- 
-N.B. stats tables must use inline HTML, since web2py doesn't know how to render table markdown :-/ 
+<!--
+N.B. stats tables must use inline HTML, since web2py doesn't know how to render table markdown :-/
 -->
 <table class="table table-condensed">
  <tr>
@@ -38,14 +38,20 @@ N.B. stats tables must use inline HTML, since web2py doesn't know how to render 
  <tr>
   <th>tips from phylogeny</th>
   <td>41226</td>
-  <td>45406</td>
-  <td>4180</td>
+  <td>45397</td>
+  <td>4171</td>
  </tr>
  <tr>
-  <th>internal nodes</th>
-  <td>235099</td>
-  <td>238398</td>
-  <td>3299</td>
+  <th>internal nodes in taxonomy</th>
+  <td>127387</td>
+  <td>127387</td>
+  <td>0</td>
+ </tr>
+ <tr>
+  <th>internal nodes from phylogeny</th>
+  <td>37137</td>
+  <td>40990</td>
+  <td>3853</td>
  </tr>
  <tr>
   <th>broken taxa</th>
@@ -56,8 +62,8 @@ N.B. stats tables must use inline HTML, since web2py doesn't know how to render 
  <tr>
   <th>subproblems</th>
   <td>5545</td>
-  <td>5858</td>
-  <td>313</td>
+  <td>5854</td>
+  <td>309</td>
  </tr>
 </table>
 
