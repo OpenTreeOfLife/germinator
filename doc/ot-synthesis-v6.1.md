@@ -25,8 +25,8 @@ N.B. stats tables must use inline HTML, since web2py doesn't know how to render 
 <table class="table table-condensed">
  <tr>
   <th><!--statistic-->&nbsp;</th>
-  <th>version5</th>
-  <th>version6</th>
+  <th>version5.0</th>
+  <th>version6.1</th>
   <th>change</th>
  </tr>
  <tr>
@@ -50,8 +50,8 @@ N.B. stats tables must use inline HTML, since web2py doesn't know how to render 
  <tr>
   <th>broken taxa</th>
   <td>2400</td>
-  <td>2646</td>
-  <td>206</td>
+  <td>2653</td>
+  <td>253</td>
  </tr>
  <tr>
   <th>subproblems</th>
