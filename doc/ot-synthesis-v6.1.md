@@ -24,7 +24,7 @@ N.B. stats tables must use inline HTML, since web2py doesn't know how to render 
 -->
 <table class="table table-condensed">
  <tr>
-  <th>statistic</th>
+  <th><!--statistic-->&nbsp;</th>
   <th>version5</th>
   <th>version6</th>
   <th>change</th>
