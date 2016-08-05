@@ -127,10 +127,10 @@ def get_obj_from_http(url,
                                 headers=headers,
                                 params=params,
                                 allow_redirects=True)
-    debug('Sent {v} to {s}\n'.format(v=verb, s=resp.url))
-    debug('Got status code {c}\n'.format(c=resp.status_code))
+    debug('Sent {v} to {s}'.format(v=verb, s=resp.url))
+    debug('Got status code {c}'.format(c=resp.status_code))
     if resp.status_code != 200:
-        debug('Full response: {r}\n'.format(r=resp.text))
+        debug('Full response: {r}'.format(r=resp.text))
         raise_for_status(resp)
     return resp.json()
 
@@ -168,11 +168,11 @@ def test_http_json_method(url,
                                 translate(url),
                                 headers=headers,
                                 allow_redirects=True)
-        debug('Sent {v} to {s}\n'.format(v=verb, s=resp.url))
-    debug('Got status code {c} (expecting {e})\n'.format(c=resp.status_code,e=expected_status))
     if resp.status_code != expected_status:
+        debug('Sent {v} to {s}'.format(v=verb, s=resp.url))
+        debug('Got status code {c} (expecting {e})'.format(c=resp.status_code,e=expected_status))
         debug('Did not get expected response status. Got:\n{s}'.format(s=resp.status_code))
-        debug('Full response: {r}\n'.format(r=resp.text))
+        debug('Full response: {r}'.format(r=resp.text))
         raise_for_status(resp)
         # this is required for the case when we expect a 4xx/5xx but a successful return code is returned
         return fail_return
@@ -190,7 +190,7 @@ def test_http_json_method(url,
         if _VERBOSITY_LEVEL > 1:
             debug(unicode(results))
     elif _VERBOSITY_LEVEL > 1:
-        debug('Full response: {r}\n'.format(r=resp.text))
+        debug('Full response: {r}'.format(r=resp.text))
     if not is_json:
              return (True, resp.text) if return_bool_data else True
     return (True, resp.json()) if return_bool_data else True

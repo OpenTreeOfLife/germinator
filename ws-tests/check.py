@@ -106,6 +106,16 @@ def check_unique_name(x, where):
     else:
         return True
 
+def check_rank(x, where):
+    if not isinstance(x, unicode):
+        print '** expected string but got', x, where
+        return False
+    elif len(x) == 0:
+        print '** expected non-null rank but got null', where
+        return False
+    else:
+        return True
+
 
 def field(name, check):
     if not isinstance(check, type(check_integer)):
@@ -188,7 +198,7 @@ def check_dict(check_key, check_val):
 
 taxon_blob_fields = [field(u'ott_id', check_integer),
                      field(u'name', check_string),
-                     field(u'rank', check_string),
+                     field(u'rank', check_rank),
                      field(u'unique_name', check_unique_name),
                      field(u'tax_sources', check_list(check_string))]
 
@@ -256,3 +266,30 @@ extended_taxon_blob_fields = (taxon_blob_fields +
                                field(u'is_suppressed', check_boolean)])
 
 check_extended_taxon_blob = check_blob(extended_taxon_blob_fields)
+
+check_taxonomy_description_blob = check_blob([field(u'source', check_string),
+                                              field(u'author', check_string),
+                                              field(u'weburl', check_string),
+                                              field(u'name', check_string),
+                                              field(u'version', check_string)])
+
+check_match_names_result = (
+            check_blob([field(u'governing_code', check_string),  # e.g. "ICN"
+                        field(u'unambiguous_names', check_list(check_string)),
+                        field(u'unmatched_names', check_list(check_string)),
+                        field(u'matched_names', check_list(check_string)),
+                        field(u'context', check_string),
+                        field(u'includes_approximate_matches', check_boolean),
+                        field(u'includes_deprecated_taxa', check_boolean),
+                        field(u'includes_suppressed_names', check_boolean),
+                        field(u'taxonomy', check_taxonomy_description_blob),
+                        field(u'results', check_list(check_blob([
+                            field(u'name', check_string),
+                            field(u'matches', check_list(check_blob([
+                                field(u'matched_name', check_string),
+                                field(u'search_string', check_string),
+                                field(u'score', check_float), # e.g. 1.0
+                                field(u'is_approximate_match', check_boolean),
+                                field(u'is_synonym', check_boolean),
+                                field(u'nomenclature_code', check_string),
+                                field(u'taxon', check_extended_taxon_blob)])))])))]))

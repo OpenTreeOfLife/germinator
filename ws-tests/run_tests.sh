@@ -95,7 +95,7 @@ function do_tests {
         else
             num_failed=$(expr 1 + $num_failed)
             /bin/echo -n "F"
-            failed="$failed \n $fn"
+            failed="$failed $fn"
         fi
         num_tried=$(expr 1 + $num_tried)
     done
