@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. functions.sh
+. setup/functions.sh
 set -e
 
 # ---------- WEB2PY ----------

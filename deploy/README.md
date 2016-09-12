@@ -127,9 +127,11 @@ provably unneeded).
 
 Next, use `push.sh` to unpack the database, make it available to neo4j, and restart the
 neo4j service.  Again, before doing this, make sure there is adequate
-disk space.
+disk space.  The command looks like this:
 
     ./push.sh -c {configfile} install-db downloads/{app}-{20151104}.db.tgz {app}
+
+where {app} is taxomachine, treemachine, or oti.
 
 The previous version of the graph.db directory is moved to
 graph.db.previous for disaster recovery.  The graph.db.previous
