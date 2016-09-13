@@ -23,7 +23,7 @@ N.B. stats tables must use inline HTML, since web2py doesn't know how to render 
 <table class="table table-condensed">
  <tr>
   <th><!--statistic-->&nbsp;</th>
-  <th>version7.0</th>
+  <th>version6.1</th>
   <th>version7.0</th>
   <th>change</th>
  </tr>
