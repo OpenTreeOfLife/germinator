@@ -12,10 +12,12 @@ There are two downloads. The first (smaller download) contain only tree and anno
 
 ### Changes in inputs
 
-* New taxonomy version, now now ott2.10
-* Three new input trees:  
+* New taxonomy version, now now ott2.10. Major changes are new NCBI version and removal of taxa marked invalid in IRMNG. See [OTT release notes](https://tree.opentreeoflife.org/about/taxonomy-version/ott2.10) for details.
+* Three new input trees:  [Herrera, 2016](https://tree.opentreeoflife.org/curator/study/view/ot_722?tab=trees&tree=tree1), [Toussaint, 2016](https://tree.opentreeoflife.org/curator/study/view/ot_764?tab=trees&tree=tree1), [Malmstrøm, 2016](https://tree.opentreeoflife.org/curator/study/view/ot_771?tab=trees&tree=tree1)
 
 ### Changes in output
+
+Note that the reduction in nodes is largely due to the removal of taxa marked invalid in IRMNG.
 
 <!--
 N.B. stats tables must use inline HTML, since web2py doesn't know how to render table markdown :-/
