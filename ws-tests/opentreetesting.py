@@ -210,7 +210,8 @@ def raise_for_status(resp):
 
 
 def api_is_readonly():
-    return config('host', 'allowwrite', 'false').lower() == 'false'
+    s = config('host', 'allowwrite', 'false').lower()
+    return not (s == 'true')
 
 def exit_if_api_is_readonly(fn):
     if not api_is_readonly():
@@ -219,6 +220,36 @@ def exit_if_api_is_readonly(fn):
         debug('Running in read-only mode. Skipped {}'.format(fn))
     # This coordinates with run_tests.sh
     sys.exit(3)
+
+def github_oauth_for_write_or_exit(fn):
+    """Pass in the name of test file and get back the OAUTH token from 
+    the GITHUB_OAUTH_TOKEN environment if the test is not readonly.
+    Otherwise, exit with the exit code (3) that signals tests skipping.
+    """
+    exit_if_api_is_readonly(fn)
+    auth_token = os.environ.get('GITHUB_OAUTH_TOKEN')
+    if auth_token is None:
+        debug('{} skipped due to lack of GITHUB_OAUTH_TOKEN in env\n'.format(fn))
+        # This coordinates with run_tests.sh
+        sys.exit(3)
+    return auth_token
+
+def writable_api_host_and_oauth_or_exit(fn):
+    """Convenience/safety function to makes sure you aren't running
+    writable phylesystem tests against the production api server.
+
+    Returns the domain and GITHUB_OAUTH_TOKEN token if the test configuration
+        is not readonly, the server is not "https://api.opentree.*" and GITHUB_OAUTH_TOKEN
+        is in your env. Otherwise exits with the "skip" test code.
+    """
+    apihost = config('host', 'apihost').strip()
+    if apihost.startswith('https://api.opentree'):
+        debug('{} skipped because host is set to production api server. This test must be run locally or against devapi.\n'.format(fn))
+        # This coordinates with run_tests.sh
+        sys.exit(3)
+    auth_token = github_oauth_for_write_or_exit(fn)
+    return apihost, auth_token
+
 
 
 # Mimic the behavior of apache so that services can be tested without
