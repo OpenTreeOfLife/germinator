@@ -209,9 +209,8 @@ def raise_for_status(resp):
         raise e
 
 
-
 def api_is_readonly():
-    return config('host', 'allowwrite', 'true') == 'false'
+    return config('host', 'allowwrite', 'false').lower() == 'false'
 
 def exit_if_api_is_readonly(fn):
     if not api_is_readonly():
