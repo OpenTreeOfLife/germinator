@@ -275,6 +275,7 @@ translations = [('/cached/', '/phylesystem/default/cached/'),
                 ('/v2/studies/', '/db/data/ext/studies/graphdb/'),
                 # smasher (port 8081)
                 ('/v2/conflict/', '/')
+                ('/v3/conflict/', '/v3/')
 ]
 
 def translate(s):
