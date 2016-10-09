@@ -258,7 +258,7 @@ def writable_api_host_and_oauth_or_exit(fn):
 translations = [('/cached/', '/phylesystem/default/cached/'),
                 ('/v2/study', '/phylesystem/v1/study'),
                 ('/v3/study', '/phylesystem/v1/study'),
-                ('/v3/collections', '/phylesystem/v1/collections'),
+                ('/v3/collection', '/phylesystem/v1/collection'),
                 ('/v3/amendment', '/phylesystem/v1/amendment'),
                 # treemachine
                 ('/v2/graph/', '/db/data/ext/graph/graphdb/'),
