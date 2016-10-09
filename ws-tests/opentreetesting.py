@@ -255,8 +255,11 @@ def writable_api_host_and_oauth_or_exit(fn):
 # Mimic the behavior of apache so that services can be tested without
 # having apache running.  See deploy/setup/opentree-shared.conf
 
-translations = [('/v2/study/', '/phylesystem/v1/study/'),
-                ('/cached/', '/phylesystem/default/cached/'),
+translations = [('/cached/', '/phylesystem/default/cached/'),
+                ('/v2/study', '/phylesystem/v1/study'),
+                ('/v3/study', '/phylesystem/v1/study'),
+                ('/v3/collections', '/phylesystem/v1/collections'),
+                ('/v3/amendment', '/phylesystem/v1/amendment'),
                 # treemachine
                 ('/v2/graph/', '/db/data/ext/graph/graphdb/'),
                 ('/v2/tree_of_life/', '/db/data/ext/tree_of_life/graphdb/'),
