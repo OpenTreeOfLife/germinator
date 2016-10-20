@@ -66,7 +66,12 @@ if [[ ! "$first_config_spec" =~ "=" ]]; then
     first_config_spec=host:apihost=$first_config_spec
 fi
 
-config_specs="$first_config_spec $* host:allowwrite=false"
+
+config_specs="$first_config_spec $*"
+if [[ ! "$config_specs" =~ "host:allowwrite=" ]]; then
+    config_specs="$first_config_spec $* host:allowwrite=false"
+fi
+
 
 # The python test scripts all use the opentreetesting.py library,
 # so its location has to be on PYTHONPATH.
@@ -95,7 +100,7 @@ function do_tests {
         else
             num_failed=$(expr 1 + $num_failed)
             /bin/echo -n "F"
-            failed="$failed \n $fn"
+            failed="$failed $fn"
         fi
         num_tried=$(expr 1 + $num_tried)
     done

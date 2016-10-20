@@ -13,7 +13,7 @@ These can run on one server, or on five servers, or anything in between; it does
 
 Currently it's assumed that treemachine and taxomachine are running on the same server.
 
-The web2py applications don't need much memory, so an EC2 'micro' or 'small' server is probably fine.  For treemachine and taxomachine, you'll want a lot of RAM.  We've been using a 17G server for this purpose but are currently experiementing to see if 8G is enough. 
+The web2py applications don't need much memory, so an EC2 'micro' or 'small' server is probably fine.  For treemachine and taxomachine, you'll want a lot of RAM.  We've been using a 17G server for this purpose but are currently experiementing to see if 8G is enough.
 
 For more information about our current deployment practices, see the notes and configuration files in the [OpenTreeOfLife/deployed-systems](http://github.com/OpenTreeOfLife/deployed-systems) repo.
 
@@ -26,15 +26,15 @@ probably better to situate these scripts within a vagrant/ansible
 setup or some other structured solution, but I was in a hurry and
 didn't want to learn how to use them.
 
-**Note: We're now using a single, common approach to managing sensitive files (private keys and API "secrets").** 
+**Note: We're now using a single, common approach to managing sensitive files (private keys and API "secrets").**
 These files should be kept in directory ```~/.ssh/opentree/```, so that configuration can be shared easily among your team. See the [deployed-systems README](https://github.com/OpenTreeOfLife/deployed-servers/blob/master/README.md) for details.
 
 Go to Amazon or some other "cloud" provider, and reserve one or more instances
 running Debian GNU/Linux (version 8 'jessie' has been working for us).  As of 2014-07-08 servers that don't
-run big neo4j databases (e.g. browser/curator only) have 4G of RAM, 
+run big neo4j databases (e.g. browser/curator only) have 4G of RAM,
 those that do (phylesystem-api/oti/taxomachine/treemachine) have 8G of RAM.
 
-Put the ssh private key somewhere, e.g. in ~/.ssh/opentree/opentree.pem (on your own machine, 
+Put the ssh private key somewhere, e.g. in ~/.ssh/opentree/opentree.pem (on your own machine,
 not the server).
 Set its file permissions to 600.
 
@@ -125,11 +125,13 @@ Check for available disk space before doing this.  Delete old database
 versions as needed (assuming they are either archived elsewhere, or
 provably unneeded).
 
-Next, unpack the database, make it available to neo4j, and restart the
+Next, use `push.sh` to unpack the database, make it available to neo4j, and restart the
 neo4j service.  Again, before doing this, make sure there is adequate
-disk space.
+disk space.  The command looks like this:
 
     ./push.sh -c {configfile} install-db downloads/{app}-{20151104}.db.tgz {app}
+
+where {app} is taxomachine, treemachine, or oti.
 
 The previous version of the graph.db directory is moved to
 graph.db.previous for disaster recovery.  The graph.db.previous
@@ -197,17 +199,17 @@ currently have two means of notifying users before and during scheduled
 maintenance windows.
 
 While any Open Tree websites(s) are unavailable, their respective webservers
-should redirect all traffic to the editable 
+should redirect all traffic to the editable
 [maintenance page](http://opentreeoflife.github.io/maintenance.html) in our
 github-pages sites. (Be sure to edit the text of this page to reflect the current situation and
 expected downtime.)
 
-This should be done with a **302 Temporary** redirect. Currently, the easiest way to do this is by [un-commenting this 
+This should be done with a **302 Temporary** redirect. Currently, the easiest way to do this is by [un-commenting this
 line](https://github.com/OpenTreeOfLife/germinator/blob/e62b653b82870d1860c832a2bb1c9bb65ebf23b6/deploy/setup/opentree-shared.conf#L15-L16) in our shared apache configuration file. This should be on the server as `/etc/apache2/opentree.conf`.
 
-To avoid lost work in the [study curation app](http://tree.opentreeoflife.org/curator), 
-we should also disable the creation and editing of studies in the hours before any 
-scheduled downtime. This can be done by modifying the `[maintenance]` section of the 
+To avoid lost work in the [study curation app](http://tree.opentreeoflife.org/curator),
+we should also disable the creation and editing of studies in the hours before any
+scheduled downtime. This can be done by modifying the `[maintenance]` section of the
 curation app's `private/config` file:
 
 ```config
