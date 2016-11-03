@@ -100,11 +100,11 @@ def summarize_gzipped_json_response(resp):
         print 'Non gzipped response, but not a string is:', results
         return False
 
-def get_obj_from_http(url,
-                      verb='GET',
-                      data=None,
-                      params=None,
-                      headers=None):
+def get_response_from_http(url,
+                           verb='GET',
+                           data=None,
+                           params=None,
+                           headers=None):
     '''Call `url` with the http method of `verb`. 
     If specified `data` is passed using json.dumps
     returns the json content of the web service or raise an HTTP error
@@ -132,6 +132,14 @@ def get_obj_from_http(url,
     if resp.status_code != 200:
         debug('Full response: {r}'.format(r=resp.text))
         raise_for_status(resp)
+    return resp
+
+def get_obj_from_http(url,
+                      verb='GET',
+                      data=None,
+                      params=None,
+                      headers=None):
+    resp = get_response_from_http(url, verb=verb, data=data, params=params, headers=headers)
     return resp.json()
 
 # Returns two results if return_bool_data.
@@ -271,7 +279,9 @@ translations = [('/v2/study/', '/phylesystem/v1/study/'),
                 ('/v3/studies/', '/db/data/ext/studies/graphdb/'),
                 ('/v2/studies/', '/db/data/ext/studies/graphdb/'),
                 # smasher (port 8081)
-                ('/v2/conflict/', '/')
+                ('/v2/conflict/', '/'),
+                # pyraphyletic impl of phylesystem-api
+                ('/phylesystem/', '/'),
 ]
 
 def translate(s):
