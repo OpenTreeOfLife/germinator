@@ -4,7 +4,7 @@
 
 # Lots of arguments to make this work.. check to see if we have them all.
 if [ "$#" -ne 13 ]; then
-    echo "install-api.sh missing required parameters (expecting 12)"
+    echo "install-api.sh missing required parameters (expecting 13)"
     exit 1
 fi
 
