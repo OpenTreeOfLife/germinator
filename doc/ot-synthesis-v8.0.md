@@ -65,3 +65,4 @@ dir. Stats tables must use inline HTML, since web2py doesn't know how to render 
    <th>6712</th>
    <th>805</th>
 </tr>
+</table>
