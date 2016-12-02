@@ -5,8 +5,8 @@ Version 7.0 of the synthetic tree was generated on 11 September 2016 using the [
 ## Downloads
 There are two downloads. The first (smaller download) contain only tree and annotations files. The second (larger download) is the full output from the synthesis procedure, including documentation. You can also [browse the full output](http://files.opentreeoflife.org/synthesis/opentree7.0/output/index.html).
 
-* [Tree and annotations](http://files.opentreeoflife.org/synthesis/opentree7.0/opentree7.0_tree.tar.gz) : Several versions of the synthetic tree, along with the annotations file. See the enclosed README for details. (compressed tar archive; 49 Mbytes)
-* [All pipeline outputs](http://files.opentreeoflife.org/synthesis/opentree7.0/opentree7.0_output.tar.gz) : Outputs and documentation from all stages of the synthesis pipeline. Or, you can [browse the output](http://files.opentreeoflife.org/synthesis/opentree7.0/output/index.html) rather than downloading. (compressed tar archive; 128 Mbytes)
+* [Tree and annotations](http://files.opentreeoflife.org/synthesis/opentree7.0/opentree7.0_tree.tgz) : Several versions of the synthetic tree, along with the annotations file. See the enclosed README for details. (compressed tar archive; 49 Mbytes)
+* [All pipeline outputs](http://files.opentreeoflife.org/synthesis/opentree7.0/opentree7.0_output.tgz) : Outputs and documentation from all stages of the synthesis pipeline. Or, you can [browse the output](http://files.opentreeoflife.org/synthesis/opentree7.0/output/index.html) rather than downloading. (compressed tar archive; 128 Mbytes)
 
 ## Release notes
 
