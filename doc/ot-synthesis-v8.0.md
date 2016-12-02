@@ -29,39 +29,39 @@ dir. Stats tables must use inline HTML, since web2py doesn't know how to render 
    <th>change</th>
 </tr>
 <tr>
-   <th>total tips</th>
-   <th>2191512</th>
-   <th>2184484</th>
-   <th>-7028</th>
+   <td>total tips</th>
+   <td>2191512</th>
+   <td>2184484</th>
+   <td>-7028</th>
 </tr>
 <tr>
-   <th>tips from phylogeny</th>
-   <th>44608</th>
-   <th>53012</th>
-   <th>8404</th>
+   <td>tips from phylogeny</th>
+   <td>44608</th>
+   <td>53012</th>
+   <td>8404</th>
 </tr>
 <tr>
-   <th>internal nodes in taxonomy</th>
-   <th>191841</th>
-   <th>191590</th>
-   <th>-251</th>
+   <td>internal nodes in taxonomy</th>
+   <td>191841</th>
+   <td>191590</th>
+   <td>-251</th>
 </tr>
 <tr>
-   <th>internal nodes from phylogeny</th>
-   <th>40482</th>
-   <th>48448</th>
-   <th>7966</th>
+   <td>internal nodes from phylogeny</th>
+   <td>40482</th>
+   <td>48448</th>
+   <td>7966</th>
 </tr>
 <tr>
-   <th>broken taxa</th>
-   <th>2651</th>
-   <th>3183</th>
-   <th>532</th>
+   <td>broken taxa</th>
+   <td>2651</th>
+   <td>3183</th>
+   <td>532</th>
 </tr>
 <tr>
-   <th>subproblems</th>
-   <th>5907</th>
-   <th>6712</th>
-   <th>805</th>
+   <td>subproblems</th>
+   <td>5907</th>
+   <td>6712</th>
+   <td>805</th>
 </tr>
 </table>
