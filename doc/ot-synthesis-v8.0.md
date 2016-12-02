@@ -28,7 +28,6 @@ dir. Stats tables must use inline HTML, since web2py doesn't know how to render 
    <th>version8.0</th>
    <th>change</th>
 </tr>
-</table>
 <tr>
    <th>total tips</th>
    <th>2191512</th>
