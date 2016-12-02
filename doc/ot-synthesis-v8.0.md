@@ -23,45 +23,44 @@ dir. Stats tables must use inline HTML, since web2py doesn't know how to render 
 -->
 <table class="table table-condensed">
 <tr>
-   <th><!--statistic-->&nbsp;</th>
-   <th>version7.0</th>
-   <th>version8.0</th>
-   <th>change</th>
+<th><!--statistic-->&nbsp;</th>
+<th>version7.0</th>
+<th>version8.0</th>
+<th>change</th>
+<tr>
+   <th>total tips</th>
+   <td>2191512</td>
+   <td>2184484</td>
+   <td>-7028</td>
 </tr>
 <tr>
-   <td>total tips</th>
-   <td>2191512</th>
-   <td>2184484</th>
-   <td>-7028</th>
+   <th>tips from phylogeny</th>
+   <td>44608</td>
+   <td>53012</td>
+   <td>8404</td>
 </tr>
 <tr>
-   <td>tips from phylogeny</th>
-   <td>44608</th>
-   <td>53012</th>
-   <td>8404</th>
+   <th>internal nodes in taxonomy</th>
+   <td>191841</td>
+   <td>191590</td>
+   <td>-251</td>
 </tr>
 <tr>
-   <td>internal nodes in taxonomy</th>
-   <td>191841</th>
-   <td>191590</th>
-   <td>-251</th>
+   <th>internal nodes from phylogeny</th>
+   <td>40482</td>
+   <td>48448</td>
+   <td>7966</td>
 </tr>
 <tr>
-   <td>internal nodes from phylogeny</th>
-   <td>40482</th>
-   <td>48448</th>
-   <td>7966</th>
+   <th>broken taxa</th>
+   <td>2651</td>
+   <td>3183</td>
+   <td>532</td>
 </tr>
 <tr>
-   <td>broken taxa</th>
-   <td>2651</th>
-   <td>3183</th>
-   <td>532</th>
-</tr>
-<tr>
-   <td>subproblems</th>
-   <td>5907</th>
-   <td>6712</th>
-   <td>805</th>
+   <th>subproblems</th>
+   <td>5907</td>
+   <td>6712</td>
+   <td>805</td>
 </tr>
 </table>
