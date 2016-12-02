@@ -149,11 +149,8 @@ production.
 
 **Files for downloads**
 
-Using propinquity output, create two tarballs for inclusion on the release page:
-
-
 Create a version-specific subdirectory of the `files.opentreeoflife.org/synthesis` directory `opentree{#}` on the
-`files.opentreeoflife.org` server. Then, copy the tarballs there:
+`files.opentreeoflife.org` server. Then, copy the two tarballs there, e.g.:
 
     scp -p opentree6.0_*.tar.gz files.opentreeoflife.org:files.opentreeoflife.org/synthesis/opentree6.0/
 
