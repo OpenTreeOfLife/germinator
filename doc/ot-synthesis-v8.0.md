@@ -28,10 +28,10 @@ dir. Stats tables must use inline HTML, since web2py doesn't know how to render 
 <th>version8.0</th>
 <th>change</th>
 <tr>
-   <th>total tips</th>
-   <td>2191512</td>
-   <td>2184484</td>
-   <td>-7028</td>
+    <th>total tips</th>
+    <td>2146904</td>
+    <td>2131472</td>
+    <td>-15432</td>
 </tr>
 <tr>
    <th>tips from phylogeny</th>
