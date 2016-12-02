@@ -8,11 +8,11 @@ This is still a fairly manual process, although we aim to automate in the future
 The steps to build and deploy a new version of the synthetic tree are:
 
 1. Build a new synthetic tree using
-[propinquity](https://github.com/OpenTreeOfLife/propinquity) and crate the tarballs for download.
+[propinquity](https://github.com/OpenTreeOfLife/propinquity) and create the tarballs for download.
 * Load the synthetic tree into a neo4j database using code in [treemachine](https://github.com/OpenTreeOfLife/treemachine)
 * Deploy the database to development (devapi) using scripts in
 [germinator](https://github.com/OpenTreeOfLife/germinator).
-* Manually create the release notes, update the synthesis statistics file, and upload tarballs for download
+* Manually create the release notes, update the synthesis statistics file, upload tarballs for download
 * Update the conflict service to use the new synthetic tree
 * Deploy to production
 
@@ -126,24 +126,26 @@ The tree browser and bibliographic references pages will update automatically ba
 
 **Release notes**
 
-Create a file in `doc` (in the `germinator` repository)
-called  `ot-synthesis-v{#}.md`, where `#` is the synthesis
-version number e.g. `6.0`. Edit this file, including links to the files for download and
-differences in this version of the tree. (At this point, we are creating these
-notes manually, but we plan to automate this in the future, likely using similiar
-code as the propinquity `compare_synthesis_outputs.py`  script.) Once the release
-notes file exists, the release will show up on the [releases
+Create a file in `doc` (in the `germinator` repository) called
+`ot-synthesis-v{#}.md`, where `#` is the synthesis version number e.g. `6.0`.
+Edit this file, including links to the files for download and differences in
+this version of the tree. Use the propinquity
+[compare_synthesis_outputs.py](https://github.com/OpenTreeOfLife/propinquity/bin/compare_synthesis_outputs.py)
+script to generate the comparison table for the release notes. Paste the table
+into the release notes file under the heading '### Changes in output'. Once the
+release notes file exists, the release will show up on the [releases
 page](https://tree.opentreeoflife.org/about/synthesis-release/).
 
 **Progress statistics**
 
 Manually edit the [statistics
 file](https://github.com/OpenTreeOfLife/opentree/blob/master/webapp/static/statistics/synthesis.json)
-on a feature branch of the `opentree` repository, adding
-the following statistics about the tree: `version`, `OTT_version`, `tree_count`,
-`total_OTU_count`, and `tip_count`. These stats will then show up on the [progress
-page](https://tree.opentreeoflife.org/about/progress). Merge the feature branch to the
-`development` branch for testing devtree, and `master` for production.
+on a feature branch of the `opentree` repository, adding the following
+statistics about the tree: `version`, `OTT_version`, `tree_count`,
+`total_OTU_count`, and `tip_count`. These stats will then show up on the
+[progress page](https://tree.opentreeoflife.org/about/progress). Merge the
+feature branch to the `development` branch for testing devtree, and `master` for
+production.
 
 **Files for downloads**
 
