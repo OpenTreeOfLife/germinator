@@ -177,6 +177,8 @@ function docommand {
     install-db)
         if [ $# = 2 ]; then
             install_neo4j_db $*
+            # restart apache to clear the RAM cache (stale results)
+            restart_apache=yes
         else
             err "Wrong number of arguments to install-db" $*
         fi
