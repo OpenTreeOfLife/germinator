@@ -38,14 +38,14 @@ Increment the id by whole numbers, unless the change is trivial.
 Create tarballs using the `bin/make_tarballs.sh` script. If you don't already
 have all of the output in one directory, use the `bin/move_outputs.sh` script.  Use the `make_tarballs.sh` to create two archives:
 
-* a small summary archive called `opentree{#}_tree.tar.gz`, with files:
+* a small summary archive called `opentree{#}_tree.tgz`, with files:
   * `labelled_supertree/labelled_supertree.tre`
   * `labelled_supertree/labelled_supertree_ottnames.tre`
   * `grafted_solution/grafted_solution.tre`
   * `grafted_solution/grafted_solution_ottnames.tre`
   * `annotated_supertree/annotations.json`
   * a README file that describes the files
-* a large archive called `opentree{#}_output.tar.gz` of all synthesis
+* a large archive called `opentree{#}_output.tgz` of all synthesis
   outputs, including `*.html` files
 
 ## Loading the tree into neo4j
@@ -152,10 +152,10 @@ production.
 Create a version-specific subdirectory of the `files.opentreeoflife.org/synthesis` directory `opentree{#}` on the
 `files.opentreeoflife.org` server. Then, copy the two tarballs there, e.g.:
 
-    scp -p opentree6.0_*.tar.gz files.opentreeoflife.org:files.opentreeoflife.org/synthesis/opentree6.0/
+    scp -p opentree6.0_*.tgz files.opentreeoflife.org:files.opentreeoflife.org/synthesis/opentree6.0/
 
-Log in to `files.opentreeoflife.org` and extract the `opentree{#}_output.tar.gz`
-file, creating an `output` directory. Also extract the `opentree{#}_tree.tar.gz file`.
+Log in to `files.opentreeoflife.org` and extract the `opentree{#}_output.tgz`
+file, creating an `output` directory.
 
 Finally, *when you are ready to have the tree linked from the production system*, delete everything
 in the `current` directory on `files.opentreeoflife.org`, and create
