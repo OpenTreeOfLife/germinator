@@ -40,7 +40,7 @@ dir. Stats tables must use inline HTML, since web2py doesn't know how to render 
    <td>8404</td>
 </tr>
 <tr>
-   <th>internal nodes in taxonomy</th>
+   <th>internal nodes from taxonomy</th>
    <td>191841</td>
    <td>191590</td>
    <td>-251</td>
