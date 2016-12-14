@@ -178,6 +178,8 @@ function docommand {
     install-db)
         if [ $# = 2 ]; then
             install_neo4j_db $*
+            # restart apache to clear the RAM cache (stale results)
+            restart_apache=yes
         else
             err "Wrong number of arguments to install-db" $*
         fi
@@ -240,7 +242,7 @@ function docomponent {
     *)
         echo "Unrecognized component: $component"
         ;;
-    esac 
+    esac
 }
 
 # list="w x y"; in_list x $list; echo $?
@@ -363,10 +365,11 @@ function push_phylesystem_api {
     [ "x$ILLUSTRATIONS_REPO" != "x" ] || err "ILLUSTRATIONS_REPO not configured"
     [ "x$FAVORITES_REPO"     != "x" ] || err "FAVORITES_REPO not configured"
     [ "x$OTI_BASE_URL"       != "x" ] || err "OTI_BASE_URL not configured"
+    [ "x$OTINDEX_BASE_URL"   != "x" ] || err "OTINDEX_BASE_URL not configured"
 
     push_bot_identity
 
-    # Place private key for GitHub access 
+    # Place private key for GitHub access
     if [ "x$OPENTREE_GH_IDENTITY" = "x" ]; then
         echo "Warning: OPENTREE_GH_IDENTITY not specified"
     elif [ ! -r $OPENTREE_GH_IDENTITY ]; then
@@ -386,7 +389,7 @@ function push_phylesystem_api {
     fi
 
     ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-api.sh "$OPENTREE_HOST" \
-           $OPENTREE_DOCSTORE $COLLECTIONS_REPO $AMENDMENTS_REPO $ILLUSTRATIONS_REPO $FAVORITES_REPO $CONTROLLER $OTI_BASE_URL $OPENTREE_API_BASE_URL $COLLECTIONS_API_BASE_URL $AMENDMENTS_API_BASE_URL $ILLUSTRATIONS_API_BASE_URL $FAVORITES_API_BASE_URL $OPENTREE_DEFAULT_APPLICATION
+           $OPENTREE_DOCSTORE $COLLECTIONS_REPO $AMENDMENTS_REPO $ILLUSTRATIONS_REPO $FAVORITES_REPO $CONTROLLER $OTI_BASE_URL $OPENTREE_API_BASE_URL $COLLECTIONS_API_BASE_URL $AMENDMENTS_API_BASE_URL $ILLUSTRATIONS_API_BASE_URL $FAVORITES_API_BASE_URL $OPENTREE_DEFAULT_APPLICATION $OTINDEX_BASE_URL 
 }
 
 function push_neo4j {

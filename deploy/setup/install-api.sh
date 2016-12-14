@@ -3,7 +3,7 @@
 # Some of this repeats what's found in install-web2py-apps.sh.  Keep in sync.
 
 # Lots of arguments to make this work.. check to see if we have them all.
-if [ "$#" -ne 14 ]; then
+if [ "$#" -ne 15 ]; then
     echo "install-api.sh missing required parameters (expecting 12)"
     exit 1
 fi
@@ -22,6 +22,7 @@ AMENDMENTS_API_BASE_URL=${11}
 ILLUSTRATIONS_API_BASE_URL=${12}
 FAVORITES_API_BASE_URL=${13}
 OPENTREE_DEFAULT_APPLICATION=${14}
+OTINDEX_BASE_URL=${15}
 
 . setup/functions.sh
 
@@ -124,6 +125,9 @@ pushd .
 
     # Access oti search from shared server-config variable
     sed -i -e "s+OTI_BASE_URL+$OTI_BASE_URL+" config
+
+    # Access otindex search from shared server-config variable
+    sed -i -e "s+OTINDEX_BASE_URL+$OTINDEX_BASE_URL+" config
 
     sed -i -e "s+COLLECTIONS_API_BASE_URL+$COLLECTIONS_API_BASE_URL+" config
     sed -i -e "s+AMENDMENTS_API_BASE_URL+$AMENDMENTS_API_BASE_URL+" config
