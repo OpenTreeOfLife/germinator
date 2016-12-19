@@ -22,6 +22,9 @@ else:
     _VERBOSITY_LEVEL = 0
 def debug(s):
     if _VERBOSITY_LEVEL > 0:
+        warn(s)
+
+def warn(s):
         sys.stderr.write('testing-harness: {s}\n'.format(s=s))
 
 def config(section=None, param=None, default=None):
@@ -224,8 +227,7 @@ def api_is_readonly():
 def exit_if_api_is_readonly(fn):
     if not api_is_readonly():
         return
-    if _VERBOSITY_LEVEL > 0:
-        debug('Running in read-only mode. Skipped {}'.format(fn))
+    warn('Running in read-only mode. Skipped {}'.format(fn))
     # This coordinates with run_tests.sh
     sys.exit(3)
 
@@ -237,7 +239,7 @@ def github_oauth_for_write_or_exit(fn):
     exit_if_api_is_readonly(fn)
     auth_token = os.environ.get('GITHUB_OAUTH_TOKEN')
     if auth_token is None:
-        debug('{} skipped due to lack of GITHUB_OAUTH_TOKEN in env\n'.format(fn))
+        warn('{} skipped due to lack of GITHUB_OAUTH_TOKEN in env\n'.format(fn))
         # This coordinates with run_tests.sh
         sys.exit(3)
     return auth_token
@@ -252,7 +254,7 @@ def writable_api_host_and_oauth_or_exit(fn):
     """
     apihost = config('host', 'apihost').strip()
     if apihost.startswith('https://api.opentree'):
-        debug('{} skipped because host is set to production api server. This test must be run locally or against devapi.\n'.format(fn))
+        warn('{} skipped because host is set to production api server. This test must be run locally or against devapi.\n'.format(fn))
         # This coordinates with run_tests.sh
         sys.exit(3)
     auth_token = github_oauth_for_write_or_exit(fn)
