@@ -1,5 +1,6 @@
 .DS_Store
 *~
+*#
 *.pem
 deploy/janrain.key
 deploy/GITHUB_CLIENT_SECRET
@@ -10,3 +11,10 @@ deploy/setup/CONFIG
 *.out
 *.jar
 *.tmp
+asterales/ott
+asterales/subset
+asterales/synth/Source_nexsons
+asterales/taxomachine.db
+asterales/treemachine.db
+trees_report/shards
+trees_report/work
