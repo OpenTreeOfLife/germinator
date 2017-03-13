@@ -107,6 +107,8 @@ release):
        new file(s).  Create new index.html files for new directories.
     * Or, retrieve `.write_dates.json` from S3, edit it to add the new file(s), and
        re-run `prepare_index.py` to update `index.html`.
+    * Or, decide that there is no need for an `index.html` and just
+      delete it or replace with a stub.
 1. Copy the new file(s), as well as the updated `index.html` and
   `.write_dates.json`, to S3 using `aws s3 cp` or `aws s3 sync`.
 
