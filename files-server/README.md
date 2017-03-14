@@ -34,28 +34,30 @@ directed.  Note that we are _not_ doing a domain (registrar) transfer, only
 subdomain name server redirection.  The instructions do not cover this
 case, but if you have an understanding of DNS, it's not hard.
 
-## Creating index.html files
+## Keeping track of metadata
 
-S3 does not automatically generate directory indexes, so we have to do
-this explicitly.  One solution is
-[here](https://github.com/rufuspollock/s3-bucket-listing) but the
-difficulty is that the wrong file write modification dates will be
-shown - the script shows the dates stored on S3, but we want the
-actual dates from the origin of the file.
+An unfortunate aspect of the `aws cp` and `aws sync` commands is that
+they do not preserve file modification date/time metadata.  It is
+useful to get the file write dates correct in each directory's
+index.html.  Therefore a script is provided for maintaining this
+metadata.
 
-* `capture_write_dates.py` - when a file is copied from a local
-  filesystem to S3, the last modified date is not preserved, and there
-  is no way to do so.  There is a 'correct' way to handle this in S3
-  involving S3 object properties, but I did not want to learn it (and
-  didn't think people maintaining the S3 bucket in the future would,
-  either).  This script captures the write dates from a local mirror,
-  and puts them in a file `.write_dates.json`, which is later used to generate an
-  index.html for the directory.
+The write dates are stored in a file `.write_dates.json` in each
+directory and is updated using the `capture_write_dates.py` script in
+either of two ways:
 
-* `prepare_index.py` - S3 does not natively provide directory
-  listings, which are useful for discovery purposes.  This script
-  creates an index.html file for a directory, using the data in the 
-  file written by the `capture_write_dates.py` script.
+ * `.write_dates.json` can be generated afresh from a local mirror of
+   a directory on the files.opentreeoflife.org web site, when it is
+   absent or when the `--refresh` flag is given.
+
+ * An existing `.write_dates.json` can be updated from a local mirror
+   directory, even if the mirror does not contain the entire contents
+   of the directory.  Metadata for unmirrored files will be carried
+   forward, and metadata for local files will be added or updated as
+   necesary.
+
+If the file's size does not change, then its write date in
+`.write_dates.json` is left unmodified.
 
 To generate all of the `.write_dates.json` files locally, based on a
 local mirror or previous instantiation of the site (e.g. the one on
@@ -66,9 +68,25 @@ cd files.opentreeoflife.org     # local mirror
 find . -type d -exec python {path-to-here}/capture_write_dates.py {} \;
 ```
 
-Then, to generate all of the index.html files:
+where `{path-to-here}` is the path to the directory containing this
+README.
+
+## Creating index.html files
+
+S3 does not automatically generate directory indexes, so we have to do
+this explicitly.  One solution is
+[here](https://github.com/rufuspollock/s3-bucket-listing) but the
+difficulty is that the wrong file modification dates will be
+shown - the script shows the dates stored on S3, but we want the
+actual dates from the origin of the file.
+
+The `prepare_index.py` script creates an `index.html` file using the
+data in the `.write_dates.json` (see above).
+
+To generate all of the index.html files:
 
 ```
+cd files.opentreeoflife.org     # local mirror  
 find . -type d -exec python {path-to-here}/prepare_index.py {} \;
 ```
 
