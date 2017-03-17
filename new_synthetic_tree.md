@@ -3,6 +3,8 @@
 This is still a fairly manual process, although we aim to automate in the future
 (possibly using ansible?).
 
+Note: updating the taxonomy is a completely separate process, described [here](https://github.com/OpenTreeOfLife/germinator/wiki/Deploying-a-new-taxonomy-version).
+
 **Overview**
 
 The steps to build and deploy a new version of the synthetic tree are:
