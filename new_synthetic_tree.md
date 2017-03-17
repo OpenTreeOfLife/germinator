@@ -145,7 +145,8 @@ statistics about the tree: `version`, `OTT_version`, `tree_count`,
 `total_OTU_count`, and `tip_count`. These stats will then show up on the
 [progress page](https://tree.opentreeoflife.org/about/progress). Merge the
 feature branch to the `development` branch for testing devtree, and `master` for
-production.
+production. Re-deploy the webapp as appropriate for the new statistics to show up
+in the webapp.
 
 **Files for downloads**
 
