@@ -36,7 +36,8 @@ case, but if you have an understanding of DNS, it's not hard.
 
 ## Keeping track of metadata
 
-An unfortunate aspect of the `aws cp` and `aws sync` commands is that
+Copy files to S3 using the `aws s3 cp` and `aws s3 sync` commands.
+An unfortunate aspect of these commands is that
 they do not preserve file modification date/time metadata.  It is
 useful to get the file write dates correct in each directory's
 index.html.  Therefore a script is provided for maintaining this
