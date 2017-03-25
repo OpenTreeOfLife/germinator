@@ -6,7 +6,7 @@ Version 9.1 of the synthetic tree was generated on 22 March 2017 using the [prop
 There are two downloads. The first (smaller download) contain only tree and annotations files. The second (larger download) is the full output from the synthesis procedure, including documentation. You can also [browse the full output](http://files.opentreeoflife.org/synthesis/opentree9.1/output/index.html).
 
 * [Tree and annotations](http://files.opentreeoflife.org/synthesis/opentree9.1/opentree9.1_tree.tgz) : Several versions of the synthetic tree, along with the annotations file. See the enclosed README for details. (compressed tar archive; 35 Mbytes)
-* [All pipeline outputs](http://files.opentreeoflife.org/synthesis/opentree8.0/opentree9.1_output.tgz) : Outputs and documentation from all stages of the synthesis pipeline. Or, you can [browse the output](http://files.opentreeoflife.org/synthesis/opentree9.1/output/index.html) rather than downloading. (compressed tar archive; 189 Mbytes)
+* [All pipeline outputs](http://files.opentreeoflife.org/synthesis/opentree9.1/opentree9.1_output.tgz) : Outputs and documentation from all stages of the synthesis pipeline. Or, you can [browse the output](http://files.opentreeoflife.org/synthesis/opentree9.1/output/index.html) rather than downloading. (compressed tar archive; 189 Mbytes)
 
 ## Release notes
 
