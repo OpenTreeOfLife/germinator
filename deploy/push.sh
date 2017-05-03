@@ -318,8 +318,12 @@ function push_webapps {
     [ "x$OTI_BASE_URL"         != x ] || err "OTI_BASE_URL not configured"
     [ "x$CONFLICT_BASE_URL"    != x ] || err "CONFLICT_BASE_URL not configured"
 
+    # CACHED_OTI_BASE_URL is optional, if not specified then build from OTI_BASE_URL
+    # (logic for this in install-web2py-apps.sh)
+    if [ "x$CACHED_OTI_BASE_URL" == x ]; then CACHED_OTI_BASE_URL=$OTI_BASE_URL; fi
+
     if [ $DRYRUN = "yes" ]; then echo "[opentree]"; return; fi
-    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-web2py-apps.sh "$OPENTREE_HOST" "${OPENTREE_PUBLIC_DOMAIN}" "${OPENTREE_DEFAULT_APPLICATION}" "$CONTROLLER" "${CURATION_GITHUB_CLIENT_ID}" "${CURATION_GITHUB_REDIRECT_URI}" "${TREEVIEW_GITHUB_CLIENT_ID}" "${TREEVIEW_GITHUB_REDIRECT_URI}" "${TREEMACHINE_BASE_URL}" "${TAXOMACHINE_BASE_URL}" "${OTI_BASE_URL}" "${OPENTREE_API_BASE_URL}" "${COLLECTIONS_API_BASE_URL}" "${AMENDMENTS_API_BASE_URL}" "${FAVORITES_API_BASE_URL}" "${CONFLICT_API_BASE_URL}"
+    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-web2py-apps.sh "$OPENTREE_HOST" "${OPENTREE_PUBLIC_DOMAIN}" "${OPENTREE_DEFAULT_APPLICATION}" "$CONTROLLER" "${CURATION_GITHUB_CLIENT_ID}" "${CURATION_GITHUB_REDIRECT_URI}" "${TREEVIEW_GITHUB_CLIENT_ID}" "${TREEVIEW_GITHUB_REDIRECT_URI}" "${TREEMACHINE_BASE_URL}" "${TAXOMACHINE_BASE_URL}" "${OTI_BASE_URL}" "${OPENTREE_API_BASE_URL}" "${COLLECTIONS_API_BASE_URL}" "${AMENDMENTS_API_BASE_URL}" "${FAVORITES_API_BASE_URL}" "${CONFLICT_API_BASE_URL}" "${CACHED_OTI_BASE_URL}"
     # place the files with secret GitHub API keys for curator and webapp (tree browser feedback) apps
     # N.B. This includes the final domain name, since we'll need different keys for dev.opentreeoflife.org, www.opentreeoflife.org, etc.
     keyfile=${OPENTREE_SECRETS}/treeview-GITHUB_CLIENT_SECRET-$OPENTREE_PUBLIC_DOMAIN
@@ -363,7 +367,6 @@ function push_phylesystem_api {
     [ "x$AMENDMENTS_REPO"   != "x" ] || err "AMENDMENTS_REPO not configured"
     [ "x$FAVORITES_REPO"    != "x" ] || err "FAVORITES_REPO not configured"
     [ "x$OTI_BASE_URL"      != "x" ] || err "OTI_BASE_URL not configured"
-    [ "x$OTINDEX_BASE_URL"      != "x" ] || err "OTINDEX_BASE_URL not configured"
 
     push_bot_identity
 
@@ -387,7 +390,7 @@ function push_phylesystem_api {
     fi
 
     ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-api.sh "$OPENTREE_HOST" \
-           $OPENTREE_DOCSTORE $COLLECTIONS_REPO $AMENDMENTS_REPO $FAVORITES_REPO $CONTROLLER $OTI_BASE_URL $OPENTREE_API_BASE_URL $COLLECTIONS_API_BASE_URL $AMENDMENTS_API_BASE_URL $FAVORITES_API_BASE_URL $OPENTREE_DEFAULT_APPLICATION $OTINDEX_BASE_URL 
+           $OPENTREE_DOCSTORE $COLLECTIONS_REPO $AMENDMENTS_REPO $FAVORITES_REPO $CONTROLLER $OTI_BASE_URL $OPENTREE_API_BASE_URL $COLLECTIONS_API_BASE_URL $AMENDMENTS_API_BASE_URL $FAVORITES_API_BASE_URL $OPENTREE_DEFAULT_APPLICATION
 }
 
 function push_neo4j {

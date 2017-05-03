@@ -3,8 +3,8 @@
 # Some of this repeats what's found in install-api.sh.  Keep in sync.
 
 # Lots of arguments to make this work.. check to see if we have them all.
-if [ "$#" -ne 16 ]; then
-    echo "install-web2py-apps.sh missing required parameters (expecting 16)"
+if [ "$#" -ne 17 ]; then
+    echo "install-web2py-apps.sh missing required parameters (expecting 17)"
     exit 1
 fi
 
@@ -25,6 +25,7 @@ COLLECTIONS_API_BASE_URL=${13}
 AMENDMENTS_API_BASE_URL=${14}
 FAVORITES_API_BASE_URL=${15}
 CONFLICT_BASE_URL=${16}
+CACHED_OTI_BASE_URL=${17}
 
 . setup/functions.sh
 
@@ -41,7 +42,7 @@ fi
 
 # the curator app's to_nexml import function
 # requires peyotl (after Feb 20). This
-# function may move to the API repo, but 
+# function may move to the API repo, but
 # until it does the curator app needs to
 # install peyotl
 git_refresh OpenTreeOfLife peyotl || true
@@ -90,7 +91,12 @@ cp -p $configtemplate $configfile
 # N.B. We now expect these base URLs to be simple domain names, with no trailing path!
 CACHED_TREEMACHINE_BASE_URL=$(sed "s+$+/cached+" <<< $TREEMACHINE_BASE_URL)
 CACHED_TAXOMACHINE_BASE_URL=$(sed "s+$+/cached+" <<< $TAXOMACHINE_BASE_URL)
-CACHED_OTI_BASE_URL=$(sed "s+$+/cached+" <<< $OTI_BASE_URL)
+
+# otindex handles cache itself, no separate cache url required
+# push.sh sets the cached URL to the base URL if note defined
+if [ $CACHED_OTI_BASE_URL = $OTI_BASE_URL]; then
+   CACHED_OTI_BASE_URL=$(sed "s+$+/cached+" <<< $OTI_BASE_URL)
+fi
 
 sed "s+github_client_id = .*+github_client_id = $TREEVIEW_GITHUB_CLIENT_ID+;
      s+github_redirect_uri = .*+github_redirect_uri = $TREEVIEW_GITHUB_REDIRECT_URI+
@@ -135,7 +141,7 @@ sed "s+github_client_id = .*+github_client_id = $CURATION_GITHUB_CLIENT_ID+;
 mv tmp.tmp $configfile
 
 # install ncl a C++ app needed for NEXUS, newick, NeXML -->NexSON conversion
-(cd repo/opentree/curator ; ./install-ncl.sh) 
+(cd repo/opentree/curator ; ./install-ncl.sh)
 
 # record the current SHA for ncl
 log  Installing NCL at `cd repo/opentree/curator/ncl; git log | head -1`
