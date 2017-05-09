@@ -1,52 +1,56 @@
 The Open Tree Deployment Scheme
 ===============================
 
-The Open Tree application currently consists of the following main components:
+The Open Tree application currently consists of the following main components.
+All communication is done over HTTP (or HTTPS), so these component can run
+on 1-5 servers:
 
-* The front end applications, 'opentree' and 'curator', which run in a web2py container
-* The API application, running in the same web2py container or a different one
-* The study index (OTI), which is a neo4j application
-* 'Taxomachine, a neo4j application, with its own database and set of web services
-* 'Treemachine, a neo4j application, with its own database and set of web services
+* The front end applications, 'opentree' and 'curator' run in a web2py container.
+  These can run on a 'micro' or 'small' EC2 instance.
+* The phylesystem-API application, running in the same web2py container or a
+    different one. Minimal RAM. A fast disk is nice.
+* The study index (OTI), which is a neo4j application ~4G RAM.
+* 'Taxomachine, a neo4j application, with its own database and set of web services. memory hog ~ 8G RAM.
+* 'Treemachine, a neo4j application, with its own database and set of web services. memory hog - ~8G RAM.
 
-These can run on one server, or on five servers, or anything in between; it doesn't really matter since all communication is done over HTTP.  For performance reasons (and because there's no reason not to) it's probably best if the API and OTI run on the same machine.
-
-Currently it's assumed that treemachine and taxomachine are running on the same server.
-
-The web2py applications don't need much memory, so an EC2 'micro' or 'small' server is probably fine.  For treemachine and taxomachine, you'll want a lot of RAM.  We've been using a 17G server for this purpose but are currently experiementing to see if 8G is enough.
+We've been using 17G server for both taxomachine and treemachine.
 
 For more information about our current deployment practices, see the notes and configuration files in the [OpenTreeOfLife/deployed-systems](http://github.com/OpenTreeOfLife/deployed-systems) repo.
 
-How to deploy a new server
---------------------------
+## How to deploy a new server
 
-The so-called 'deployment system' is a set of ad hoc shell script for
-managing Open Tree servers remotely.  By way of apology, it would
-probably better to situate these scripts within a vagrant/ansible
-setup or some other structured solution, but I was in a hurry and
-didn't want to learn how to use them.
+The so-called 'deployment system' is a set of _ad hoc_ shell script for
+managing Open Tree servers remotely.
 
-**Note: We're now using a single, common approach to managing sensitive files (private keys and API "secrets").**
-These files should be kept in directory ```~/.ssh/opentree/```, so that configuration can be shared easily among your team. See the [deployed-systems README](https://github.com/OpenTreeOfLife/deployed-servers/blob/master/README.md) for details.
-
+## hosts OS
 Go to Amazon or some other "cloud" provider, and reserve one or more instances
-running Debian GNU/Linux (version 8 'jessie' has been working for us).  As of 2014-07-08 servers that don't
-run big neo4j databases (e.g. browser/curator only) have 4G of RAM,
-those that do (phylesystem-api/oti/taxomachine/treemachine) have 8G of RAM.
+running Debian GNU/Linux (version 8 'jessie' has been working for us). 
 
-Put the ssh private key somewhere, e.g. in ~/.ssh/opentree/opentree.pem (on your own machine,
-not the server).
-Set its file permissions to 600.
+## Secret files
+**Note: We're now using a single, common approach to managing sensitive files (private keys and API "secrets").**
+These files should be kept in directory `~/.ssh/opentree/`, so that configuration can be shared easily among your team. See the [deployed-systems README](https://github.com/OpenTreeOfLife/deployed-servers/blob/master/README.md) for details.
+
+Put the ssh private key somewhere in `~/.ssh/opentree/opentree.pem`
+ (on your own machine, not the server).
+Set its file permissions to `600`.
 
 It is useful, but not strictly necessary, to set up host aliases in
-your ~/.ssh/config file with IdentityFile set to the location of the ssh
+your `~/.ssh/config` file with IdentityFile set to the location of the ssh
 private key and User set to 'opentree'.
 
+## SSL
 To support secure (HTTPS) web connections to Open Tree, put the required files on the server:
- - Our Apache config currently expects to find the **SSL private keyfile** (from your local filesystem) at `/etc/ssl/private/opentreeoflife.org.key` (or location configured by CERTIFICATE_KEY_FILE).
- - You'll also need to push the **combined public SSL cert file** (setup/ssl-certs/STAR_opentreeoflife_org.pem) to its expected location `/etc/ssl/certs/opentree/STAR_opentreeoflife_org.pem` (or location configured by CERTIFICATE_FILE).
+ - Our Apache config currently expects to find the **SSL private keyfile** (from your local filesystem) at `/etc/ssl/private/opentreeoflife.org.key` (or location configured by `CERTIFICATE_KEY_FILE` environmental variable).
+ - You'll also need to push the **combined public SSL cert file** (`setup/ssl-certs/STAR_opentreeoflife_org.pem`) to its expected location `/etc/ssl/certs/opentree/STAR_opentreeoflife_org.pem` (or location configured by CERTIFICATE_FILE).
 
-If running the phylesystem API, put the private key for the github account somewhere (e.g. in ~/.ssh/opentree/), so that the API can push changes to study files out to github.
+## Key for phylesystem-api services that need to push to GitHub
+If running the phylesystem API, put the private key for the github account 
+somewhere (e.g. in `~/.ssh/opentree/`), so that the API can push changes to study files out to github.
+
+## Configuration files for the push system
+
+**MTH** it seems like either we should put the wiki page in here or move most of these
+    details to the wike rather than having 2 locations.
 
 Create one configuration file for each server.  A configuration is just a shell script that sets some variables.  See sample.config in this directory for documentation on how to prepare a configuration file.
 
@@ -56,7 +60,7 @@ Run the management script, which is called 'push.sh', as
 
      ./push.sh -c {configfile} [arguments]
 
-All manipulation of the server, other than ad hoc temporary patches and debugging, should be done through the push script.  If you find you need functionality that it doesn't provide, please create a github issue.
+All manipulation of the server, other than _ad hoc_ temporary patches and debugging, should be done through the push script.  If you find you need functionality that it doesn't provide, please create a github issue.
 
 The push.sh script starts by pushing out a script to be run as the admin user (setup/as_admin.sh).  This script installs prerequisite software and creates an unprivileged 'opentree' user.  Then further scripts run as user 'opentree'.  The only privileged operation thereafter is restarting Apache.
 
@@ -65,7 +69,8 @@ With no arguments, push.sh installs or all components configured for this server
 After this, on each invocation of push.sh, the contents of the setup/
 directory are synchronized from setup/ in the current directory - not from github. All other software is fetched from specified branches on github.
 
-The script may be re-run, and it tries to save time by avoiding reexecution of steps it has already performed based on sources that haven't changed.  If you're debugging you can re-run it repeatedly every time you want to try a change. (Unfortunately, at present it always reads from master branches of repos, but this is supposed to change soon.)
+The script may be re-run, and it tries to save time by avoiding reexecution of steps it has already performed based on sources that haven't changed. 
+If you're debugging you can re-run it repeatedly every time you want to try a change. (Unfortunately, at present it always reads from master branches of repos, but this is supposed to change soon.)
 
 Smoke test
 ----------
@@ -94,10 +99,9 @@ Setting up the phylesystem API and studies repo
 
     ./push.sh -c {configfile} phylesystem-api
 
-In order for the API to be able to write studies, and not just read
-them, this command requires OPENTREE_GH_IDENTITY, as set in the configuration
-file, to point to the file containing the ssh private key for github
-access.
+For the API push studies, this service requires OPENTREE_GH_IDENTITY,
+(set in the configuration file), to point to the file containing the ssh
+private key for github access.
 
 How to push a neo4j database
 -------------------------------
@@ -190,47 +194,61 @@ files.opentreeoflife.org github repository.  The large files (such as
 the synthetic tree) are not in github and are at present (2015-11-04)
 managed manually.
 
-Notifying users of scheduled downtime
--------------------------------------
+# Notifying users of scheduled downtime
 
-For system migrations or other extended periods of downtime, we should take
-special care to avoid lost work, particularly in the study curation app. We
-currently have two means of notifying users before and during scheduled
+We currently have two means of notifying users before and during scheduled
 maintenance windows.
 
+## Maintenance text
 While any Open Tree websites(s) are unavailable, their respective webservers
 should redirect all traffic to the editable
 [maintenance page](http://opentreeoflife.github.io/maintenance.html) in our
-github-pages sites. (Be sure to edit the text of this page to reflect the current situation and
-expected downtime.)
+github-pages sites. (Be sure to edit the text of this page to reflect the current 
+situation and expected downtime.)
 
-This should be done with a **302 Temporary** redirect. Currently, the easiest way to do this is by [un-commenting this
-line](https://github.com/OpenTreeOfLife/germinator/blob/e62b653b82870d1860c832a2bb1c9bb65ebf23b6/deploy/setup/opentree-shared.conf#L15-L16) in our shared apache configuration file. This should be on the server as `/etc/apache2/opentree.conf`.
+## Downtime redirect
+This should be done with a **302 Temporary** redirect.
+Currently, the easiest way to do this is by 
+[un-commenting thisline](https://github.com/OpenTreeOfLife/germinator/blob/e62b653b82870d1860c832a2bb1c9bb65ebf23b6/deploy/setup/opentree-shared.conf#L15-L16)
+in our shared apache configuration file.
+This should be on the server as `/etc/apache2/opentree.conf`.
 
+## Avoiding lost work in the curation tool
 To avoid lost work in the [study curation app](http://tree.opentreeoflife.org/curator),
 we should also disable the creation and editing of studies in the hours before any
 scheduled downtime. This can be done by modifying the `[maintenance]` section of the
 curation app's `private/config` file:
 
-```config
-[maintenance]
-# During system migration and other scheduled maintenance, we should allow
-# viewing of existing studies but block study creation and editing.
-# Boolean values here should be 'true' or 'false'. Use indents to define a long (multi-line) notice.
-maintenance_in_progress = true
-maintenance_notice = Study creation and editing are disabled while we upgrade to
-                   the latest code and features. Please pardon the
-                   inconvenience. We expect to be back online for editing
-                   studies later this evening (Thursday, July 10).
-```
-An hour or two before disabling the server, set the `maintenance_in_progress`
-value to `true`, edit the message text below (preserving indentation as
-above!), then restart the web2py server. Now users who attempt to create or
-edit a study will be blocked from doing so, and will see the HTML in
-`maintenance_notice' in a popup. (The intent is to avoid someone starting an
-edit session, then having their changes locked out of the system.)
+    config
+    [maintenance]
+    # During system migration and other scheduled maintenance, we should allow
+    # viewing of existing studies but block study creation and editing.
+    # Boolean values here should be 'true' or 'false'. Use indents to define a long (multi-line) notice.
+    maintenance_in_progress = true
+    maintenance_notice = Study creation and editing are disabled while we upgrade to
+                       the latest code and features. Please pardon the
+                       inconvenience. We expect to be back online for editing
+                       studies later this evening (Thursday, July 10).
 
-Of course, once you're ready to restore the sites, remove/disable the apache
-redirects above and reset `maintenance_in_progress` to `false` in the curation
-app's `private/config` file. (Or just clobber it by pushing fresh code and
-configuration to the web2py server.)
+sers who attempt to create or edit a study will be blocked from doing so, and will see the HTML in `maintenance_notice' in a popup.
+
+## Summary of moving to downtown
+
+  1. If curation will be down: 
+    1. set the `maintenance_in_progress` value to `true`, 
+    2. edit the message text below (preserving indentation as above!),
+    3. restart the web2py server,
+    3. Make sure the message displays when you try to edit a study,
+    4. wait an hour or 2
+  2. Refresh the the maintenance page text described above
+  3. Set up the apache redirects mentioned above.
+  4. restart apache.
+
+
+## Coming back from downtime
+Once you're ready to restore the sites:
+  1. remove/disable the apache redirects above.
+  2. reset `maintenance_in_progress` to `false` in the curation app's `private/config` 
+  file. (Or just clobber it by pushing fresh code and
+  configuration to the web2py server.)
+  3. restart apache

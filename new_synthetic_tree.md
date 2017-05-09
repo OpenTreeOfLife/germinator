@@ -1,25 +1,23 @@
 # Building and deploying a new version of the synthetic tree
 
-This is still a fairly manual process, although we aim to automate in the future
-(possibly using ansible?).
-
 **Overview**
 
 The steps to build and deploy a new version of the synthetic tree are:
 
-1. Build a new synthetic tree using
+  1. Build a new synthetic tree using
 [propinquity](https://github.com/OpenTreeOfLife/propinquity) and crate the tarballs for download.
-* Load the synthetic tree into a neo4j database using code in [treemachine](https://github.com/OpenTreeOfLife/treemachine)
-* Deploy the database to development (devapi) using scripts in
+  2. Load the synthetic tree into a neo4j database using code in [treemachine](https://github.com/OpenTreeOfLife/treemachine)
+  3. Deploy the database to development (devapi) using scripts in
 [germinator](https://github.com/OpenTreeOfLife/germinator).
-* Manually create the release notes, update the synthesis statistics file, and upload tarballs for download
-* Update the conflict service to use the new synthetic tree
-* Deploy to production
+  4. Manually create the release notes, update the synthesis statistics file, and upload tarballs for download
+  5. Update the conflict service to use the new synthetic tree
+  6. Deploy to production
 
 ## Building the tree
 
 Building the tree takes minimal resources, so you can do this locally or on a
-server. Build the tree, extras and html docs using the pipeline in
+server.
+Build the tree, extras and html docs using the pipeline in
 [propinquity](https://github.com/OpenTreeOfLife/propinquity).
 Specifically, the "[how the open tree of life synthetic tree is built](https://github.com/OpenTreeOfLife/propinquity#how-the-open-tree-of-life-synthetic-tree-is-built)"
 section of the README describes the way that the propinquity tool was used
@@ -35,8 +33,9 @@ the `[synthesis]` section of the config is:
 
 Increment the id by whole numbers, unless the change is trivial.
 
-Create tarballs using the `bin/make_tarballs.sh` script. If you don't already
-have all of the output in one directory, use the `bin/move_outputs.sh` script.  Use the `make_tarballs.sh` to create two archives:
+Create tarballs using the `bin/make_tarballs.sh` script.
+If you don't already have all of the output in one directory, use the `bin/move_outputs.sh` script. 
+Use the `make_tarballs.sh` to create two archives:
 
 * a small summary archive called `opentree{#}_tree.tar.gz`, with files:
   * `labelled_supertree/labelled_supertree.tre`
@@ -122,45 +121,41 @@ Delete the backup file if everything seems to work:
 
 ## Updating web pages
 
-The tree browser and bibliographic references pages will update automatically based on results from the api server. The following tasks need to be done manually:
+The tree browser and bibliographic references pages will update automatically based on results from the api server.
+The following tasks need to be done manually:
 
 **Release notes**
 
-Create a file in `doc` (in the `germinator` repository)
-called  `ot-synthesis-v{#}.md`, where `#` is the synthesis
-version number e.g. `6.0`. Edit this file, including links to the files for download and
-differences in this version of the tree. (At this point, we are creating these
-notes manually, but we plan to automate this in the future, likely using similiar
-code as the propinquity `compare_synthesis_outputs.py`  script.) Once the release
-notes file exists, the release will show up on the [releases
-page](https://tree.opentreeoflife.org/about/synthesis-release/).
+  1. Create a file in `doc` (in the `germinator` repository) called  `ot-synthesis-v{#}.md`, 
+  where `#` is the synthesis version number e.g. `6.0`.
+  2. Edit this file, including links to the files for download and differences in this version of the tree.
+  3. Once the release notes file exists and is pushed to github the release will show up on the [releases page](https://tree.opentreeoflife.org/about/synthesis-release/).
 
 **Progress statistics**
 
-Manually edit the [statistics
-file](https://github.com/OpenTreeOfLife/opentree/blob/master/webapp/static/statistics/synthesis.json)
-on a feature branch of the `opentree` repository, adding
-the following statistics about the tree: `version`, `OTT_version`, `tree_count`,
-`total_OTU_count`, and `tip_count`. These stats will then show up on the [progress
-page](https://tree.opentreeoflife.org/about/progress). Merge the feature branch to the
-`development` branch for testing devtree, and `master` for production.
+  1. Manually edit the
+  [statistics file](https://github.com/OpenTreeOfLife/opentree/blob/master/webapp/static/statistics/synthesis.json)
+  on a feature branch of the `opentree` repository, 
+  adding the following statistics about the tree:
+    1. `version`,
+    2. `OTT_version`,
+    3. `tree_count`,
+    4. `total_OTU_count`, and `tip_count`. 
+  These stats will then show up on the
+   [progress page](https://tree.opentreeoflife.org/about/progress).
+  2. Merge the feature branch to the `development` branch for testing devtree, and `master` for production.
 
 **Files for downloads**
 
-Using propinquity output, create two tarballs for inclusion on the release page:
-
-
-Create a version-specific subdirectory of the `files.opentreeoflife.org/synthesis` directory `opentree{#}` on the
-`files.opentreeoflife.org` server. Then, copy the tarballs there:
-
-    scp -p opentree6.0_*.tar.gz files.opentreeoflife.org:files.opentreeoflife.org/synthesis/opentree6.0/
-
-Log in to `files.opentreeoflife.org` and extract the `opentree{#}_output.tar.gz`
-file, creating an `output` directory. Also extract the `opentree{#}_tree.tar.gz file`.
-
-Finally, *when you are ready to have the tree linked from the production system*, delete everything
-in the `current` directory on `files.opentreeoflife.org`, and create
-three symbolic links in this directory:
+  1. Create a version-specific `opentree{#}` directory on the `files.opentreeoflife.org` server
+  2. Copy the tarballs there.
+  3. Extract the `opentree{#}_output.tar.gz` file, 
+  4. creating an `output` subdirectory. 
+  5. extract the `opentree{#}_tree.tar.gz file`.
+  6. *when you are ready to have the tree linked from the production system*
+    1. delete everything in the `current` directory on `files.opentreeoflife.org`, 
+    2. create three symbolic links in this directory (`current_output.tgz`, `current_tree.tgz` and `output`) to the
+    copies of these files in the `../opentree{#}` subdirectory.
 
     cd synthesis/current
     rm -rf *
@@ -168,4 +163,23 @@ three symbolic links in this directory:
     ln -sf ../opentree{#}/opentree{#}_tree.tgz current_tree.tgz
     ln -sf ../opentree{#}/output output
 
-where `#` is the release number, e.g. `6.0`.
+ 
+For example for verion 6.0. To upload:
+
+    ssh -t files.opentreeoflife.org 'mkdir files.opentreeoflife.org/synthesis/opentree6.0/' || exit
+    scp -p opentree6.0_*.tar.gz files.opentreeoflife.org:files.opentreeoflife.org/synthesis/opentree6.0/ || exit
+    ssh -t files.opentreeoflife.org 'cd files.opentreeoflife.org/synthesis/opentree6.0 && tar xfvz opentree6.0_output.tar.gz' || exit
+    ssh -t files.opentreeoflife.org 'mkdir files.opentreeoflife.org/synthesis/opentree6.0/output' || exit
+    ssh -t files.opentreeoflife.org 'cd files.opentreeoflife.org/synthesis/opentree6.0 && tar xfvz opentree6.0_tree.tar.gz' || exit
+
+To deploy on production run the script from files:
+
+    cd files.opentreeoflife.org/synthesis/current || exit
+    rm -f current_output.tgz current_tre.tgz || exit
+    rm -rf output || exit
+    ln -sf ../opentree6.0/opentree6.0_output.tgz current_output.tgz || exit
+    ln -sf ../opentree6.0/opentree6.0_tree.tgz current_tree.tgz || exit
+    ln -sf ../opentree6.0/opentree6.0/output output || exit
+
+
+
