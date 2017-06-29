@@ -18,10 +18,10 @@ get them all.
 
 Before doing an API call you have to authenticate to Mendeley.  I
 forget exactly how to do this, but you have to do one dummy HTTP
-request providing username and password, and save the resulting cookie
-to a file.  Then on the the calls to the documents method, make sure
+request providing an authentication header with username and password, and save the resulting cookie
+to a file.  Then on the calls to the `documents` method, make sure
 that the cookies get sent.  `wget` has everything you need for
-accomplishing this; I don't know about `curl`.
+saving and using cookies; I don't know about `curl`.
 
 The result from December 2015 is here, in
-[mendeley-papers.md](mendeley-papers.md).
+[mendeley-papers.json](mendeley-papers.json).
