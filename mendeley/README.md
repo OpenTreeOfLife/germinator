@@ -16,6 +16,8 @@ blobs can be retrieved at once, so I did two calls, requesting 400
 each time, one with `order=asc` and one with `order=desc`, in order to
 get them all.
 
+N.B. the the Mendeley API does support pagination for large result sets, as [documented here](http://dev.mendeley.com/reference/topics/pagination.html), and [demonstrated here](https://mendeleyapi.wordpress.com/2014/08/13/paginated-collections-an-example/). 
+
 Before doing an API call you have to authenticate to Mendeley.  I
 forget exactly how to do this, but you have to do one dummy HTTP
 request providing an authentication header with username and password, and save the resulting cookie
