@@ -13,7 +13,7 @@ Last time this was done, in December 2015, there were 710 papers.
 
 My notes say there is a limit on how many papers on how many paper
 blobs can be retrieved at once, so I did two calls, requesting 400
-each time, one with `order=asc` and one with `order=dec`, in order to
+each time, one with `order=asc` and one with `order=desc`, in order to
 get them all.
 
 Before doing an API call you have to authenticate to Mendeley.  I
