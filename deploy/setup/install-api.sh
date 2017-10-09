@@ -47,7 +47,7 @@ fi
 # ---------- Celery for task queue for deferred tasks ------
 if ! which celery
 then
-    CELERY_VERSION="3.0.20"
+    CELERY_VERSION="4.1.0"
     if ! test -d celery-${CELERY_VERSION} ; then
         if ! test -d "downloads/v${CELERY_VERSION}.zip" ; then
             wget --no-verbose -O downloads/v${CELERY_VERSION}.zip https://github.com/celery/celery/archive/v${CELERY_VERSION}.zip
