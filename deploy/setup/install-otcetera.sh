@@ -34,6 +34,7 @@ if [ ! -e "$OTT" ] ; then
 	echo "** Failed to install taxonomy file $TAX_URL"
     fi
 fi
+echo "Taxonomy: installed."
 
 # 3. Install the synth tree && define SYNTHPARENT
 SYNTHPARENT=$OPENTREE/synth-par
@@ -51,19 +52,24 @@ if [ ! -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
 	echo "** Failed to install synth tree $SYNTH_URL"
     fi
 fi
+echo "Synth tree: installed."
 	
-# 4a. restbed: source
-(
-    cd $APPS
-    mkdir -p restbed/build
-    cd restbed
-    git clone --recursive https://github.com/corvusoft/restbed.git
-)
-
-# 4b. restbed: build
-(
-    cd $APPS/restbed/build
-    cmake -DCMAKE_INSTALL_PREFIX=$APPS/restbed/local/ ../restbed
-    make
-    make install
-)
+# 4. build restbed
+if [ ! -r $APPS/restbed/local/include/restbed ] ; then
+    if [ -d $APPS/restbed/restbed ] ; then
+	echo "Restbed: using previously cloned source."
+    else
+	mkdir -p $APPS/restbed/build
+	(
+	    cd $APPS/restbed
+	    git clone --recursive https://github.com/corvusoft/restbed.git
+	)
+    fi
+    (
+	cd $APPS/restbed/build
+	cmake -DCMAKE_INSTALL_PREFIX=$APPS/restbed/local/ ../restbed
+	make
+	make install
+    )
+fi
+echo "restbed: installed."
