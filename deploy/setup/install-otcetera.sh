@@ -125,6 +125,12 @@ fi
 PIDFILE=$OPENTREE/wspidfile.txt
 cd $OPENTREE
 
+# Ideally we only kill the server if we had to rebuild anything...
 killall -q otc-tol-ws || true
 
 /usr/sbin/daemonize -c $OPENTREE $SERVER $OTT -D$SYNTHPARENT -p$PIDFILE -P1984 --num-threads=4 --prefix=v3
+
+# 7. Install the wrapper
+cd
+git_refresh OpenTreeOfLife ws_wrapper
+py_package_setup_install ws_wrapper || true
