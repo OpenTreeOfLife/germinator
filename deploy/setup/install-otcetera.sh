@@ -18,17 +18,19 @@ mkdir -p $OPENTREE
 # 2. Install the taxonomy && define OTT
 TAX_FILE=${TAX_URL##*/}
 TAX_DIR=${TAX_FILE%.*}
-TAX_NEW_DIR=$(echo $TAX_DIR | sed "s/ott/ott-/")
-OTT=$OPENTREE/$TAX_NEW_DIR
+OTT=$OPENTREE/$TAX_DIR
 
 if [ ! -e "$OTT" ] ; then
+    mkdir -p $OTT
     (
 	cd $OPENTREE
-	wget $TAX_URL
-	tar -zxf ${TAX_FILE};
-	ln -s $TAX_DIR $TAX_NEW_DIR
+	wget -O $TAX_FILE $TAX_URL
+	(
+	    cd $OTT
+	    tar -zxf ../${TAX_FILE} --strip-components=1;
+	)
     )
-    if [ ! -e "$OTT" ] ; then
+    if [ ! -e "$OTT/version.txt" ] ; then
 	echo "** Failed to install taxonomy file $TAX_URL"
     fi
 fi
