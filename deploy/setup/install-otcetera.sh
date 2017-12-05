@@ -30,11 +30,13 @@ if [ ! -e "$OTT" ] ; then
 	    tar -zxf ../${TAX_FILE} --strip-components=1;
 	)
     )
-    if [ ! -e "$OTT/version.txt" ] ; then
-	echo "** Failed to install taxonomy file $TAX_URL"
-    fi
 fi
-echo "Taxonomy: installed."
+
+if [ -e "$OTT/version.txt" ] ; then
+    echo "Taxonomy: installed."
+else
+    echo "** Failed to install taxonomy file $TAX_URL"
+fi
 
 # 3. Install the synth tree && define SYNTHPARENT
 SYNTHPARENT=$OPENTREE/synth-par
@@ -48,23 +50,25 @@ if [ ! -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
 	wget $SYNTH_URL
 	tar -zxf $SYNTH_FILE
     )
-    if [ ! -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
-	echo "** Failed to install synth tree $SYNTH_URL"
-    fi
 fi
-echo "Synth tree: installed."
+if [ -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
+    echo "Synth tree: installed."
+else
+    echo "** Failed to install synth tree $SYNTH_URL"
+fi
 	
-# 4. build restbed
+# 4. Build restbed
 if [ ! -r $APPS/restbed/local/include/restbed ] ; then
+    mkdir -p $APPS/restbed
     if [ -d $APPS/restbed/restbed ] ; then
 	echo "Restbed: using previously cloned source."
     else
-	mkdir -p $APPS/restbed/build
 	(
 	    cd $APPS/restbed
 	    git clone --recursive https://github.com/corvusoft/restbed.git
 	)
     fi
+    mkdir -p $APPS/restbed/build
     (
 	cd $APPS/restbed/build
 	cmake -DCMAKE_INSTALL_PREFIX=$APPS/restbed/local/ ../restbed
@@ -72,4 +76,55 @@ if [ ! -r $APPS/restbed/local/include/restbed ] ; then
 	make install
     )
 fi
-echo "restbed: installed."
+if [ -r $APPS/restbed/local/include/restbed ] ; then
+    echo "restbed: installed."
+else
+    echo "** Failed to install restbed"
+fi
+
+# Make sure apps linked against these libraries know where to find them.
+export LD_RUN_PATH=$APPS/restbed/local/library/
+
+#5. Build otcetera with web services
+SERVER=$APPS/otcetera/local/bin/otc-tol-ws
+
+mkdir -p $APPS/otcetera
+cd $APPS/otcetera
+if [ -d otcetera ] ; then
+    (
+	cd otcetera
+	git pull
+    )
+else
+    (
+	git clone --recursive https://github.com/mtholder/otcetera
+	cd otcetera
+	./bootstrap.sh
+    )
+fi
+mkdir -p build
+(
+    cd build
+    export LDFLAGS=-L${APPS}/restbed/local/library
+    export CPPFLAGS=-I${APPS}/restbed/local/include
+    export CXXFLAGS="-Wno-unknown-pragmas"
+    if [ ! -r Makefile ] ; then
+	../otcetera/configure --prefix=$APPS/otcetera/local --with-webservices=yes
+    fi
+    make
+    make install
+)
+if [ -r "$SERVER" ] ; then
+    echo "otc-tol-ws: installed."
+else
+    echo "** otc-tol-ws: not found!"
+fi
+
+
+# 6. Run the service
+PIDFILE=$OPENTREE/wspidfile.txt
+cd $OPENTREE
+
+killall -q otc-tol-ws || true
+
+echo /usr/sbin/daemonize -c $OPENTREE $SERVER $OTT -D$SYNTHPARENT -p$PIDFILE -P1984 --num-threads=4 --prefix=v3
