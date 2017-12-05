@@ -18,7 +18,7 @@ mkdir -p $OPENTREE
 # 2. Install the taxonomy && define OTT
 TAX_FILE=${TAX_URL##*/}
 TAX_DIR=${TAX_FILE%.*}
-TAX_NEW_DIR=$(echo $TAX_DIR | sed "s/ott/ott-")
+TAX_NEW_DIR=$(echo $TAX_DIR | sed "s/ott/ott-/")
 OTT=$OPENTREE/$TAX_NEW_DIR
 
 if [ ! -e "$OTT" ] ; then
