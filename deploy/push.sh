@@ -238,6 +238,9 @@ function docomponent {
     smasher)
         push_smasher
         ;;
+    otcetera)
+	push_otcetera
+	;;
     *)
         echo "Unrecognized component: $component"
         ;;
@@ -400,6 +403,12 @@ function push_smasher {
     if [ $DRYRUN = "yes" ]; then echo "[push_smasher]"; return; fi
     echo push_smasher: ${OPENTREE_WEBAPI_BASE_URL}
     ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-smasher.sh ${CONTROLLER} ${OPENTREE_WEBAPI_BASE_URL}
+}
+
+function push_otcetera {
+    if [ $DRYRUN = "yes" ]; then echo "[push_otcetera]"; return; fi
+    echo push_otcetera:
+    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-otcetera.sh ${CONTROLLER}
 }
 
 process_arguments $*
