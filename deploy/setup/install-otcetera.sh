@@ -132,5 +132,6 @@ killall -q otc-tol-ws || true
 
 # 7. Install the wrapper
 cd
-git_refresh OpenTreeOfLife ws_wrapper
+git_refresh OpenTreeOfLife ws_wrapper || true
 py_package_setup_install ws_wrapper || true
+/usr/sbin/daemonize -c $HOME/repo/ws_wrapper ${VIRTUAL_ENV}/bin/pserve production.ini
