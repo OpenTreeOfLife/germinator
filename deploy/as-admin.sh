@@ -34,6 +34,14 @@ function apt_get_install {
     $APTGET install $*
 }
 
+function apt_get_install_one
+{
+    PKG=$1
+    if ! dpkg -s "$PKG" >/dev/null 2>&1 ; then
+	apt_get_install $PKG
+    fi
+}
+
 # ---------- UPDATE ----------
 
 if [ `which dialog`x = x ]; then
@@ -70,6 +78,18 @@ fi
 if [ `which automake`x = x ]; then
     apt_get_install automake
 fi
+
+# ---------- for otcetera  ----------------
+apt_get_install_one libboost-dev
+apt_get_install_one libboost-filesystem-dev
+apt_get_install_one libboost-program-options-dev
+apt_get_install_one libboost-system-dev
+
+# ---------- for restbed (otcetera web services dependency) ----------
+apt_get_install_one cmake
+apt_get_install_one libssl-dev
+apt_get_install_one libcurl4-openssl-dev
+
 
 # ---------- PYTHON-DEV (for some python packages) ----------
 if [ ! -r /usr/include/*/Python.h ]; then
