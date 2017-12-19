@@ -134,4 +134,5 @@ killall -q otc-tol-ws || true
 cd
 git_refresh OpenTreeOfLife ws_wrapper || true
 py_package_setup_install ws_wrapper || true
-/usr/sbin/daemonize -c $HOME/repo/ws_wrapper ${VIRTUAL_ENV}/bin/pserve production.ini
+WPIDFILE=$HOME/repo/ws_wrapper/pid
+pkill -F "$WPIDFILE" && /usr/sbin/daemonize -p $WPIDFILE -c $HOME/repo/ws_wrapper ${VIRTUAL_ENV}/bin/pserve production.ini
