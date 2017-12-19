@@ -135,4 +135,4 @@ cd
 git_refresh OpenTreeOfLife ws_wrapper || true
 py_package_setup_install ws_wrapper || true
 WPIDFILE=$HOME/repo/ws_wrapper/pid
-(pkill -F "$WPIDFILE" || true ) && /usr/sbin/daemonize -p $WPIDFILE -c $HOME/repo/ws_wrapper ${VIRTUAL_ENV}/bin/pserve production.ini
+(pkill -F "$WPIDFILE" 2>/dev/null || true ) && /usr/sbin/daemonize -p $WPIDFILE -c $HOME/repo/ws_wrapper ${VIRTUAL_ENV}/bin/pserve production.ini
