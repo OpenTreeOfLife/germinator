@@ -1,4 +1,13 @@
 #!/bin/bash
+### BEGIN INIT INFO
+# Provides:          cleanup-sessions-WEB2PY_APP_DIRNAME
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Session sweeper for web2py
+# Description:       Periodically remove old/expired web2py sessions.
+### END INIT INFO
 
 # Once WEB2PYAPPNAME is defined, all else is probably boilerplate.
 # N.B. this name should match its subdirectory in web2py/applications/!
