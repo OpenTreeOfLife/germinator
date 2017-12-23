@@ -65,6 +65,7 @@ fi
 # Compare install-web2py-apps.sh
 
 WEBAPP=phylesystem-api
+WEB2PY_APP_DIRNAME=phylesystem
 APPROOT=repo/$WEBAPP
 OTHOME=$PWD
 
@@ -86,8 +87,8 @@ py_package_setup_install peyotl || true
 (cd $APPROOT/ot-celery; pip install -r requirements.txt ; python setup.py develop)
 
 (cd web2py/applications; \
-    rm -rf ./phylesystem ; \
-    ln -sf ../../repo/$WEBAPP ./phylesystem)
+    rm -rf ./$WEB2PY_APP_DIRNAME ; \
+    ln -sf ../../repo/$WEBAPP ./$WEB2PY_APP_DIRNAME)
 
 # ---------- DOC STORE ----------
 
@@ -245,5 +246,23 @@ nohup redis/bin/redis-server redis/ot-redis.config &
 
 echo "restarting a celery worker"
 celery multi restart worker -A open_tree_tasks -l info
+
+# ---------- SESSION CLEANUP DAEMON ----------
+
+echo "add and enable daemon to remove old web2py sessions"
+# Customize the web2py session-cleanup template for this webapp
+
+pushd .
+    cd /etc/init.d
+    SESSION_CLEANER_INIT_SCRIPT=cleanup-sessions-${WEB2PY_APP_DIRNAME}.sh
+    cp setup/cleanup-sessions-WEB2PYAPPNAME.sh.template ./$SESSION_CLEANER_INIT_SCRIPT
+    # TODO: chown, chmod for this script?
+    # Give it the proper directory name for this web2py app
+    sed -i -e "s+WEB2PY_APP_DIRNAME+$WEB2PY_APP_DIRNAME+" $SESSION_CLEANER_INIT_SCRIPT
+    # TODO: Customize its DAEMONOPTS?
+    # Register this daemon with init.d and start it now
+    sudo /usr/sbin/update-rc.d $SESSION_CLEANER_INIT_SCRIPT defaults
+    # N.B. This should start automatically upon installation!
+popd
 
 echo "Apache needs to be restarted (API)"

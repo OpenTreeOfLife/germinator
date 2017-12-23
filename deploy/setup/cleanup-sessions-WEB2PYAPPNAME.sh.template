@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# Once WEB2PYAPPNAME is defined, all else is probably boilerplate.
+# N.B. this name should match its subdirectory in web2py/applications/!
+# e.g. 'phylesystem' for component 'phylesystem-api', 'webapp' for 'opentree'
+WEB2PYAPPNAME=WEB2PY_APP_DIRNAME
+DESC="Session cleanup for web2py app '$WEB2PYAPPNAME'"
+NAME=cleanup-sessions-$WEB2PYAPPNAME
+LOGFILE=/tmp/$NAME.log
+WEB2PYDIR=/home/opentree/web2py
+VENVDIR=/home/opentree/venv
+DAEMONOPTS="--verbose --expiration 3600 --sleep 3600 "   # 3600 sec = 1 hr
+
+# Append all my output (stdout and stderr) to a log file,
+# as well as to the console. Output will not appear on the
+# console when calling `service blah foo` except for the
+# final output before exiting with 1.
+#
+# N.B. I'd prefer to use `logger` for this, but it's not
+# working on our current (Debian Wheezy) servers!
+exec > >(tee --append $LOGFILE) 2>&1
+
+start() {
+        echo "Starting $NAME service (user=`whoami`)..."
+        # Enter our virtualenv and launch the sweeper
+        . $VENVDIR/bin/activate
+        ## FAILED attemps to launch a persistent python process with logging  :-/
+        ##  nohup python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS  &
+        ##  python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS  &>> $LOGFILE &
+        ##  nohup python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS  >> $LOGFILE 2>&1 &
+        ##  python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS  >> $LOGFILE 2>&1   		# works, with delayed logging
+        ##  nohup python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS  >> $LOGFILE 2>&1  	# delayed logging
+        ##  nohup python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS  > >> $LOGFILE 2>&1  	# syntax error!
+        ##  nohup python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS  > $LOGFILE 2>&1  	# delayed logging
+        ##  python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS  >> $LOGFILE 2>&1 & 		# no logging!
+        ##  python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS  > >(tee --append $LOGFILE) & 	# no logging!
+        ##  (python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS &) >> $LOGFILE			# no logging!
+        ##  (python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS 2>&1 &) | tee --append $LOGFILE	# hangs this script
+        ##  (python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS 2>&1) | tee --append $LOGFILE &	# no logging!
+        ##  (python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS 2>&1) | tee --append $LOGFILE &	# no logging!
+        ## python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS | tee --append $LOGFILE  2>&1  &	# captures 'tee' PID as $!
+        ## python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS >(tee --append $LOGFILE) 2>&1  &	# no logging!
+        ##  { python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS 2>&1 & } >> $LOGFILE		# no logging!
+        nohup python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py -A $DAEMONOPTS  &                       # no logging (via my stdout)
+        echo "$NAME service has started."
+        echo ""
+}
+
+
+stop() {
+        echo "Stopping $NAME service (user=`whoami`)..."
+        ##echo "Found these matching processes: `ps -ef | grep "\-S $WEB2PYAPPNAME .*sessions2trash" | grep -v grep | awk '{print $2}'`"
+        ACTIVEPIDS=`ps -ef | grep "\-S $WEB2PYAPPNAME .*sessions2trash" | grep -v grep | awk '{print $2}' ORS=' '`
+        echo "Found matching process(es): $ACTIVEPIDS"
+        # Kill any running sweeper(s), based on live PID scan
+        [[ !  -z  $ACTIVEPIDS  ]] && kill -9 $ACTIVEPIDS
+        echo "$NAME service has stopped."
+        echo ""
+}
+
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  status)
+        status $NAME
+        ;;
+  restart)
+        stop
+        start
+        ;;
+  *)
+        echo $"Usage: $0 {start|stop|restart|status}"
+        exit 1
+esac
+
+exit 0
