@@ -256,7 +256,9 @@ pushd .
     cd /etc/init.d
     SESSION_CLEANER_INIT_SCRIPT=cleanup-sessions-${WEB2PY_APP_DIRNAME}
     cp setup/cleanup-sessions-WEB2PYAPPNAME.template ./$SESSION_CLEANER_INIT_SCRIPT
-    # TODO: chown, chmod for this script?
+    # TODO: Set owner and permissions for this script?
+    ##sudo chown ...
+    ##sudo chmod 755 ./$SESSION_CLEANER_INIT_SCRIPT
     # Give it the proper directory name for this web2py app
     sed -i -e "s+WEB2PY_APP_DIRNAME+$WEB2PY_APP_DIRNAME+g" $SESSION_CLEANER_INIT_SCRIPT
     # TODO: Customize its DAEMONOPTS?
