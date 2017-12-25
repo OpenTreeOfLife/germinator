@@ -1,36 +1,35 @@
 #! /bin/sh
 ### BEGIN INIT INFO
-# Provides:          skeleton
+# Provides:          cleanup-sessions-WEB2PY_APP_DIRNAME
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Example initscript
-# Description:       This file should be used to construct scripts to be
-#                    placed in /etc/init.d.
+# Short-Description: Session sweeper for web2py (LSB version)
+# Description:       Periodically remove old/expired web2py sessions.
+#                    This version uses LSB/Debian-specific commands for logging
+#                    and daemon management.
 ### END INIT INFO
 
-# Author: Foo Bar <foobar@baz.org>
-#
-# Please remove the "Author" lines above and replace them
-# with your own name if you copy and modify this script.
+# Author: Jim Allman <jim@ibang.com>
 
 # Do NOT "set -e"
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-DESC="Description of the service"
-NAME=daemonexecutablename
-DAEMON=/usr/sbin/$NAME
-DAEMON_ARGS="--options args"
+WEB2PYAPPNAME=WEB2PY_APP_DIRNAME
+WEB2PYDIR=/home/opentree/web2py
+VENVDIR=/home/opentree/venv
+DESC="Session cleanup for web2py app '$WEB2PYAPPNAME'"
+NAME=cleanup-sessions-$WEB2PYAPPNAME
+DAEMON="python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py"
+DAEMON_ARGS="-A --verbose --expiration 3600 --sleep 3600 "   # 3600 sec = 1 hr
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
-# Exit if the package is not installed
-[ -x "$DAEMON" ] || exit 0
-
-# Read configuration variable file if it is present
-[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+# Enter our virtualenv (if it exists) and launch the sweeper
+[ -x "$VENVDIR/bin/activate" ] || exit 0
+. $VENVDIR/bin/activate
 
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
@@ -72,30 +71,12 @@ do_stop()
     start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE --name $NAME
     RETVAL="$?"
     [ "$RETVAL" = 2 ] && return 2
-    # Wait for children to finish too if this is a daemon that forks
-    # and if the daemon is only ever run from this initscript.
-    # If the above conditions are not satisfied then add some other code
-    # that waits for the process to drop all resources that could be
-    # needed by services started subsequently.  A last resort is to
-    # sleep for some time.
+    # Wait for any children to finish too, or other resources to be dropped.
     start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 --exec $DAEMON
     [ "$?" = 2 ] && return 2
-    # Many daemons don't delete their pidfiles when they exit.
+    # Delete our pidfile on exit.
     rm -f $PIDFILE
     return "$RETVAL"
-}
-
-#
-# Function that sends a SIGHUP to the daemon/service
-#
-do_reload() {
-    #
-    # If the daemon can reload its configuration without
-    # restarting (for example, when it is sent a SIGHUP),
-    # then implement that here.
-    #
-    start-stop-daemon --stop --signal 1 --quiet --pidfile $PIDFILE --name $NAME
-    return 0
 }
 
 case "$1" in
@@ -118,15 +99,6 @@ case "$1" in
   status)
     status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
     ;;
-  #reload|force-reload)
-    #
-    # If do_reload() is not implemented then leave this commented out
-    # and leave 'force-reload' as an alias for 'restart'.
-    #
-    #log_daemon_msg "Reloading $DESC" "$NAME"
-    #do_reload
-    #log_end_msg $?
-    #;;
   restart|force-reload)
     #
     # If the "reload" option is implemented then remove the
@@ -150,8 +122,7 @@ case "$1" in
     esac
     ;;
   *)
-    #echo "Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload}" >&2
-    echo "Usage: $SCRIPTNAME {start|stop|status|restart|force-reload}" >&2
+    echo "Usage: $SCRIPTNAME {start|stop|restart|status|force-reload}" >&2
     exit 3
     ;;
 esac

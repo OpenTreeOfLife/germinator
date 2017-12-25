@@ -7,7 +7,10 @@
 # Default-Stop:      0 1 6
 # Short-Description: Session sweeper for web2py
 # Description:       Periodically remove old/expired web2py sessions.
+#                    This version should work in most linux distributions.
 ### END INIT INFO
+
+# Author: Jim Allman <jim@ibang.com>
 
 # Once WEB2PYAPPNAME is defined, all else is probably boilerplate.
 # N.B. this name should match its subdirectory in web2py/applications/!
