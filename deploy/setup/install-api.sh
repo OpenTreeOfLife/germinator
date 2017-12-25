@@ -252,16 +252,16 @@ celery multi restart worker -A open_tree_tasks -l info
 echo "add and enable daemon to remove old web2py sessions"
 # Customize the web2py session-cleanup template for this webapp
 
+SESSION_CLEANER_INIT_SCRIPT=cleanup-sessions-${WEB2PY_APP_DIRNAME}
+cp setup/cleanup-sessions-WEB2PYAPPNAME.lsb-template ./$SESSION_CLEANER_INIT_SCRIPT
+# N.B. there's also a generic linux init.d script that doesn't rely on LSB:
+# cp setup/cleanup-sessions-WEB2PYAPPNAME.generic-template ./$SESSION_CLEANER_INIT_SCRIPT
+
 pushd .
     cd /etc/init.d
-    SESSION_CLEANER_INIT_SCRIPT=cleanup-sessions-${WEB2PY_APP_DIRNAME}
-    cp setup/cleanup-sessions-WEB2PYAPPNAME.lsb-template ./$SESSION_CLEANER_INIT_SCRIPT
-    # N.B. there's also a generic linux init.d script that doesn't rely on LSB:
-    # cp setup/cleanup-sessions-WEB2PYAPPNAME.generic-template ./$SESSION_CLEANER_INIT_SCRIPT
-
     # TODO: Set owner and permissions for this script?
     ##sudo chown ...
-    ##sudo chmod 755 ./$SESSION_CLEANER_INIT_SCRIPT
+    ##sudo chmod 755 $SESSION_CLEANER_INIT_SCRIPT
     # Give it the proper directory name for this web2py app
     sed -i -e "s+WEB2PY_APP_DIRNAME+$WEB2PY_APP_DIRNAME+g" $SESSION_CLEANER_INIT_SCRIPT
     # TODO: Customize its DAEMONOPTS?
