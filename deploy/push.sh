@@ -151,6 +151,7 @@ restart_apache=no
 function process_arguments {
     sync_system
     docommand $*
+    install_daemons
     if [ $restart_apache = "yes" ]; then
         restart_apache
     fi
@@ -159,7 +160,7 @@ function process_arguments {
 function docommand {
 
     if [ $# -eq 0 ]; then
-        if [ $DRYRUN = yes ]; then echo "[no component or command]"; fi
+        if [ $DRYRUN = yes ]; then echo "[no component or command]"; return; fi
         echo "No command. Deploying these components: $OPENTREE_COMPONENTS"
         for component in $OPENTREE_COMPONENTS; do
             docomponent $component
@@ -201,8 +202,8 @@ EOF
 
     *)
         if ! in_list $command $OPENTREE_COMPONENTS; then
-	    err "Unrecognized command, or component not in OPENTREE_COMPONENTS: $command"
-	fi
+            err "Unrecognized command, or component not in OPENTREE_COMPONENTS: $command"
+        fi
         # Default if not a recognized command: treat as component name
         docomponent $command
     esac
@@ -273,7 +274,23 @@ function sync_system {
     rsync -pr -e "${SSH}" "--exclude=*~" "--exclude=#*" setup "$OT_USER@$OPENTREE_HOST":
     # Bleh
     rsync -p -e "${SSH}" $CONFIGFILE "$OT_USER@$OPENTREE_HOST":setup/CONFIG
-    }
+}
+
+# Set up appropriate daemons based on the components and services deployed
+function install_daemons {
+    if [ $DRYRUN = "yes" ]; then echo "[installing daemons]"; return; fi
+    scp -p -i "${ADMIN_IDENTITY}" install-daemons.sh "$ADMIN@$OPENTREE_HOST":
+    # Pass along any command or component(s) being installed, as these will indicate
+    # what daemons should be installed/updated.
+    if [ $# -eq 0 ]; then
+        # No command specified; we're deploying the default set of components
+        COMMAND_OR_COMPONENTS=$OPENTREE_COMPONENTS
+    else
+        # As elsewhere, assume any first arg is the ONLY command or component
+        COMMAND_OR_COMPONENTS=$1
+    fi
+    ${ASSH} "$ADMIN@$OPENTREE_HOST" bash install-daemons.sh "$COMMAND_OR_COMPONENTS"
+}
 
 # The install scripts modify the apache config files, so do this last
 function restart_apache {
