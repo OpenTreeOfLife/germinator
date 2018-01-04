@@ -57,7 +57,7 @@ for TEST_NAME in $COMMAND_OR_COMPONENTS; do
                 ##sudo chown ...
                 ##sudo chmod 755 $SESSION_CLEANER_INIT_SCRIPT
                 # Give it the proper directory name for this web2py app
-                sed -i -e "s+WEB2PY_APP_DIRNAME+$WEB2PY_APP_DIRNAME+g" $SESSION_CLEANER_INIT_SCRIPT
+                sudo sed -i -e "s+WEB2PY_APP_DIRNAME+$WEB2PY_APP_DIRNAME+g" $SESSION_CLEANER_INIT_SCRIPT
                 # TODO: Customize its DAEMONOPTS?
                 # Register this daemon with init.d and start it now
                 sudo /usr/sbin/update-rc.d $SESSION_CLEANER_INIT_SCRIPT defaults
