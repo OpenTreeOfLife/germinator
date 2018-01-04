@@ -27,10 +27,7 @@ for TEST_NAME in $COMMAND_OR_COMPONENTS; do
             # TODO: Monitor and restart neo4j?
             ;;
         # Commands that don't need daemons (or already install them)
-        apache)
-        index  | indexoti | index-db)
-        echo)
-        none)
+        apache | index  | indexoti | index-db | echo | none)
             echo "    No daemons required for command [$TEST_NAME]"
             ;;
 
@@ -85,9 +82,7 @@ for TEST_NAME in $COMMAND_OR_COMPONENTS; do
             # TODO: Monitor and restart neo4j?
             ;;
         # Components that don't need daemons (or already install them)
-        smasher)
-        otcetera)
-        push_otcetera)
+        smasher | otcetera | push_otcetera)
             echo "    No daemons required for component [$TEST_NAME]"
             ;;
 
