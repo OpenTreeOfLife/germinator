@@ -7,7 +7,7 @@
 COMMAND_OR_COMPONENTS=$1
 
 for TEST_NAME in $COMMAND_OR_COMPONENTS; do 
-    echo "... testing this command or component for daemons: [$TEST_NAME]"
+    echo "  testing this command or component for daemons: [$TEST_NAME]"
     # Some components and commands will deploy services that need daemons for
     # monitoring, to hand reboots, etc.
     case $TEST_NAME in
@@ -40,10 +40,6 @@ for TEST_NAME in $COMMAND_OR_COMPONENTS; do
         phylesystem-api | api)
             ## Customize the web2py session-cleanup template for this webapp
             echo "    Adding daemon to remove old web2py sessions [$TEST_NAME]..."
-            echo "      whoami [`whoami`]"
-            echo "      hostname [`hostname`]"
-            echo "      pwd [`pwd`]"
-            
             WEB2PY_APP_DIRNAME=phylesystem
             SESSION_CLEANER_INIT_SCRIPT=cleanup-sessions-${WEB2PY_APP_DIRNAME}
             OTHOME=/home/opentree
