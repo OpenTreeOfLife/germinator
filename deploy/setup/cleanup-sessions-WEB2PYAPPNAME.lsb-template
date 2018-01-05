@@ -27,6 +27,7 @@ DAEMON_ARGS="-A --verbose --expiration 3600 --sleep 3600 "   # 3600 sec = 1 hr
 DAEMON_USER_GROUP=opentree:opentree
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
+LOGFILE=/tmp/$NAME.log
 
 # Enter our virtualenv (if it exists) and launch the sweeper
 [ -x "$VENVDIR/bin/activate" ] || exit 0
@@ -52,13 +53,15 @@ do_start()
     start-stop-daemon --start --verbose \
         --chuid $DAEMON_USER_GROUP \
         --make-pidfile --pidfile $PIDFILE \
+        --background --no-close \
         --exec $DAEMON --test > /dev/null \
         || return 1
     # that was just a check for already-running service... now for the real start:
     start-stop-daemon --start --verbose \
         --chuid $DAEMON_USER_GROUP \
         --make-pidfile --pidfile $PIDFILE \
-        --exec "$DAEMON" -- $DAEMON_ARGS >> /tmp/$NAME.log 2>&1 \
+        --background --no-close \
+        --exec "$DAEMON" -- $DAEMON_ARGS >> $LOGFILE 2>&1 \
         || return 2
     # Add code here, if necessary, that waits for the process to be ready
     # to handle requests from services started subsequently which depend
