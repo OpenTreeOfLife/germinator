@@ -92,6 +92,7 @@ do_stop()
 
 case "$1" in
   start)
+    log_daemon_msg "TEST! VERBOSE=$VERBOSE" "$NAME"
     [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
     do_start
     case "$?" in
