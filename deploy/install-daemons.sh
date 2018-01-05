@@ -57,7 +57,8 @@ for TEST_NAME in $COMMAND_OR_COMPONENTS; do
                 # TODO: Customize its DAEMONOPTS?
                 # Register this daemon with init.d and start it now
                 sudo /usr/sbin/update-rc.d $SESSION_CLEANER_INIT_SCRIPT defaults
-                # N.B. This should start automatically upon installation!
+                # N.B. This should start automatically upon installation, but it's not reliable...
+                sudo service $SESSION_CLEANER_INIT_SCRIPT start
             popd
             echo "    Daemon added! [$TEST_NAME]"
             ;;
