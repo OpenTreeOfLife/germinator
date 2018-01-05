@@ -58,8 +58,7 @@ do_start()
     start-stop-daemon --start --verbose \
         --chuid $DAEMON_USER_GROUP \
         --make-pidfile --pidfile $PIDFILE \
-        --exec $DAEMON -- \
-        $DAEMON_ARGS >> /tmp/$NAME.log \
+        --exec "$DAEMON" -- $DAEMON_ARGS >> /tmp/$NAME.log 2>&1 \
         || return 2
     # Add code here, if necessary, that waits for the process to be ready
     # to handle requests from services started subsequently which depend
