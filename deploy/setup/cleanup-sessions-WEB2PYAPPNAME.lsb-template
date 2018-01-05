@@ -24,7 +24,7 @@ DESC="Session cleanup for web2py app '$WEB2PYAPPNAME'"
 NAME=cleanup-sessions-$WEB2PYAPPNAME
 DAEMON="python $WEB2PYDIR/web2py.py -S $WEB2PYAPPNAME -M -R scripts/sessions2trash.py"
 DAEMON_ARGS="-A --verbose --expiration 3600 --sleep 3600 "   # 3600 sec = 1 hr
-DAEMON_USER=opentree
+DAEMON_USER_GROUP=opentree:opentree
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
@@ -50,11 +50,13 @@ do_start()
     #   1 if daemon was already running
     #   2 if daemon could not be started
     start-stop-daemon --start --verbose \
+        --chuid $DAEMON_USER_GROUP \
         --make-pidfile --pidfile $PIDFILE \
         --exec $DAEMON --test > /dev/null \
         || return 1
     # that was just a check for already-running service... now for the real start:
     start-stop-daemon --start --verbose \
+        --chuid $DAEMON_USER_GROUP \
         --make-pidfile --pidfile $PIDFILE \
         --exec $DAEMON -- \
         $DAEMON_ARGS >> /tmp/$NAME.log \
