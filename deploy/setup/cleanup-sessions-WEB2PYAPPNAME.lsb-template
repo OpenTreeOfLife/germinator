@@ -30,7 +30,7 @@ SCRIPTNAME=/etc/init.d/$NAME
 LOGFILE=/tmp/$NAME.log
 
 # Enter our virtualenv (if it exists) and launch the sweeper
-[ -x "$VENVDIR/bin/activate" ] || exit 0
+[ -f "$VENVDIR/bin/activate" ] || exit 0
 . $VENVDIR/bin/activate
 
 # Load the VERBOSE setting and other rcS variables
