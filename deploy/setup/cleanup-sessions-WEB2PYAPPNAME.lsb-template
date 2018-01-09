@@ -60,14 +60,14 @@ do_start()
         --chuid $DAEMON_USER_GROUP \
         --make-pidfile --pidfile $PIDFILE \
         --background --no-close \
-        --exec "$DAEMON" --test > /dev/null \
+        --startas "$DAEMON" --test > /dev/null \
         || return 1
     # that was just a check for already-running service... now for the real start:
     start-stop-daemon --start --verbose \
         --chuid $DAEMON_USER_GROUP \
         --make-pidfile --pidfile $PIDFILE \
         --background --no-close \
-        --exec "$DAEMON" -- $DAEMON_ARGS \
+        --startas "$DAEMON" -- $DAEMON_ARGS \
         || return 2
     # Add code here, if necessary, that waits for the process to be ready
     # to handle requests from services started subsequently which depend
@@ -90,7 +90,9 @@ do_stop()
     RETVAL="$?"
     [ "$RETVAL" = 2 ] && return 2
     # Wait for any children to finish too, or other resources to be dropped.
-    start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 --exec "$DAEMON"
+    start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 \
+        --remove-pidfile --pidfile $PIDFILE \
+        --startas "$DAEMON"
     [ "$?" = 2 ] && return 2
     return "$RETVAL"
 }
