@@ -6,6 +6,31 @@
 # command or component as used in the deployment script `push.sh`
 COMMAND_OR_COMPONENTS=$1
 
+add_web2py_session_sweeper()
+{
+    WEB2PY_APP_DIRNAME=$1
+    SESSION_CLEANER_INIT_SCRIPT=cleanup-sessions-${WEB2PY_APP_DIRNAME}
+    OTHOME=/home/opentree
+    sudo cp "$OTHOME"/setup/cleanup-sessions-WEB2PYAPPNAME.lsb-template /etc/init.d/$SESSION_CLEANER_INIT_SCRIPT
+    # N.B. there's also a generic linux init.d script that doesn't rely on LSB:
+    # cp "$OTHOME"/setup/cleanup-sessions-WEB2PYAPPNAME.generic-template /etc/init.d/$SESSION_CLEANER_INIT_SCRIPT
+    pushd .
+        cd /etc/init.d
+        # TODO: Set owner and permissions for this script?
+        ##sudo chown ...
+        ##sudo chmod 755 $SESSION_CLEANER_INIT_SCRIPT
+        # Give it the proper directory name for this web2py app
+        sudo sed -i -e "s+WEB2PY_APP_DIRNAME+$WEB2PY_APP_DIRNAME+g" $SESSION_CLEANER_INIT_SCRIPT
+        # TODO: Customize its DAEMONOPTS?
+        # Register this daemon with init.d and start it now
+        sudo /usr/sbin/update-rc.d $SESSION_CLEANER_INIT_SCRIPT defaults
+        # N.B. This should start automatically upon installation, BUT if
+        # there's an older version already running, force systemd to restart.
+        sudo service $SESSION_CLEANER_INIT_SCRIPT stop
+        sudo service $SESSION_CLEANER_INIT_SCRIPT start
+    popd
+}
+
 for TEST_NAME in $COMMAND_OR_COMPONENTS; do 
     echo "  testing this command or component for daemons: [$TEST_NAME]"
     # Some components and commands will deploy services that need daemons for
@@ -33,33 +58,16 @@ for TEST_NAME in $COMMAND_OR_COMPONENTS; do
 
         # Components that require daemons
         opentree)
-            ## push_webapps
-            ## restart_apache=yes
-            # TODO: Sweep old sessions in its web2py apps!
+            ## Customize the web2py session-cleanup template for this webapp
+            echo "    Adding daemon to remove old web2py sessions [$TEST_NAME]..."
+            add_web2py_session_sweeper opentree  # for main synth-tree viewer
+            add_web2py_session_sweeper curator  # for study curation app
+            echo "    Daemon added! [$TEST_NAME]"
             ;;
         phylesystem-api | api)
             ## Customize the web2py session-cleanup template for this webapp
             echo "    Adding daemon to remove old web2py sessions [$TEST_NAME]..."
-            WEB2PY_APP_DIRNAME=phylesystem
-            SESSION_CLEANER_INIT_SCRIPT=cleanup-sessions-${WEB2PY_APP_DIRNAME}
-            OTHOME=/home/opentree
-            sudo cp "$OTHOME"/setup/cleanup-sessions-WEB2PYAPPNAME.lsb-template /etc/init.d/$SESSION_CLEANER_INIT_SCRIPT
-            # N.B. there's also a generic linux init.d script that doesn't rely on LSB:
-            # cp "$OTHOME"/setup/cleanup-sessions-WEB2PYAPPNAME.generic-template /etc/init.d/$SESSION_CLEANER_INIT_SCRIPT
-            
-            pushd .
-                cd /etc/init.d
-                # TODO: Set owner and permissions for this script?
-                ##sudo chown ...
-                ##sudo chmod 755 $SESSION_CLEANER_INIT_SCRIPT
-                # Give it the proper directory name for this web2py app
-                sudo sed -i -e "s+WEB2PY_APP_DIRNAME+$WEB2PY_APP_DIRNAME+g" $SESSION_CLEANER_INIT_SCRIPT
-                # TODO: Customize its DAEMONOPTS?
-                # Register this daemon with init.d and start it now
-                sudo /usr/sbin/update-rc.d $SESSION_CLEANER_INIT_SCRIPT defaults
-                # N.B. This should start automatically upon installation, but it's not reliable...
-                sudo service $SESSION_CLEANER_INIT_SCRIPT start
-            popd
+            add_web2py_session_sweeper phylesystem  # for APIs 'phylesystem-api'
             echo "    Daemon added! [$TEST_NAME]"
             ;;
         oti)
