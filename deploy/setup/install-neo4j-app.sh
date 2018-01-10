@@ -89,16 +89,21 @@ function make_neo4j_instance {
         fi
     fi
 
-    # Stop any running server.  (The database may be empty at this point.)
-    # Do this after compilation, so as to minimize system downtime.
-    # N.B. We do this regardless of whether there has been a change in its
-    # repo, since otherwise apache may fail to proxy requests to this app.
-    if true; then
-	if ./neo4j-$APP/bin/neo4j status; then
-	    echo "Stopping $APP neo4j server"
-	    ./neo4j-$APP/bin/neo4j stop
-	fi
-    else
+    if false; then
+        # NOTE that we now use systemd to manage neo4j instances as daemons, so
+        # (re)starting neo4j will be take care of later.
+
+        # Stop any running server.  (The database may be empty at this point.)
+        # Do this after compilation, so as to minimize system downtime.
+        # N.B. We do this regardless of whether there has been a change in its
+        # repo, since otherwise apache may fail to proxy requests to this app.
+        if ./neo4j-$APP/bin/neo4j status; then
+            # this is just a one-time task as we shut down an old-style neo4j
+            # instance still running on this server.
+            echo "Stopping (old) standalone $APP neo4j server"
+            ./neo4j-$APP/bin/neo4j stop
+        fi
+
         # There was some question as to whether the above code worked.
         # I'm keeping the following replacement code for a while, just in case.
         # N.B. The 'neo4j status' command returns a phrase like this (for a stopped instance):
@@ -106,7 +111,7 @@ function make_neo4j_instance {
         # ... or this (for a running instance):
         #    Neo4j Server is running at pid #####
         if [[ "`./neo4j-$APP/bin/neo4j status`" =~ "is running" ]]; then
-	    echo "Stopping $APP neo4j server"
+            echo "Stopping $APP neo4j server"
             ./neo4j-$APP/bin/neo4j stop
         fi
     fi
@@ -125,10 +130,7 @@ function make_neo4j_instance {
       > props.tmp
     mv props.tmp neo4j-$APP/conf/neo4j-server.properties
 
-    # Start or restart the server
-    echo "Starting $APP neo4j server"
-    ./neo4j-$APP/bin/neo4j start
-    log "Started $APP"
+    # Now wait for its persistent neo4j daemon to (re)start...
 }
 
 # TBD: The port numbers should be configurable in the config file

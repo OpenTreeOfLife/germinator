@@ -38,9 +38,7 @@ mv neo4j-$APP/data/graph.db $prev
 mv $next neo4j-$APP/data/graph.db
 log "Installed $APP neo4j database"
 
-# Start the server.  (also need restart on reboot!! TBD)
-neo4j-$APP/bin/neo4j start
-
+# Now wait for its persistent neo4j daemon to (re)start...
 
 # Not sure what the db directory should be called; on norbert the
 # names are irregular, and different between tree and taxo.  Here

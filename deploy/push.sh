@@ -151,7 +151,7 @@ restart_apache=no
 function process_arguments {
     sync_system
     docommand $*
-    install_daemons
+    install_daemons $*
     if [ $restart_apache = "yes" ]; then
         restart_apache
     fi
@@ -282,13 +282,17 @@ function install_daemons {
     scp -p -i "${ADMIN_IDENTITY}" install-daemons.sh "$ADMIN@$OPENTREE_HOST":
     # Pass along any command or component(s) being installed, as these will indicate
     # what daemons should be installed/updated.
+    echo "install_daemons: What arguments were provided? $*"
     if [ $# -eq 0 ]; then
         # No command specified; we're deploying the default set of components
+        echo "NO command specified, installing daemons for default components:"
         COMMAND_OR_COMPONENTS=$OPENTREE_COMPONENTS
     else
         # As elsewhere, assume any first arg is the ONLY command or component
+        echo "Installing daemons for first command/component:"
         COMMAND_OR_COMPONENTS=$1
     fi
+    echo $COMMAND_OR_COMPONENTS
     ${ASSH} "$ADMIN@$OPENTREE_HOST" bash install-daemons.sh "$COMMAND_OR_COMPONENTS"
 }
 
