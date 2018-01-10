@@ -1,0 +1,28 @@
+# This should be copied to /lib/systemd/system/ with the specified neo4j instance name, for example 
+#   /lib/systemd/system/neo4j-treemachine.service
+# Note that there are also necessary substitutions below in ALL_CAPS.
+
+[Unit] 
+Description=Neo4j management service (NEO4J_INSTANCE_NAME)
+
+[Service] 
+Type=forking
+# The user and group which the service runs as.
+User=opentree
+Group=opentree
+# Point to the neo4j script for this instance
+ExecStart=NEO4J_COMMAND start
+ExecStop=NEO4J_COMMAND stop
+ExecReload=NEO4J_COMMAND restart
+RemainAfterExit=no
+# Attempt a restart if process goes down?
+Restart=on-failure
+PIDFile=NEO4J_INSTANCE_HOME/data/neo4j-service.pid
+LimitNOFILE=60000
+# If it takes longer than this then the shutdown is considered to have failed.
+# This may need to be increased if the system serves long-running transactions.
+TimeoutSec=600
+
+[Install] 
+# This roughly corresponds to runlevels 2-5
+WantedBy=multi-user.target
