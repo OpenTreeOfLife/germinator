@@ -91,7 +91,7 @@ apt_get_install_one libssl-dev
 apt_get_install_one libcurl4-openssl-dev
 
 # ---------- for running otc-tol-ws ------------------
-apt_get_install_one daemonize
+# apt_get_install_one daemonize
 
 # ---------- PYTHON-DEV (for some python packages) ----------
 if [ ! -r /usr/include/*/Python.h ]; then
