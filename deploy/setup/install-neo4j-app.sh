@@ -127,7 +127,7 @@ function make_neo4j_instance {
 
     # Start or restart the server
     echo "Starting $APP neo4j server"
-    ./neo4j-$APP/bin/neo4j start
+    ./neo4j-$APP/bin/neo4j start-no-wait
     log "Started $APP"
 }
 
