@@ -20,15 +20,15 @@ it is all a matter of filling out web forms.
 
   1. To get the certificate, you need to generate a signed request to 
       send to Comodo. You do this by:
-
-        openssl req -new -newkey rsa:2048 -nodes -keyout opentreeoflife.org.key -out opentreeoflife.org.csr
-
+   ```
+   openssl req -new -newkey rsa:2048 -nodes -keyout opentreeoflife.org.key -out opentreeoflife.org.csr
+   ```
    and then answering the queries. It is very important that you:
-
-    * specify `*.opentreeoflife.org` as the "Common Name" otherwise you might just
-    get a cert for one machine (instead of the wildcard for the domain), and
-    * store the private `opentreeoflife.org.key` securely. Apache needs
-    to have access to that key when serving up the certificate.
+   
+     * specify `*.opentreeoflife.org` as the "Common Name" otherwise you might just
+     get a cert for one machine (instead of the wildcard for the domain), and
+     * store the private `opentreeoflife.org.key` securely. Apache needs
+     to have access to that key when serving up the certificate.
 
   1. There are some verification steps via email and codes sent to you by Comodo, but
   soon you will get a zip archive from Comodo with a `STAR_opentreeoflife_org.ca-bundle`
