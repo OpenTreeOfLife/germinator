@@ -24,10 +24,9 @@ it is all a matter of filling out web forms.
    openssl req -new -newkey rsa:2048 -nodes -keyout opentreeoflife.org.key -out opentreeoflife.org.csr
    ```
    and then answering the queries. It is very important that you:
-   
-     * specify `*.opentreeoflife.org` as the "Common Name" otherwise you might just
+    (A) specify `*.opentreeoflife.org` as the "Common Name" otherwise you might just
      get a cert for one machine (instead of the wildcard for the domain), and
-     * store the private `opentreeoflife.org.key` securely. Apache needs
+    (B) store the private `opentreeoflife.org.key` securely. Apache needs
      to have access to that key when serving up the certificate.
 
   1. There are some verification steps via email and codes sent to you by Comodo, but
