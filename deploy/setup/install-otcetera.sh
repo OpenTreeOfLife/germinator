@@ -71,7 +71,7 @@ if [ ! -r $APPS/restbed/local/include/restbed ] ; then
     mkdir -p $APPS/restbed/build
     (
 	cd $APPS/restbed/build
-	cmake -DCMAKE_INSTALL_PREFIX=$APPS/restbed/local/ ../restbed
+	cmake -DBUILD_SSL=NO -DCMAKE_INSTALL_PREFIX=$APPS/restbed/local/ ../restbed
 	make
 	make install
     )
@@ -109,6 +109,7 @@ mkdir -p build
     export CPPFLAGS=-I${APPS}/restbed/local/include
     export CXXFLAGS="-Wno-unknown-pragmas"
     if [ ! -r Makefile ] ; then
+	(cd ../otcetera ; ./bootstrap.sh )
 	../otcetera/configure --prefix=$APPS/otcetera/local --with-webservices=yes
     fi
     make
@@ -128,7 +129,9 @@ cd $OPENTREE
 # Ideally we only kill the server if we had to rebuild anything...
 killall -q otc-tol-ws || true
 
-/usr/sbin/daemonize -c $OPENTREE $SERVER $OTT -D$SYNTHPARENT -p$PIDFILE -P1984 --num-threads=4 --prefix=v3
+echo -n "Starting otcetera web services (otc-tol-ws)... "
+LD_LIBRARY_PATH=${APPS}/restbed/local/library /usr/sbin/daemonize -c $OPENTREE $SERVER $OTT -D$SYNTHPARENT -p$PIDFILE -P1984 --num-threads=4 --prefix=v3
+echo "done."
 
 # 7. Install the wrapper
 cd
