@@ -20,6 +20,13 @@ TAX_FILE=${TAX_URL##*/}
 TAX_DIR=${TAX_FILE%.*}
 OTT=$OPENTREE/$TAX_DIR
 
+DARK_RED='\033[0;31m'
+LIGHT_GREEN='\033[1;32m'
+NC='\033[0m'
+LIGHT_CYAN='\033[1;36m'
+FAIL="[${DARK_RED}[FAIL]${NC}]"
+OK="[${LIGHT_GREEN}OK${NC}]"
+
 if [ ! -e "$OTT" ] ; then
     mkdir -p $OTT
     (
@@ -126,12 +133,26 @@ fi
 PIDFILE=$OPENTREE/wspidfile.txt
 cd $OPENTREE
 
-# Ideally we only kill the server if we had to rebuild anything...
-killall -q otc-tol-ws || true
+# FIXME: Ideally we only kill the server if we had to rebuild anything...
 
-echo -n "Starting otcetera web services (otc-tol-ws)... "
+# FIXME: We need to check if killing the old server actually succeeds!
+echo -n "Killing the old server process: "
+killall -9 -q otc-tol-ws || true
+sleep 1
+if pgrep -x "otc-tol-ws" ; then
+    echo -e "${FAIL}"
+else
+    echo -e "${OK}"
+fi
+
+echo -ne "${LIGHT_CYAN}Starting otcetera web services (otc-tol-ws)${NC}: "
 LD_LIBRARY_PATH=${APPS}/restbed/local/library /usr/sbin/daemonize -c $OPENTREE $SERVER $OTT -D$SYNTHPARENT -p$PIDFILE -P1984 --num-threads=4 --prefix=v3
-echo "done."
+sleep 1
+if pgrep -x "otc-tol-ws" ; then
+    echo -e "${OK}"
+else
+    echo -e "${FAIL}"
+fi
 
 # 7. Install the wrapper
 cd
