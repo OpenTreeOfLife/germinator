@@ -79,6 +79,9 @@ if [ `which automake`x = x ]; then
     apt_get_install automake
 fi
 
+# ---------- for taxonomy browser -------------
+apt_get_install_one python-requests
+
 # ---------- for otcetera  ----------------
 apt_get_install_one libboost-dev
 apt_get_install_one libboost-filesystem-dev
@@ -138,6 +141,12 @@ fi
 if [ ! -r /etc/apache2/mods-enabled/ssl.load ]; then
     sudo a2enmod ssl
 fi
+
+# Enable the apache cgid. Used for the taxonomy browser
+if [ ! -r /etc/apache2/mods-enabled/cgid.load ]; then
+    sudo a2enmod cgid
+fi
+
 
 # ---------- UNZIP ----------
 # unzip is needed for unpacking web2py.  Somebody broke the 'which' program -
