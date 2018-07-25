@@ -24,7 +24,7 @@ DARK_RED='\033[0;31m'
 LIGHT_GREEN='\033[1;32m'
 NC='\033[0m'
 LIGHT_CYAN='\033[1;36m'
-FAIL="[${DARK_RED}[FAIL]${NC}]"
+FAIL="[${DARK_RED}FAIL${NC}]"
 OK="[${LIGHT_GREEN}OK${NC}]"
 
 if [ ! -e "$OTT" ] ; then
@@ -146,12 +146,13 @@ else
 fi
 
 echo -ne "${LIGHT_CYAN}Starting otcetera web services (otc-tol-ws)${NC}: "
-LD_LIBRARY_PATH=${APPS}/restbed/local/library /usr/sbin/daemonize -c $OPENTREE $SERVER $OTT -D$SYNTHPARENT -p$PIDFILE -P1984 --num-threads=4 --prefix=v3
+LD_LIBRARY_PATH=${APPS}/restbed/local/library /usr/sbin/daemonize -c $OPENTREE $SERVER $OTT -D$SYNTHPARENT -p$PIDFILE -P1984 --num-threads=4
 sleep 1
 if pgrep -x "otc-tol-ws" ; then
     echo -e "${OK}"
 else
     echo -e "${FAIL}"
+    tail $OPENTREE/logs/myeasylog.log || true
 fi
 
 # 7. Install the wrapper
