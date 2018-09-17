@@ -20,43 +20,43 @@ There are two downloads. The first (smaller download) contain only tree and anno
 <table class="table table-condensed">
 <tr>
 <th><!--statistic-->&nbsp;</th>
-<th>version10.2</th>
+<th>version9.1</th>
 <th>version10.3</th>
 <th>change</th>
 <tr>
    <th>total tips</th>
-   <td>2641222</td>
+   <td>2637204</td>
    <td>2641229</td>
-   <td>7</td>
+   <td>4025</td>
 </tr>
 <tr>
    <th>tips from phylogeny</th>
-   <td>62664</td>
+   <td>55226</td>
    <td>65739</td>
-   <td>3075</td>
+   <td>10513</td>
 </tr>
 <tr>
    <th>internal nodes in taxonomy</th>
-   <td>214698</td>
+   <td>214121</td>
    <td>214702</td>
-   <td>4</td>
+   <td>581</td>
 </tr>
 <tr>
    <th>internal nodes from phylogeny</th>
-   <td>57471</td>
+   <td>50367</td>
    <td>59523</td>
-   <td>2052</td>
+   <td>9156</td>
 </tr>
 <tr>
    <th>broken taxa</th>
-   <td>3907</td>
+   <td>3280</td>
    <td>4018</td>
-   <td>111</td>
+   <td>738</td>
 </tr>
 <tr>
    <th>subproblems</th>
-   <td>7625</td>
+   <td>6933</td>
    <td>7770</td>
-   <td>145</td>
+   <td>837</td>
 </tr>
 </table>
