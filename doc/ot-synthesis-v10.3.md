@@ -13,7 +13,7 @@ There are two downloads. The first (smaller download) contain only tree and anno
 ### Changes in inputs
 
 * no new tree collections.
-* 21 new input trees.
+* 171 new input trees.
 
 ### Changes in output
 
