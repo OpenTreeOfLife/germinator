@@ -68,7 +68,11 @@ fi
 if [ ! -r $APPS/restbed/local/include/restbed ] ; then
     mkdir -p $APPS/restbed
     if [ -d $APPS/restbed/restbed ] ; then
-	echo "Restbed: using previously cloned source."
+	(
+	    echo "Restbed: updating source."
+	    git pull
+	    git submodule update
+	)
     else
 	(
 	    cd $APPS/restbed
