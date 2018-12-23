@@ -104,6 +104,7 @@ def get_study_list(api_url):
 def load_study_json(study, study_api_url):
     """returns NexSON for the study identified by 'study' as parse json"""
     url = '%s%s/' % (study_api_url, study)
+    print("url = {}".format(url))
     response = requests.get(url)
     try:
         study_json = json.loads(response.text, object_hook=_decode_dict)
@@ -185,14 +186,14 @@ def process():
     '''
 
     server, filename = getargs()
-    if not server.startswith('http://'):
-        server = 'http://' + server
+    if not server.startswith('https://'):
+        server = 'https://' + server
     if not server.endswith('/'):
         server = server + '/'
-    api_url = server + 'v2/'
+    api_url = server + 'v3/'
 
     # point where needed, but see get_remote_otus
-    study_api_url = server + 'v2/study/'
+    study_api_url = server + 'v3/studies/'
 
     old_data = load_old_results_json(filename)
 
