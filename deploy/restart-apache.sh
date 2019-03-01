@@ -31,7 +31,7 @@ if [ ! -r /etc/apache2/sites-available/opentree-ssl.conf ] || \
     # This will overwrite the letsencrypt configuration
     sudo cp -p "$OPENTREE_HOME/setup/opentree-ssl.conf" /etc/apache2/sites-available/ || \
       "opentree-ssl.conf install failed"
-    sudo sed -i -e s/SERVERNAME_REPLACEME/$OPENTREE_HOST/ \
+    sudo sed -i -e s/SERVERNAME_REPLACEME/$OPENTREE_HOST/g \
       /etc/apache2/sites-available/opentree-ssl.conf  || "Edit hostname in opentree-ssl failed"
     sudo sed -i -e s+CERTIFICATE_FILE+$CERTIFICATE_FILE+ \
       /etc/apache2/sites-available/opentree-ssl.conf  || "Edit cert file in opentree-ssl failed"
