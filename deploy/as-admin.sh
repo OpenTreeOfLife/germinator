@@ -88,6 +88,8 @@ apt_get_install_one libboost-filesystem-dev
 apt_get_install_one libboost-program-options-dev
 apt_get_install_one libboost-system-dev
 apt_get_install_one libtool
+apt_get_install_one pkg-config
+apt_get_install_one meson
 apt_get_install_one psmisc # for killall
 
 # ---------- for restbed (otcetera web services dependency) ----------

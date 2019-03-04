@@ -110,21 +110,16 @@ else
     (
 	git clone --recursive https://github.com/mtholder/otcetera
 	cd otcetera
-	./bootstrap.sh
     )
 fi
-mkdir -p build
 (
-    cd build
     export LDFLAGS=-L${APPS}/restbed/local/library
     export CPPFLAGS=-I${APPS}/restbed/local/include
-    export CXXFLAGS="-Wno-unknown-pragmas"
-    if [ ! -r Makefile ] ; then
-	(cd ../otcetera ; ./bootstrap.sh )
-	../otcetera/configure --prefix=$APPS/otcetera/local --with-webservices=yes
+    if  ! (cd ./build ; meson configure) >/dev/null 2>&1 ; then
+	rm -r ../otcetera/build
+	meson otcetera build --prefix=$APPS/otcetera/local
     fi
-    make
-    make install
+    nice -n10 ninja -C build install
 )
 if [ -r "$SERVER" ] ; then
     echo "otc-tol-ws: installed."
