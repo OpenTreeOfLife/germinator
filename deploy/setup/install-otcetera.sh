@@ -119,7 +119,8 @@ fi
 	rm -r ../otcetera/build
 	meson otcetera build --prefix=$APPS/otcetera/local
     fi
-    nice -n10 ninja -C build install
+    # Parallel builds are faster, but use more memory.  Can fail on devapi.
+    nice -n10 ninja -j1 -C build install
 )
 if [ -r "$SERVER" ] ; then
     echo "otc-tol-ws: installed."
