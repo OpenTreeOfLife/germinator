@@ -105,14 +105,15 @@ if ! (cd $APPS/restbed/build && cmake -DBUILD_SSL=NO -DCMAKE_INSTALL_PREFIX=$APP
     mkdir -p $APPS/restbed/build
     cd $APPS/restbed/build && cmake -DBUILD_SSL=NO -DCMAKE_INSTALL_PREFIX=$APPS/restbed/local/ ../restbed -G Ninja && ninja install
 fi
-if [ -r $APPS/restbed/local/include/restbed ] ; then
+
+if [ -r $APPS/restbed/local/include/restbed ] && [ -r $APPS/restbed/local/lib/librestbed.a ] ; then
     echo "restbed: installed."
 else
     echo "** Failed to install restbed"
 fi
 
 # Make sure apps linked against these libraries know where to find them.
-export LD_RUN_PATH=$APPS/restbed/local/library/
+export LD_RUN_PATH=$APPS/restbed/local/lib/
 
 #5. Build otcetera with web services
 SERVER=$APPS/otcetera/local/bin/otc-tol-ws
@@ -131,7 +132,7 @@ else
     )
 fi
 (
-    export LDFLAGS=-L${APPS}/restbed/local/library
+    export LDFLAGS=-L${APPS}/restbed/local/lib
     export CPPFLAGS=-I${APPS}/restbed/local/include
 
     # We need to check a full build, since change to defaults aren't applied to pre-existing project dirs.
@@ -165,7 +166,7 @@ else
 fi
 
 echo -ne "${LIGHT_CYAN}Starting otcetera web services (otc-tol-ws)${NC}: "
-LD_LIBRARY_PATH=${APPS}/restbed/local/library /usr/sbin/daemonize -c $OPENTREE $SERVER $OTT -D$SYNTHPARENT -p$PIDFILE -P1984 --num-threads=4
+LD_LIBRARY_PATH=${APPS}/restbed/local/lib /usr/sbin/daemonize -c $OPENTREE $SERVER $OTT -D$SYNTHPARENT -p$PIDFILE -P1984 --num-threads=4
 sleep 1
 if pgrep -x "otc-tol-ws" ; then
     echo -e "${OK}"
