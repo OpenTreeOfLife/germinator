@@ -71,21 +71,32 @@ else
     echo "** Failed to install synth tree $SYNTH_URL"
 fi
 	
-# 4. Build restbed
-if [ ! -r $APPS/restbed/local/include/restbed ] ; then
-    mkdir -p $APPS/restbed
-    if [ -d $APPS/restbed/restbed ] ; then
-	(
-	    echo "Restbed: updating source."
-	    git pull
-	    git submodule update
-	)
-    else
-	(
-	    cd $APPS/restbed
-	    git clone --recursive https://github.com/corvusoft/restbed.git
-	)
-    fi
+# FIXME: probably we should check out a stable branch, instead of master.
+# But 5.0 isn't stable.
+branch=master
+
+# 4a. Build restbed: update source
+if [ -d $APPS/restbed/restbed ] ; then
+    (
+        cd $APPS/restbed/restbed
+        echo -e "${LIGHT_CYAN}Restbed: updating source: starting ...${NC}"
+        git checkout "${branch}"
+        git pull
+        git submodule update
+        echo -e "${LIGHT_CYAN}Restbed: updating source: ${LIGHT_GREEN}done.${NC}"
+    )
+else
+    (
+        echo -e "${LIGHT_CYAN}Restbed: cloning source: starting ...${NC}"
+        mkdir -p $APPS/restbed
+	cd $APPS/restbed
+	git clone https://github.com/corvusoft/restbed.git
+        git checkout "${branch}"
+        git submodule update
+        echo -e "${LIGHT_CYAN}Restbed: cloning source: ${LIGHT_GREEN}done.${NC}"
+    )
+fi
+
     mkdir -p $APPS/restbed/build
     (
 	cd $APPS/restbed/build
