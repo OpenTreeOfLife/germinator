@@ -115,12 +115,18 @@ fi
 (
     export LDFLAGS=-L${APPS}/restbed/local/library
     export CPPFLAGS=-I${APPS}/restbed/local/include
-    if  ! (cd ./build ; meson configure) >/dev/null 2>&1 ; then
+
+    # renice: don't slow down other processes
+    renice 10 $$
+
+    # We need to check a full build, since change to defaults aren't applied to pre-existing project dirs.
+    if  ! (cd ./build && ninja -j1 install) ; then
 	rm -r ../otcetera/build
 	meson otcetera build --prefix=$APPS/otcetera/local
+        # -j1: Override default to use all cores, because parallel builds use more memory, and can fail on devapi.
+        # We should remove the override if all machines ever have more RAM
+        (cd ./build && ninja -j1 install)
     fi
-    # Parallel builds are faster, but use more memory.  Can fail on devapi.
-    nice -n10 ninja -j1 -C build install
 )
 if [ -r "$SERVER" ] ; then
     echo "otc-tol-ws: installed."
