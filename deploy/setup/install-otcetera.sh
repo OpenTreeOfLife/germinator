@@ -8,6 +8,13 @@ set -e
 # Load config file and also some function definitions
 . setup/functions.sh
 
+# renice: don't slow down other processes
+renice 10 $$
+
+# Override default to use all cores, because parallel builds use more memory, and can fail on devapi.
+# We should remove the override on machines that have enough RAM
+alias ninja='ninja -j1'
+
 # 1. Make the OpenTree directory
 APPS=$HOME/Applications
 mkdir -p $APPS
@@ -116,16 +123,11 @@ fi
     export LDFLAGS=-L${APPS}/restbed/local/library
     export CPPFLAGS=-I${APPS}/restbed/local/include
 
-    # renice: don't slow down other processes
-    renice 10 $$
-
     # We need to check a full build, since change to defaults aren't applied to pre-existing project dirs.
-    if  ! (cd ./build && ninja -j1 install) ; then
+    if  ! (cd ./build && ninja install) ; then
 	rm -r ../otcetera/build
 	meson otcetera build --prefix=$APPS/otcetera/local
-        # -j1: Override default to use all cores, because parallel builds use more memory, and can fail on devapi.
-        # We should remove the override if all machines ever have more RAM
-        (cd ./build && ninja -j1 install)
+        (cd ./build && ninja install)
     fi
 )
 if [ -r "$SERVER" ] ; then
