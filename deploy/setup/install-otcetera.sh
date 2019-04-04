@@ -22,6 +22,9 @@ mkdir -p $APPS
 OPENTREE=$APPS/OpenTree
 mkdir -p $OPENTREE
 
+VIRTUAL_ENV_PYTHON3=${HOME}/venvp3
+mkdir -p $OPENTREE
+
 # 2. Install the taxonomy && define OTT
 TAX_FILE=${TAX_URL##*/}
 TAX_DIR=${TAX_FILE%.*}
@@ -139,11 +142,13 @@ log Checkout: otcetera `git log | head -1`
 (
     export LDFLAGS=-L${APPS}/restbed/local/lib
     export CPPFLAGS=-I${APPS}/restbed/local/include
+    export CXX=$(which g++-8)
+
 
     # We need to check a full build, since change to defaults aren't applied to pre-existing project dirs.
     if  ! (cd ./build && ninja install) ; then
 	rm -r ../otcetera/build
-	meson otcetera build --prefix=$APPS/otcetera/local
+	/home/opentree/venvp3/bin/meson otcetera build --prefix=$APPS/otcetera/local
         (cd ./build && ninja install)
     fi
 )
