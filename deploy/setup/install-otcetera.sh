@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 # Name of user who ran the 'push.sh' command
 CONTROLLER=$1 
@@ -23,7 +24,7 @@ OPENTREE=$APPS/OpenTree
 mkdir -p $OPENTREE
 
 VIRTUAL_ENV_PYTHON3=${HOME}/venvp3
-mkdir -p $OPENTREE
+
 
 # 2. Install the taxonomy && define OTT
 TAX_FILE=${TAX_URL##*/}
@@ -79,24 +80,33 @@ fi
 branch=master
 
 # 4a. Build restbed: update source
+export CXX=$(which g++-8)
 if [ -d $APPS/restbed/restbed ] ; then
     (
         cd $APPS/restbed/restbed
-        echo -e "${LIGHT_CYAN}Restbed: updating source: starting ...${NC}"
+        echo -e "${LIGHT_CYAN}Restbed 1: updating source: starting ...${NC}"
         git checkout "${branch}"
         git pull
+        echo -e "${LIGHT_CYAN}Restbed 2: updating source: ${LIGHT_GREEN}done.${NC}"
+        git submodule init
         git submodule update
-        echo -e "${LIGHT_CYAN}Restbed: updating source: ${LIGHT_GREEN}done.${NC}"
     )
 else
     (
-        echo -e "${LIGHT_CYAN}Restbed: cloning source: starting ...${NC}"
+        echo -e "${LIGHT_CYAN}Restbed 3: cloning source: starting ...${NC}"
         mkdir -p $APPS/restbed
+<<<<<<< HEAD
         cd $APPS/restbed
         git clone https://github.com/corvusoft/restbed.git
+=======
+	    cd $APPS/restbed
+	    git clone https://github.com/corvusoft/restbed.git
+        cd $APPS/restbed/restbed
+>>>>>>> split python2-3 venvs, deploy to ubuntu
         git checkout "${branch}"
+        echo -e "${LIGHT_CYAN}Restbed 4: cloning source: ${LIGHT_GREEN}done.${NC}"
+        git submodule init
         git submodule update
-        echo -e "${LIGHT_CYAN}Restbed: cloning source: ${LIGHT_GREEN}done.${NC}"
     )
 fi
 
@@ -112,7 +122,8 @@ fi
 if [ -r $APPS/restbed/local/include/restbed ] && [ -r $APPS/restbed/local/lib/librestbed.a ] ; then
     echo "restbed: installed."
 else
-    echo "** Failed to install restbed"
+    echo "** Failed to install restbed" 
+    exit 1
 fi
 
 # Make sure apps linked against these libraries know where to find them.
@@ -144,10 +155,10 @@ log Checkout: otcetera `git log | head -1`
     export CPPFLAGS=-I${APPS}/restbed/local/include
     export CXX=$(which g++-8)
 
-
+    echo $PWD
     # We need to check a full build, since change to defaults aren't applied to pre-existing project dirs.
     if  ! (cd ./build && ninja install) ; then
-	rm -r ../otcetera/build
+	rm -rf ../otcetera/build
 	/home/opentree/venvp3/bin/meson otcetera build --prefix=$APPS/otcetera/local
         (cd ./build && ninja install)
     fi

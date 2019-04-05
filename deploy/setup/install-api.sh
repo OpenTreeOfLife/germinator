@@ -28,6 +28,8 @@ setup/install-common.sh $OPENTREE_DEFAULT_APPLICATION $CONTROLLER
 
 echo "Installing API"
 
+pip  install vine==1.3 #Force early version of vine to deal with python2 python3 issues
+
 # ---------- Redis for caching ---------
 REDIS_WITH_VERSION="redis-2.8.8"
 if ! test -f redis/bin/redis-server ; then
