@@ -77,7 +77,7 @@ fi
 	
 # FIXME: probably we should check out a stable branch, instead of master.
 # But 5.0 isn't stable.
-branch=master
+restbedbranch=master
 
 # 4a. Build restbed: update source
 export CXX=$(which g++-8)
@@ -85,7 +85,7 @@ if [ -d $APPS/restbed/restbed ] ; then
     (
         cd $APPS/restbed/restbed
         echo -e "${LIGHT_CYAN}Restbed 1: updating source: starting ...${NC}"
-        git checkout "${branch}"
+        git checkout "${restbedbranch}"
         git pull
         echo -e "${LIGHT_CYAN}Restbed 2: updating source: ${LIGHT_GREEN}done.${NC}"
         git submodule init
@@ -102,8 +102,12 @@ else
 	    cd $APPS/restbed
 	    git clone https://github.com/corvusoft/restbed.git
         cd $APPS/restbed/restbed
+<<<<<<< HEAD
 >>>>>>> split python2-3 venvs, deploy to ubuntu
         git checkout "${branch}"
+=======
+        git checkout "${restbedbranch}"
+>>>>>>> specify otcetera branch *in germinator*
         echo -e "${LIGHT_CYAN}Restbed 4: cloning source: ${LIGHT_GREEN}done.${NC}"
         git submodule init
         git submodule update
@@ -132,10 +136,13 @@ export LD_RUN_PATH=$APPS/restbed/local/lib/
 #5. Build otcetera with web services
 SERVER=$APPS/otcetera/local/bin/otc-tol-ws
 
+otceterabranch=master
+
 mkdir -p $APPS/otcetera
 cd $APPS/otcetera
 if [ -d otcetera ] ; then
     (
+<<<<<<< HEAD
     cd otcetera
     git pull
     )
@@ -145,6 +152,17 @@ else
     cd otcetera
     git branch --track deployed origin/deployed
     git checkout deployed
+=======
+	cd otcetera
+    git checkout "${otceterabranch}"
+	git pull 
+    )
+else
+    (
+	git clone --recursive https://github.com/mtholder/otcetera
+    git checkout "${otceterabranch}"
+	cd otcetera 
+>>>>>>> specify otcetera branch *in germinator*
     )
 fi
 
