@@ -31,9 +31,6 @@ if [ ! -d venvp3 ]; then
    python3 -m venv venvp3
 fi
 
-venvp3/bin/pip install meson
-
-
 
 # ---------- LOGGING ----------
 

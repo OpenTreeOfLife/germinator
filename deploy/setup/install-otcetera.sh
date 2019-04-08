@@ -23,8 +23,13 @@ mkdir -p $APPS
 OPENTREE=$APPS/OpenTree
 mkdir -p $OPENTREE
 
+<<<<<<< HEAD
 VIRTUAL_ENV_PYTHON3=${HOME}/venvp3
 
+=======
+venvp3/bin/pip install meson
+#Use python3 venvp3 for otcetera build
+>>>>>>> fix celery install
 
 # 2. Install the taxonomy && define OTT
 TAX_FILE=${TAX_URL##*/}
@@ -136,7 +141,7 @@ export LD_RUN_PATH=$APPS/restbed/local/lib/
 #5. Build otcetera with web services
 SERVER=$APPS/otcetera/local/bin/otc-tol-ws
 
-otceterabranch=master
+otceterabranch=development
 
 mkdir -p $APPS/otcetera
 cd $APPS/otcetera
