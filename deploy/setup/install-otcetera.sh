@@ -141,7 +141,12 @@ export LD_RUN_PATH=$APPS/restbed/local/lib/
 #5. Build otcetera with web services
 SERVER=$APPS/otcetera/local/bin/otc-tol-ws
 
-otceterabranch=development
+#otceterabranch=development
+otceterabranch=${OPENTREE_BRANCHES[otcetera]}
+        if [ x$branch = x ]; then
+            branch='master'
+        fi
+
 
 mkdir -p $APPS/otcetera
 cd $APPS/otcetera
