@@ -89,16 +89,16 @@ export CXX=$(which g++-8)
 if [ -d $APPS/restbed/restbed ] ; then
     (
         cd $APPS/restbed/restbed
-        echo -e "${LIGHT_CYAN}Restbed 1: updating source: starting ...${NC}"
+        echo -e "${LIGHT_CYAN}Restbed: updating source: starting ...${NC}"
         git checkout "${restbedbranch}"
         git pull
-        echo -e "${LIGHT_CYAN}Restbed 2: updating source: ${LIGHT_GREEN}done.${NC}"
+        echo -e "${LIGHT_CYAN}Restbed: updating source: ${LIGHT_GREEN}done.${NC}"
         git submodule init
         git submodule update
     )
 else
     (
-        echo -e "${LIGHT_CYAN}Restbed 3: cloning source: starting ...${NC}"
+        echo -e "${LIGHT_CYAN}Restbed: cloning source: starting ...${NC}"
         mkdir -p $APPS/restbed
 <<<<<<< HEAD
         cd $APPS/restbed
@@ -112,8 +112,12 @@ else
         git checkout "${branch}"
 =======
         git checkout "${restbedbranch}"
+<<<<<<< HEAD
 >>>>>>> specify otcetera branch *in germinator*
         echo -e "${LIGHT_CYAN}Restbed 4: cloning source: ${LIGHT_GREEN}done.${NC}"
+=======
+        echo -e "${LIGHT_CYAN}Restbed: cloning source: ${LIGHT_GREEN}done.${NC}"
+>>>>>>> align with updates to master
         git submodule init
         git submodule update
     )
@@ -165,14 +169,18 @@ else
 =======
 	cd otcetera
     git checkout "${otceterabranch}"
-	git pull 
+	git pull
     )
 else
     (
 	git clone --recursive https://github.com/mtholder/otcetera
     git checkout "${otceterabranch}"
+<<<<<<< HEAD
 	cd otcetera 
 >>>>>>> specify otcetera branch *in germinator*
+=======
+	cd otcetera
+>>>>>>> align with updates to master
     )
 fi
 
