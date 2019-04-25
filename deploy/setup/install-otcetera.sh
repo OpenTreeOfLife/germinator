@@ -89,8 +89,8 @@ else
     (
         echo -e "${LIGHT_CYAN}Restbed: cloning source: starting ...${NC}"
         mkdir -p $APPS/restbed
-	cd $APPS/restbed
-	git clone https://github.com/corvusoft/restbed.git
+        cd $APPS/restbed
+        git clone https://github.com/corvusoft/restbed.git
         git checkout "${branch}"
         git submodule update
         echo -e "${LIGHT_CYAN}Restbed: cloning source: ${LIGHT_GREEN}done.${NC}"
@@ -122,15 +122,20 @@ mkdir -p $APPS/otcetera
 cd $APPS/otcetera
 if [ -d otcetera ] ; then
     (
-	cd otcetera
-	git pull
+    cd otcetera
+    git pull
     )
 else
     (
-	git clone --recursive https://github.com/mtholder/otcetera
-	cd otcetera
+    git clone --recursive https://github.com/mtholder/otcetera
+    git branch --track deployed origin/deployed
+    git checkout deployed
+    cd otcetera
     )
 fi
+
+log Checkout: otcetera `git log | head -1`
+
 (
     export LDFLAGS=-L${APPS}/restbed/local/lib
     export CPPFLAGS=-I${APPS}/restbed/local/include
