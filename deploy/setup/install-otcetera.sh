@@ -128,9 +128,9 @@ if [ -d otcetera ] ; then
 else
     (
     git clone --recursive https://github.com/mtholder/otcetera
+    cd otcetera
     git branch --track deployed origin/deployed
     git checkout deployed
-    cd otcetera
     )
 fi
 
