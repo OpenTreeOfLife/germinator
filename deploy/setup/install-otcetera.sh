@@ -168,19 +168,24 @@ else
     git checkout deployed
 =======
 	cd otcetera
+    git fetch
     git checkout "${otceterabranch}"
 	git pull
     )
 else
     (
 	git clone --recursive https://github.com/mtholder/otcetera
+    cd otcetera
     git checkout "${otceterabranch}"
+<<<<<<< HEAD
 <<<<<<< HEAD
 	cd otcetera 
 >>>>>>> specify otcetera branch *in germinator*
 =======
 	cd otcetera
 >>>>>>> align with updates to master
+=======
+>>>>>>> cd and fetch first
     )
 fi
 
