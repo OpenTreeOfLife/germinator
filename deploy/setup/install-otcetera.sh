@@ -76,6 +76,7 @@ fi
 branch=master
 
 # 4a. Build restbed: update source
+export CXX=$(which g++-8)
 if [ -d $APPS/restbed/restbed ] ; then
     (
         cd $APPS/restbed/restbed
