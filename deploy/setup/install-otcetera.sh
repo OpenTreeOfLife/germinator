@@ -121,19 +121,26 @@ export LD_RUN_PATH=$APPS/restbed/local/lib/
 #5. Build otcetera with web services
 SERVER=$APPS/otcetera/local/bin/otc-tol-ws
 
+otceterabranch=${OPENTREE_BRANCHES[otcetera]}
+        if [ x$branch = x ]; then
+            branch='deployed'
+        fi
+
 mkdir -p $APPS/otcetera
 cd $APPS/otcetera
 if [ -d otcetera ] ; then
     (
     cd otcetera
+    git fetch
+    git checkout "${otceterabranch}"
     git pull
     )
 else
     (
     git clone --recursive https://github.com/mtholder/otcetera
     cd otcetera
-    git branch --track deployed origin/deployed
-    git checkout deployed
+    git branch --track "${otceterabranch}" origin/"${otceterabranch}"
+    git checkout "${otceterabranch}"
     )
 fi
 
@@ -142,10 +149,11 @@ log Checkout: otcetera `git log | head -1`
 (
     export LDFLAGS=-L${APPS}/restbed/local/lib
     export CPPFLAGS=-I${APPS}/restbed/local/include
+    export CXX=$(which g++-8)
 
     # We need to check a full build, since change to defaults aren't applied to pre-existing project dirs.
     if  ! (cd ./build && ninja install) ; then
-	rm -r ../otcetera/build
+	rm -rf ../otcetera/build
 	meson otcetera build --prefix=$APPS/otcetera/local
         (cd ./build && ninja install)
     fi
