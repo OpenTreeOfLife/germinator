@@ -73,7 +73,7 @@ fi
 	
 # FIXME: probably we should check out a stable branch, instead of master.
 # But 5.0 isn't stable.
-branch=master
+restbedbranch=master
 
 # 4a. Build restbed: update source
 export CXX=$(which g++-8)
@@ -81,8 +81,9 @@ if [ -d $APPS/restbed/restbed ] ; then
     (
         cd $APPS/restbed/restbed
         echo -e "${LIGHT_CYAN}Restbed: updating source: starting ...${NC}"
-        git checkout "${branch}"
+        git checkout "${restbedbranch}"
         git pull
+        git submodule init
         git submodule update
         echo -e "${LIGHT_CYAN}Restbed: updating source: ${LIGHT_GREEN}done.${NC}"
     )
@@ -92,7 +93,8 @@ else
         mkdir -p $APPS/restbed
         cd $APPS/restbed
         git clone https://github.com/corvusoft/restbed.git
-        git checkout "${branch}"
+        cd $APPS/restbed/restbed
+        git checkout "${restbedbranch}"
         git submodule update
         echo -e "${LIGHT_CYAN}Restbed: cloning source: ${LIGHT_GREEN}done.${NC}"
     )
