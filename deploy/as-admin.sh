@@ -89,11 +89,11 @@ apt_get_install_one libboost-program-options-dev
 apt_get_install_one libboost-system-dev
 apt_get_install_one libtool
 apt_get_install_one pkg-config
-apt_get_install_one meson
 apt_get_install_one psmisc # for killall
 #only needed on ubuntu or older OS's
 apt_get_install_one g++-8
 apt_get_install_one ninja-build
+apt_get_install_one python3-venv
 
 # ---------- for restbed (otcetera web services dependency) ----------
 apt_get_install_one cmake

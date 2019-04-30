@@ -15,6 +15,8 @@ renice 10 $$
 # We should remove the override on machines that have enough RAM
 alias ninja='ninja -j1'
 
+venvp3/bin/pip install meson
+
 # 1. Make the OpenTree directory
 APPS=$HOME/Applications
 mkdir -p $APPS
@@ -144,7 +146,7 @@ else
     )
 fi
 
-log Checkout: otcetera `git log | head -1`
+#log Checkout: otcetera `git log | head -1`
 
 (
     export LDFLAGS=-L${APPS}/restbed/local/lib
@@ -154,7 +156,7 @@ log Checkout: otcetera `git log | head -1`
     # We need to check a full build, since change to defaults aren't applied to pre-existing project dirs.
     if  ! (cd ./build && ninja install) ; then
 	rm -rf ../otcetera/build
-	meson otcetera build --prefix=$APPS/otcetera/local
+	/home/opentree/venvp3/bin/meson otcetera build --prefix=$APPS/otcetera/local
         (cd ./build && ninja install)
     fi
 )

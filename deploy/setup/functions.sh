@@ -26,6 +26,11 @@ if [ ! -d venv ]; then
 fi
 source venv/bin/activate
 
+#set up a python3 venv
+if [ ! -d venvp3 ]; then
+   python3 -m venv venvp3
+fi
+
 # ---------- LOGGING ----------
 
 function log() {
