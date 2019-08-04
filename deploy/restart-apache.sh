@@ -41,10 +41,12 @@ fi
 
 TMP=/tmp/$$.tmp
 sed -e s+/home/opentree+$OPENTREE_HOME+ <"$OPENTREE_HOME/setup/opentree-shared.conf" >$TMP
+sed -i -e "s+OTINDEX_BASE_URL+$OTINDEX_BASE_URL+" $TMP
 if [ ! -r /etc/apache2/opentree-shared.conf ] || \
    ! cmp -s $TMP /etc/apache2/opentree-shared.conf; then
     echo "Installing opentree vhosts shared config"
     sudo cp -p $TMP /etc/apache2/opentree-shared.conf || "Sudo failed"
+    # Access otindex search from shared server-config variable
 fi
 rm $TMP
 fi
