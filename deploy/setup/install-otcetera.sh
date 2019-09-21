@@ -126,6 +126,7 @@ if [ -r $APPS/restbed/local/include/restbed ] && [ -r $APPS/restbed/local/lib/li
     echo "restbed: installed."
 else
     echo "** Failed to install restbed"
+    exit 1
 fi
 
 # Make sure apps linked against these libraries know where to find them.
