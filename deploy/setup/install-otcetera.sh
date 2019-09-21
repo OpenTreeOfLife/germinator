@@ -1,8 +1,15 @@
 #!/bin/bash
+set -x
 
 # Name of user who ran the 'push.sh' command
 CONTROLLER=$1 
 
+if [ "$#" -ne 2 ]; then
+    echo "install-octcetera.sh missing required parameters (expecting 2)"
+    exit 1
+fi
+
+OPENTREE_WEBAPI_BASE_URL=$2
 # Exit immediately in a command has a non-zero exit status
 set -e 
 # Load config file and also some function definitions
@@ -187,7 +194,20 @@ fi
 
 # 7. Install the wrapper
 cd
-git_refresh OpenTreeOfLife ws_wrapper || true
+${VIRTUAL_ENV}/bin/pip install configparser
+
+
+
+# Until ws_wrapper chang e is merged, need to select use template branch
+git_refresh OpenTreeOfLife ws_wrapper ini-template || true
+#git_refresh OpenTreeOfLife ws_wrapper || true
+
 py_package_setup_install ws_wrapper || true
+
 WPIDFILE=$HOME/repo/ws_wrapper/pid
-(pkill -F "$WPIDFILE" 2>/dev/null || true ) && /usr/sbin/daemonize -p $WPIDFILE -c $HOME/repo/ws_wrapper ${VIRTUAL_ENV}/bin/pserve development.ini
+
+#make new ini from a template and .gitignore it
+cp $HOME/repo/ws_wrapper/template.ini $HOME/repo/ws_wrapper/wswrapper.ini
+sed -i -e "s+OPENTREE_WEBAPI_BASE_URL+${OPENTREE_WEBAPI_BASE_URL}+" $HOME/repo/ws_wrapper/wswrapper.ini
+
+(pkill -F "$WPIDFILE" 2>/dev/null || true ) && /usr/sbin/daemonize -p $WPIDFILE -c $HOME/repo/ws_wrapper ${VIRTUAL_ENV}/bin/pserve wswrapper.ini
