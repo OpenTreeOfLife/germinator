@@ -33,6 +33,7 @@ VIRTUAL_ENV_PYTHON3=${HOME}/venvp3
 
 #Use python3 venvp3 for otcetera build
 ${VIRTUAL_ENV_PYTHON3}/bin/pip install meson
+
 # 2. Install the taxonomy && define OTT
 TAX_FILE=${TAX_URL##*/}
 TAX_DIR=${TAX_FILE%.*}
@@ -81,20 +82,22 @@ if [ -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
 else
     echo "** Failed to install synth tree $SYNTH_URL"
 fi
-	
+
 # FIXME: probably we should check out a stable branch, instead of master.
 # But 5.0 isn't stable.
-branch=master
+restbedbranch=master
 
 # 4a. Build restbed: update source
+export CXX=$(which g++-8)
 if [ -d $APPS/restbed/restbed ] ; then
     (
         cd $APPS/restbed/restbed
         echo -e "${LIGHT_CYAN}Restbed: updating source: starting ...${NC}"
-        git checkout "${branch}"
+        git checkout "${restbedbranch}"
         git pull
-        git submodule update
         echo -e "${LIGHT_CYAN}Restbed: updating source: ${LIGHT_GREEN}done.${NC}"
+        git submodule init
+        git submodule update
     )
 else
     (
@@ -102,9 +105,11 @@ else
         mkdir -p $APPS/restbed
         cd $APPS/restbed
         git clone https://github.com/corvusoft/restbed.git
-        git checkout "${branch}"
+        cd $APPS/restbed/restbed
+        git checkout "${restbedbranch}"
+        echo -e "${LIGHT_CYAN}Restbed 4: cloning source: ${LIGHT_GREEN}done.${NC}"
+        git submodule init
         git submodule update
-        echo -e "${LIGHT_CYAN}Restbed: cloning source: ${LIGHT_GREEN}done.${NC}"
     )
 fi
 
