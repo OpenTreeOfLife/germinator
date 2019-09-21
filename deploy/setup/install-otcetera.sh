@@ -67,9 +67,9 @@ SYNTH_DIR=${SYNTH_FILE%_output.tgz}
 
 if [ ! -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
     (
-	cd $SYNTHPARENT
-	wget $SYNTH_URL
-	tar -zxf $SYNTH_FILE
+    cd $SYNTHPARENT
+    wget $SYNTH_URL
+    tar -zxf $SYNTH_FILE
     )
 fi
 if [ -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
@@ -77,7 +77,7 @@ if [ -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
 else
     echo "** Failed to install synth tree $SYNTH_URL"
 fi
-	
+
 # FIXME: probably we should check out a stable branch, instead of master.
 # But 5.0 isn't stable.
 restbedbranch=master
@@ -98,8 +98,8 @@ else
     (
         echo -e "${LIGHT_CYAN}Restbed: cloning source: starting ...${NC}"
         mkdir -p $APPS/restbed
-	    cd $APPS/restbed
-	    git clone https://github.com/corvusoft/restbed.git
+        cd $APPS/restbed
+        git clone https://github.com/corvusoft/restbed.git
         cd $APPS/restbed/restbed
         git checkout "${restbedbranch}"
         echo -e "${LIGHT_CYAN}Restbed 4: cloning source: ${LIGHT_GREEN}done.${NC}"
@@ -162,8 +162,8 @@ log Checkout: otcetera `git log | head -1`
     echo $PWD
     # We need to check a full build, since change to defaults aren't applied to pre-existing project dirs.
     if  ! (cd ./build && ninja install) ; then
-	rm -rf ../otcetera/build
-	/home/opentree/venvp3/bin/meson otcetera build --prefix=$APPS/otcetera/local
+    rm -rf ../otcetera/build
+    /home/opentree/venvp3/bin/meson otcetera build --prefix=$APPS/otcetera/local
         (cd ./build && ninja install)
     fi
 )
@@ -179,7 +179,6 @@ PIDFILE=$OPENTREE/wspidfile.txt
 cd $OPENTREE
 
 # FIXME: Ideally we only kill the server if we had to rebuild anything...
-
 # FIXME: We need to check if killing the old server actually succeeds!
 echo -n "Killing the old server process: "
 killall -9 -q otc-tol-ws || true

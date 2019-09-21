@@ -201,8 +201,8 @@ EOF
 
     *)
         if ! in_list $command $OPENTREE_COMPONENTS; then
-	    err "Unrecognized command, or component not in OPENTREE_COMPONENTS: $command"
-	fi
+        err "Unrecognized command, or component not in OPENTREE_COMPONENTS: $command"
+    fi
         # Default if not a recognized command: treat as component name
         docomponent $command
     esac
