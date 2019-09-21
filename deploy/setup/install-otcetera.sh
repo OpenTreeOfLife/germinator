@@ -208,12 +208,20 @@ fi
 
 # 7. Install the wrapper
 cd
-git_refresh OpenTreeOfLife ws_wrapper || true
+${VIRTUAL_ENV_PYTHON3}/bin/pip install configparser
+
+
+
+# Until ws_wrapper chang e is merged, need to select use template branch
+git_refresh OpenTreeOfLife ws_wrapper ini-template || true
+#git_refresh OpenTreeOfLife ws_wrapper || true
+
 py_package_setup_install ws_wrapper || true
+
 WPIDFILE=$HOME/repo/ws_wrapper/pid
 
 #make new ini from a template and .gitignore it
-cp template.ini wswrapper.ini
-sed -i -e "s+OPENTREE_WEBAPI_BASE_URL+${OPENTREE_WEBAPI_BASE_URL}+" config
+cp $HOME/repo/ws_wrapper/template.ini $HOME/repo/ws_wrapper/wswrapper.ini
+sed -i -e "s+OPENTREE_WEBAPI_BASE_URL+${OPENTREE_WEBAPI_BASE_URL}+" $HOME/repo/ws_wrapper/wswrapper.ini
 
 (pkill -F "$WPIDFILE" 2>/dev/null || true ) && /usr/sbin/daemonize -p $WPIDFILE -c $HOME/repo/ws_wrapper ${VIRTUAL_ENV}/bin/pserve wswrapper.ini
