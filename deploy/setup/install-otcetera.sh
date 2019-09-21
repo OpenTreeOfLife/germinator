@@ -71,9 +71,9 @@ SYNTH_DIR=${SYNTH_FILE%_output.tgz}
 
 if [ ! -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
     (
-	cd $SYNTHPARENT
-	wget $SYNTH_URL
-	tar -zxf $SYNTH_FILE
+    cd $SYNTHPARENT
+    wget $SYNTH_URL
+    tar -zxf $SYNTH_FILE
     )
 fi
 if [ -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
