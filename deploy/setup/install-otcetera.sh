@@ -214,8 +214,8 @@ ${VIRTUAL_ENV}/bin/pip install configparser
 
 
 # Until ws_wrapper chang e is merged, need to select use template branch
-git_refresh OpenTreeOfLife ws_wrapper ini-template || true
-#git_refresh OpenTreeOfLife ws_wrapper || true
+#git_refresh OpenTreeOfLife ws_wrapper ini-template || true
+git_refresh OpenTreeOfLife ws_wrapper || true
 
 py_package_setup_install ws_wrapper || true
 
