@@ -408,7 +408,7 @@ function push_smasher {
 function push_otcetera {
     if [ $DRYRUN = "yes" ]; then echo "[push_otcetera]"; return; fi
     echo push_otcetera:
-    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-otcetera.sh ${CONTROLLER}
+    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-otcetera.sh ${CONTROLLER} ${OPENTREE_WEBAPI_BASE_URL}
 }
 
 process_arguments $*
