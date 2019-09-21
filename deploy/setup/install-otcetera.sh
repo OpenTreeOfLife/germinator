@@ -208,7 +208,7 @@ fi
 
 # 7. Install the wrapper
 cd
-${VIRTUAL_ENV_PYTHON3}/bin/pip install configparser
+${VIRTUAL_ENV}/bin/pip install configparser
 
 
 
