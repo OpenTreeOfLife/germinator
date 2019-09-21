@@ -23,13 +23,11 @@ mkdir -p $APPS
 OPENTREE=$APPS/OpenTree
 mkdir -p $OPENTREE
 
-<<<<<<< HEAD
 VIRTUAL_ENV_PYTHON3=${HOME}/venvp3
 
-=======
-venvp3/bin/pip install meson
+${VIRTUAL_ENV_PYTHON3}/bin/pip install meson
 #Use python3 venvp3 for otcetera build
->>>>>>> fix celery install
+ fix celery install
 
 # 2. Install the taxonomy && define OTT
 TAX_FILE=${TAX_URL##*/}
@@ -100,24 +98,11 @@ else
     (
         echo -e "${LIGHT_CYAN}Restbed: cloning source: starting ...${NC}"
         mkdir -p $APPS/restbed
-<<<<<<< HEAD
-        cd $APPS/restbed
-        git clone https://github.com/corvusoft/restbed.git
-=======
 	    cd $APPS/restbed
 	    git clone https://github.com/corvusoft/restbed.git
         cd $APPS/restbed/restbed
-<<<<<<< HEAD
->>>>>>> split python2-3 venvs, deploy to ubuntu
-        git checkout "${branch}"
-=======
         git checkout "${restbedbranch}"
-<<<<<<< HEAD
->>>>>>> specify otcetera branch *in germinator*
         echo -e "${LIGHT_CYAN}Restbed 4: cloning source: ${LIGHT_GREEN}done.${NC}"
-=======
-        echo -e "${LIGHT_CYAN}Restbed: cloning source: ${LIGHT_GREEN}done.${NC}"
->>>>>>> align with updates to master
         git submodule init
         git submodule update
     )
@@ -156,36 +141,14 @@ mkdir -p $APPS/otcetera
 cd $APPS/otcetera
 if [ -d otcetera ] ; then
     (
-<<<<<<< HEAD
-    cd otcetera
+    git fetch
+    git checkout "${otceterabranch}"
     git pull
     )
 else
     (
     git clone --recursive https://github.com/mtholder/otcetera
-    cd otcetera
-    git branch --track deployed origin/deployed
-    git checkout deployed
-=======
-	cd otcetera
-    git fetch
     git checkout "${otceterabranch}"
-	git pull
-    )
-else
-    (
-	git clone --recursive https://github.com/mtholder/otcetera
-    cd otcetera
-    git checkout "${otceterabranch}"
-<<<<<<< HEAD
-<<<<<<< HEAD
-	cd otcetera 
->>>>>>> specify otcetera branch *in germinator*
-=======
-	cd otcetera
->>>>>>> align with updates to master
-=======
->>>>>>> cd and fetch first
     )
 fi
 
