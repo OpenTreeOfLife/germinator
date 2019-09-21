@@ -134,19 +134,27 @@ export LD_RUN_PATH=$APPS/restbed/local/lib/
 #5. Build otcetera with web services
 SERVER=$APPS/otcetera/local/bin/otc-tol-ws
 
+otceterabranch=${OPENTREE_BRANCHES[otcetera]}
+        if [ x$branch = x ]; then
+            branch='master'
+        fi
+
+
 mkdir -p $APPS/otcetera
 cd $APPS/otcetera
 if [ -d otcetera ] ; then
     (
     cd otcetera
+    git fetch
+    git checkout "${otceterabranch}"
     git pull
     )
 else
     (
-    git clone --recursive https://github.com/mtholder/otcetera
+    git clone --recursive https://github.com/OpenTreeOfLife/otcetera
     cd otcetera
-    git branch --track deployed origin/deployed
-    git checkout deployed
+    git branch --track ${otceterabranch} origin/${otceterabranch}
+    git checkout "${otceterabranch}"
     )
 fi
 
