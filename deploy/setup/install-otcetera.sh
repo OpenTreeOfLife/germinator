@@ -163,6 +163,7 @@ log Checkout: otcetera `git log | head -1`
 (
     export LDFLAGS=-L${APPS}/restbed/local/lib
     export CPPFLAGS=-I${APPS}/restbed/local/include
+    export CXX=$(which g++-8)
 
     echo $PWD
     # We need to check a full build, since change to defaults aren't applied to pre-existing project dirs.
