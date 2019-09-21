@@ -25,9 +25,8 @@ mkdir -p $OPENTREE
 
 VIRTUAL_ENV_PYTHON3=${HOME}/venvp3
 
-${VIRTUAL_ENV_PYTHON3}/bin/pip install meson
 #Use python3 venvp3 for otcetera build
- fix celery install
+${VIRTUAL_ENV_PYTHON3}/bin/pip install meson
 
 # 2. Install the taxonomy && define OTT
 TAX_FILE=${TAX_URL##*/}
@@ -163,7 +162,7 @@ log Checkout: otcetera `git log | head -1`
     # We need to check a full build, since change to defaults aren't applied to pre-existing project dirs.
     if  ! (cd ./build && ninja install) ; then
     rm -rf ../otcetera/build
-    /home/opentree/venvp3/bin/meson otcetera build --prefix=$APPS/otcetera/local
+    ${VIRTUAL_ENV_PYTHON3}/bin/meson otcetera build --prefix=$APPS/otcetera/local
         (cd ./build && ninja install)
     fi
 )
