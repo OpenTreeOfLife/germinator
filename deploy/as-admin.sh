@@ -91,7 +91,7 @@ apt_get_install_one libtool
 apt_get_install_one pkg-config
 apt_get_install_one psmisc # for killall
 apt_get_install_one python3-venv
-apt_get_install_one g++-8
+#apt_get_install_one g++-8
 apt_get_install_one ninja-build
 
 
