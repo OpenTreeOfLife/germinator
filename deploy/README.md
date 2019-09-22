@@ -200,7 +200,7 @@ maintenance windows.
 
 While any Open Tree websites(s) are unavailable, their respective webservers
 should redirect all traffic to the editable
-[maintenance page](http://opentreeoflife.github.io/maintenance.html) in our
+[maintenance page](http://opentreeoflife.github.io/maintenance/) in our
 github-pages sites. (Be sure to edit the text of this page to reflect the current situation and
 expected downtime.)
 
