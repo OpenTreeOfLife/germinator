@@ -14,6 +14,7 @@ There are two downloads. The first (smaller download) contain only tree and anno
 
 * one new tree collection: [aves](https://tree.opentreeoflife.org/curator/collections/josephwb/aves)
 * 173 new input trees.
+* based on OTT 3.1 instead of OTT 3.0
 
 ### Changes in output
 
