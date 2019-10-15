@@ -20,8 +20,8 @@ There are two downloads. The first (smaller download) contain only tree and anno
 <table class="table table-condensed">
 <tr>
 <th><!--statistic-->&nbsp;</th>
-<th>version7.0</th>
-<th>version8.0</th>
+<th>version10.4</th>
+<th>version11.4</th>
 <th>change</th>
 <tr>
    <th>total tips</th>
