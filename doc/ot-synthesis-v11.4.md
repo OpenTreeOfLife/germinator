@@ -12,7 +12,6 @@ There are two downloads. The first (smaller download) contain only tree and anno
 
 ### Changes in inputs
 
-* one new tree collection: [catfish](https://tree.opentreeoflife.org/curator/collections/kcranston/catfish)
 * based on OTT 3.1 instead of OTT 3.0
 * extinct tips in phylogenetic inputs are no longer pruned
 * 249 new input trees.
