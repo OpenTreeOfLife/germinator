@@ -12,19 +12,21 @@ OPENTREE_HOST=$1  #Not used; set in functions.sh anyhow
 OPENTREE_PUBLIC_DOMAIN=$2
 OPENTREE_DEFAULT_APPLICATION=$3
 CONTROLLER=$4
-CURATION_GITHUB_CLIENT_ID=$5
-CURATION_GITHUB_REDIRECT_URI=$6
-TREEVIEW_GITHUB_CLIENT_ID=$7
-TREEVIEW_GITHUB_REDIRECT_URI=$8
-TREEMACHINE_BASE_URL=$9
+CURATION_GITHUB_APP_ID=$5
+CURATION_GITHUB_CLIENT_ID=$6
+CURATION_GITHUB_REDIRECT_URI=$7
+TREEVIEW_GITHUB_APP_ID=$8
+TREEVIEW_GITHUB_CLIENT_ID=$9
 # NOTE that args beyond nine must be referenced in curly braces
-TAXOMACHINE_BASE_URL=${10}
-OTI_BASE_URL=${11}
-OPENTREE_API_BASE_URL=${12}
-COLLECTIONS_API_BASE_URL=${13}
-AMENDMENTS_API_BASE_URL=${14}
-FAVORITES_API_BASE_URL=${15}
-CONFLICT_BASE_URL=${16}
+TREEVIEW_GITHUB_REDIRECT_URI=${10}
+TREEMACHINE_BASE_URL=${11}
+TAXOMACHINE_BASE_URL=${12}
+OTI_BASE_URL=${13}
+OPENTREE_API_BASE_URL=${14}
+COLLECTIONS_API_BASE_URL=${15}
+AMENDMENTS_API_BASE_URL=${16}
+FAVORITES_API_BASE_URL=${17}
+CONFLICT_BASE_URL=${18}
 
 . setup/functions.sh
 
@@ -65,9 +67,11 @@ git_refresh OpenTreeOfLife $WEBAPP || true
 # authentication purposes.  'hostname' doesn't work on EC2 instances,
 # so it has to be passed in as a parameter.
 
-# N.B. Two other files with were already placed via rsync (in push.sh):
+# N.B. Other sensitive files were already placed via rsync (in push.sh):
 #   curator/private/GITHUB_CLIENT_SECRET
+#   curator/private/GITHUB_APP_PRIVATE_KEY_PEM
 #   webapp/private/GITHUB_CLIENT_SECRET
+#   webapp/private/GITHUB_APP_PRIVATE_KEY_PEM
 
 # ---- main webapp (opentree)
 
@@ -92,7 +96,8 @@ CACHED_TREEMACHINE_BASE_URL=$(sed "s+$+/cached+" <<< $TREEMACHINE_BASE_URL)
 CACHED_TAXOMACHINE_BASE_URL=$(sed "s+$+/cached+" <<< $TAXOMACHINE_BASE_URL)
 CACHED_OTI_BASE_URL=$(sed "s+$+/cached+" <<< $OTI_BASE_URL)
 
-sed "s+github_client_id = .*+github_client_id = $TREEVIEW_GITHUB_CLIENT_ID+;
+sed "s+github_app_id = .*+github_app_id = $TREEVIEW_GITHUB_APP_ID+;
+     s+github_client_id = .*+github_client_id = $TREEVIEW_GITHUB_CLIENT_ID+;
      s+github_redirect_uri = .*+github_redirect_uri = $TREEVIEW_GITHUB_REDIRECT_URI+
      s+hostdomain = .*+hostdomain = $OPENTREE_PUBLIC_DOMAIN+;
      s+treemachine = .*+treemachine = $TREEMACHINE_BASE_URL+
@@ -117,7 +122,8 @@ configfile=$configdir/config
 
 # Replace tokens in example config file to make the active config (assume this always changes)
 cp -p $configtemplate $configfile
-sed "s+github_client_id = .*+github_client_id = $CURATION_GITHUB_CLIENT_ID+;
+sed "s+github_app_id = .*+github_app_id = $CURATION_GITHUB_APP_ID+;
+     s+github_client_id = .*+github_client_id = $CURATION_GITHUB_CLIENT_ID+;
      s+github_redirect_uri = .*+github_redirect_uri = $CURATION_GITHUB_REDIRECT_URI+
      s+treemachine = .*+treemachine = $TREEMACHINE_BASE_URL+
      s+taxomachine = .*+taxomachine = $TAXOMACHINE_BASE_URL+

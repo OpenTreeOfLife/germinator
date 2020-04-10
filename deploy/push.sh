@@ -114,8 +114,10 @@ fi
 if [ "x$WEBAPP_BASE_URL" = x ]; then
     WEBAPP_BASE_URL=https://$OPENTREE_PUBLIC_DOMAIN
 fi
+[ "x$CURATION_GITHUB_APP_ID" != x ] || CURATION_GITHUB_APP_ID=ID_NOT_PROVIDED
 [ "x$CURATION_GITHUB_CLIENT_ID" != x ] || CURATION_GITHUB_CLIENT_ID=ID_NOT_PROVIDED
 [ "x$CURATION_GITHUB_REDIRECT_URI" != x ] || CURATION_GITHUB_REDIRECT_URI=$WEBAPP_BASE_URL/webapp/user/login
+[ "x$TREEVIEW_GITHUB_APP_ID" != x ] || TREEVIEW_GITHUB_APP_ID=ID_NOT_PROVIDED
 [ "x$TREEVIEW_GITHUB_CLIENT_ID" != x ] || TREEVIEW_GITHUB_CLIENT_ID=ID_NOT_PROVIDED
 [ "x$TREEVIEW_GITHUB_REDIRECT_URI" != x ] || TREEVIEW_GITHUB_REDIRECT_URI=$WEBAPP_BASE_URL/curator/user/login
 
@@ -313,7 +315,9 @@ function index_doc_store {
 
 function push_webapps {
 
+    if [ $CURATION_GITHUB_APP_ID = ID_NOT_PROVIDED ]; then echo "WARNING: Missing GitHub app ID! Curation feedback will be disabled."; fi
     if [ $CURATION_GITHUB_CLIENT_ID = ID_NOT_PROVIDED ]; then echo "WARNING: Missing GitHub client ID! Curation UI will be disabled."; fi
+    if [ $TREEVIEW_GITHUB_APP_ID = ID_NOT_PROVIDED ]; then echo "WARNING: Missing GitHub app ID! Tree-view feedback will be disabled."; fi
     if [ $TREEVIEW_GITHUB_CLIENT_ID = ID_NOT_PROVIDED ]; then echo "WARNING: Missing GitHub client ID! Tree-view feedback will be disabled."; fi
     # We could default these (used by webapps), but for some reason we don't
     [ "x$TREEMACHINE_BASE_URL" != x ] || err "TREEMACHINE_BASE_URL not configured"
@@ -322,7 +326,7 @@ function push_webapps {
     [ "x$CONFLICT_BASE_URL"    != x ] || err "CONFLICT_BASE_URL not configured"
 
     if [ $DRYRUN = "yes" ]; then echo "[opentree]"; return; fi
-    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-web2py-apps.sh "$OPENTREE_HOST" "${OPENTREE_PUBLIC_DOMAIN}" "${OPENTREE_DEFAULT_APPLICATION}" "$CONTROLLER" "${CURATION_GITHUB_CLIENT_ID}" "${CURATION_GITHUB_REDIRECT_URI}" "${TREEVIEW_GITHUB_CLIENT_ID}" "${TREEVIEW_GITHUB_REDIRECT_URI}" "${TREEMACHINE_BASE_URL}" "${TAXOMACHINE_BASE_URL}" "${OTI_BASE_URL}" "${OPENTREE_API_BASE_URL}" "${COLLECTIONS_API_BASE_URL}" "${AMENDMENTS_API_BASE_URL}" "${FAVORITES_API_BASE_URL}" "${CONFLICT_API_BASE_URL}"
+    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-web2py-apps.sh "$OPENTREE_HOST" "${OPENTREE_PUBLIC_DOMAIN}" "${OPENTREE_DEFAULT_APPLICATION}" "$CONTROLLER" "${CURATION_GITHUB_APP_ID}" "${CURATION_GITHUB_CLIENT_ID}" "${CURATION_GITHUB_REDIRECT_URI}" "${TREEVIEW_GITHUB_APP_ID}" "${TREEVIEW_GITHUB_CLIENT_ID}" "${TREEVIEW_GITHUB_REDIRECT_URI}" "${TREEMACHINE_BASE_URL}" "${TAXOMACHINE_BASE_URL}" "${OTI_BASE_URL}" "${OPENTREE_API_BASE_URL}" "${COLLECTIONS_API_BASE_URL}" "${AMENDMENTS_API_BASE_URL}" "${FAVORITES_API_BASE_URL}" "${CONFLICT_API_BASE_URL}"
     # place the files with secret GitHub API keys for curator and webapp (tree browser feedback) apps
     # N.B. This includes the final domain name, since we'll need different keys for dev.opentreeoflife.org, www.opentreeoflife.org, etc.
     keyfile=${OPENTREE_SECRETS}/treeview-GITHUB_CLIENT_SECRET-$OPENTREE_PUBLIC_DOMAIN
@@ -331,11 +335,23 @@ function push_webapps {
     else
         echo "** Cannot find GITHUB_CLIENT_SECRET file $keyfile"
     fi
+    keyfile=${OPENTREE_SECRETS}/treeview-GITHUB_APP_PRIVATE_KEY_PEM-$OPENTREE_PUBLIC_DOMAIN
+    if [ -r $keyfile ]; then
+        rsync -pr -e "${SSH}" $keyfile "$OT_USER@$OPENTREE_HOST":repo/opentree/webapp/private/GITHUB_APP_PRIVATE_KEY_PEM
+    else
+        echo "** Cannot find GITHUB_APP_PRIVATE_KEY_PEM file $keyfile"
+    fi
     keyfile=${OPENTREE_SECRETS}/curation-GITHUB_CLIENT_SECRET-$OPENTREE_PUBLIC_DOMAIN
     if [ -r $keyfile ]; then
         rsync -pr -e "${SSH}" $keyfile "$OT_USER@$OPENTREE_HOST":repo/opentree/curator/private/GITHUB_CLIENT_SECRET
     else
         echo "** Cannot find GITHUB_CLIENT_SECRET file $keyfile"
+    fi
+    keyfile=${OPENTREE_SECRETS}/curation-GITHUB_APP_PRIVATE_KEY_PEM-$OPENTREE_PUBLIC_DOMAIN
+    if [ -r $keyfile ]; then
+        rsync -pr -e "${SSH}" $keyfile "$OT_USER@$OPENTREE_HOST":repo/opentree/curator/private/GITHUB_APP_PRIVATE_KEY_PEM
+    else
+        echo "** Cannot find GITHUB_APP_PRIVATE_KEY_PEM file $keyfile"
     fi
 
     # we’re using the bot for “anonymous” comments in the synth-tree explorer
@@ -354,6 +370,8 @@ function push_bot_identity {
     else
         echo "** Cannot find OPENTREEAPI_OAUTH_TOKEN file $tokenfile"
     fi
+
+
 }
 
 # Set up server's clone of phylesystem repo, and the web API

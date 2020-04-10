@@ -145,7 +145,7 @@ pushd .
 popd
 
 # N.B. Another file 'GITHUB_CLIENT_SECRET' was already placed via rsync (in push.sh)
-# Also 'OPENTREEAPI_OAUTH_TOKEN'
+# Also 'GITHUB_APP_PRIVATE_KEY_PEM'
 
 # prompt to add a GitHub webhook (if it's not already there) to nudge my oti service as studies change
 pushd .
