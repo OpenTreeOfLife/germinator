@@ -8,6 +8,7 @@ if [ "$#" -ne 16 ]; then
     exit 1
 fi
 
+# NOTE that args beyond nine must be referenced in curly braces
 OPENTREE_HOST=$1  #Not used; set in functions.sh anyhow
 OPENTREE_PUBLIC_DOMAIN=$2
 OPENTREE_DEFAULT_APPLICATION=$3
@@ -15,18 +16,19 @@ CONTROLLER=$4
 CURATION_GITHUB_APP_ID=$5
 CURATION_GITHUB_CLIENT_ID=$6
 CURATION_GITHUB_REDIRECT_URI=$7
-TREEVIEW_GITHUB_APP_ID=$8
-TREEVIEW_GITHUB_CLIENT_ID=$9
-# NOTE that args beyond nine must be referenced in curly braces
-TREEVIEW_GITHUB_REDIRECT_URI=${10}
-TREEMACHINE_BASE_URL=${11}
-TAXOMACHINE_BASE_URL=${12}
-OTI_BASE_URL=${13}
-OPENTREE_API_BASE_URL=${14}
-COLLECTIONS_API_BASE_URL=${15}
-AMENDMENTS_API_BASE_URL=${16}
-FAVORITES_API_BASE_URL=${17}
-CONFLICT_BASE_URL=${18}
+CURATION_GITHUB_INSTALLATION_ID=$8
+TREEVIEW_GITHUB_APP_ID=$9
+TREEVIEW_GITHUB_CLIENT_ID=${10}
+TREEVIEW_GITHUB_REDIRECT_URI=${11}
+TREEVIEW_GITHUB_INSTALLATION_ID=${12}
+TREEMACHINE_BASE_URL=${13}
+TAXOMACHINE_BASE_URL=${14}
+OTI_BASE_URL=${15}
+OPENTREE_API_BASE_URL=${16}
+COLLECTIONS_API_BASE_URL=${17}
+AMENDMENTS_API_BASE_URL=${18}
+FAVORITES_API_BASE_URL=${19}
+CONFLICT_BASE_URL=${20}
 
 . setup/functions.sh
 
@@ -99,6 +101,7 @@ CACHED_OTI_BASE_URL=$(sed "s+$+/cached+" <<< $OTI_BASE_URL)
 sed "s+github_app_id = .*+github_app_id = $TREEVIEW_GITHUB_APP_ID+;
      s+github_client_id = .*+github_client_id = $TREEVIEW_GITHUB_CLIENT_ID+;
      s+github_redirect_uri = .*+github_redirect_uri = $TREEVIEW_GITHUB_REDIRECT_URI+
+     s+github_app_installation_id = .*+github_app_installation_id = $TREEVIEW_GITHUB_INSTALLATION_ID+;
      s+hostdomain = .*+hostdomain = $OPENTREE_PUBLIC_DOMAIN+;
      s+treemachine = .*+treemachine = $TREEMACHINE_BASE_URL+
      s+taxomachine = .*+taxomachine = $TAXOMACHINE_BASE_URL+
@@ -125,6 +128,7 @@ cp -p $configtemplate $configfile
 sed "s+github_app_id = .*+github_app_id = $CURATION_GITHUB_APP_ID+;
      s+github_client_id = .*+github_client_id = $CURATION_GITHUB_CLIENT_ID+;
      s+github_redirect_uri = .*+github_redirect_uri = $CURATION_GITHUB_REDIRECT_URI+
+     s+github_app_installation_id = .*+github_app_installation_id = $CURATION_GITHUB_INSTALLATION_ID+;
      s+treemachine = .*+treemachine = $TREEMACHINE_BASE_URL+
      s+taxomachine = .*+taxomachine = $TAXOMACHINE_BASE_URL+
      s+oti = .*+oti = $OTI_BASE_URL+
