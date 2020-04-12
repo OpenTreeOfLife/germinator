@@ -50,7 +50,7 @@ if [ ! -e "$OTT" ] ; then
     mkdir -p $OTT
     (
 	cd $OPENTREE
-	wget -O $TAX_FILE $TAX_URL
+	#wget -O $TAX_FILE $TAX_URL
 	(
 	    cd $OTT
 	    tar -zxf ../${TAX_FILE} --strip-components=1;

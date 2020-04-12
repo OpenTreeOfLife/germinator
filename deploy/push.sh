@@ -85,10 +85,10 @@ done
 # Unprivileged user that runs all the services
 [ "x$OPENTREE_USER" != x ] || OPENTREE_USER=opentree
 
-# OPENTREE_SECRETS is the *local* directory where .pem and other
+# OPENTREE_SECRETS is the *local* directory where .pem and otherd
 # private files are kept
-[ "x$OPENTREE_SECRETS" != x ] || OPENTREE_SECRETS=~/.ssh/opentree
-[ -d ${OPENTREE_SECRETS} ] || err "Directory ${OPENTREE_SECRETS} not found"
+#[ "x$OPENTREE_SECRETS" != x ] || OPENTREE_SECRETS=~/.ssh/opentree
+#[ -d ${OPENTREE_SECRETS} ] || err "Directory ${OPENTREE_SECRETS} not found"
 
 # ssh private key for unprivileged
 [ "x$OPENTREE_IDENTITY" != x ] || OPENTREE_IDENTITY=${OPENTREE_SECRETS}/opentree.pem
