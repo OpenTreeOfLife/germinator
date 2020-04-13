@@ -12,21 +12,19 @@ WEB2PY_RELEASE='2.19.1'
 # listed in the section 'ROUTES AND WEB2PY PATCHES' below, and thorough testing!
 
 mkdir -p downloads
+log "ABOUT TO  web2py from git........................................................................." || exit
 
-if [ ! -d web2py -o  ! -r downloads/web2py_${WEB2PY_RELEASE}_src.zip ]; then
-    wget --no-verbose -O downloads/web2py_${WEB2PY_RELEASE}_src.zip \
-      https://github.com/web2py/web2py/archive/R-${WEB2PY_RELEASE}.zip
-    # clobber any existing web2py installation
-    rm -rf ./web2py
-    unzip -q downloads/web2py_${WEB2PY_RELEASE}_src.zip
-    # rename to expected 'web2py'
-    mv web2py-R-${WEB2PY_RELEASE}/ web2py
-    log "Installed web2py R-${WEB2PY_RELEASE}"
+if [ ! -d web2py ]; then
+    git clone --recursive https://github.com/web2py/web2py.git || exit
+    log "Installed web2py from git........................................................................." || exit
 
     # clear old sessions in all web2py applications (these can cause heisenbugs in web2py upgrades)
-    rm -rf repo/opentree/*/sessions/*
-    rm -rf repo/phylesystem-api/sessions/*
-    log "Cleared old sessions in all web2py apps"
+    rm -rf repo/opentree/*/sessions/* || exit
+    rm -rf repo/phylesystem-api/sessions/* || exit
+
+    rm -rf web2py/applications/welcome  || exit
+    rm -rf web2py/applications/examples  || exit
+    log "Cleared old sessions in all web2py apps"  || exit
 fi
 
 # ---------- VIRTUALENV + WEB2PY + WSGI ----------

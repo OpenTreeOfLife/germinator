@@ -204,22 +204,22 @@ fi
 # corresponding prioritization in /etc/apt/preferences (to prevent
 # unstable from taking over the whole system).
 
-if [ `which javac`x != x ] && ( javac -version 2>&1 | egrep -q 1.8 ); then
-    echo "Java 8 OK"
-elif apt-cache policy openjdk-8-jre-headless | grep -q "Installed.*none"; then
-    apt_get_install openjdk-8-jre-headless
-    apt_get_install openjdk-8-jdk
-    sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
-    sudo update-alternatives --set javac /usr/lib/jvm/java-8-openjdk-amd64/bin/javac
-elif [ `which javac`x != x ] && ( javac -version 2>&1 | egrep -q 1.7 ); then
-    echo path is $PATH
-    echo "Java 7 OK"
-elif [ `which javac`x != x ]; then
-    echo "** Possible wrong version of java"
-else
-    apt_get_install openjdk-7-jre-headless
-    apt_get_install openjdk-7-jdk
-fi
+#if [ `which javac`x != x ] && ( javac -version 2>&1 | egrep -q 1.8 ); then
+#    echo "Java 8 OK"
+#elif apt-cache policy openjdk-8-jre-headless | grep -q "Installed.*none"; then
+#    apt_get_install openjdk-8-jre-headless
+#    apt_get_install openjdk-8-jdk
+#    sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+#    sudo update-alternatives --set javac /usr/lib/jvm/java-8-openjdk-amd64/bin/javac
+#elif [ `which javac`x != x ] && ( javac -version 2>&1 | egrep -q 1.7 ); then
+#    echo path is $PATH
+#    echo "Java 7 OK"
+#elif [ `which javac`x != x ]; then
+#    echo "** Possible wrong version of java"
+#else
+#    apt_get_install openjdk-7-jre-headless
+#    apt_get_install openjdk-7-jdk
+#fi
 
 # ---------- MAVEN 3 ----------
 if [ `which mvn`x = x ]; then
