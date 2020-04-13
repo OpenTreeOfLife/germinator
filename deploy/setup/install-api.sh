@@ -24,7 +24,7 @@ OTINDEX_BASE_URL=${13}
 
 . setup/functions.sh || exit 1
 
-setup/install-common.sh $OPENTREE_DEFAULT_APPLICATION $CONTROLLER || exit 1
+bash setup/install-web2py.sh || exit 1
 
 echo "Installing API" || exit 1
 

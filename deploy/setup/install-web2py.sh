@@ -4,6 +4,7 @@
 set -e
 
 # ---------- WEB2PY ----------
+echo "Begin install web2py.sh" || exit
 
 # Install or upgrade web2py, based on a pinned release. (See
 # https://github.com/web2py/web2py/releases for all available releases.)
@@ -12,11 +13,11 @@ WEB2PY_RELEASE='2.19.1'
 # listed in the section 'ROUTES AND WEB2PY PATCHES' below, and thorough testing!
 
 mkdir -p downloads || exit 1
-log "ABOUT TO  web2py from git........................................................................." || exit
+echo "ABOUT TO clone web2py from git" || exit
 
 if [ ! -d web2py ]; then
     git clone --recursive https://github.com/web2py/web2py.git || exit
-    log "Installed web2py from git........................................................................." || exit
+    echo "Installed web2py from git." || exit
 
     # clear old sessions in all web2py applications (these can cause heisenbugs in web2py upgrades)
     rm -rf repo/opentree/*/sessions/* || exit
@@ -24,7 +25,7 @@ if [ ! -d web2py ]; then
 
     rm -rf web2py/applications/welcome  || exit
     rm -rf web2py/applications/examples  || exit
-    log "Cleared old sessions in all web2py apps"  || exit
+    echo "Cleared old sessions in all web2py apps"  || exit
 fi
 
 # ---------- VIRTUALENV + WEB2PY + WSGI ----------
