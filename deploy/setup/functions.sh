@@ -22,13 +22,13 @@ fi
 # ---------- Setup TWO VIRTUALENVs ----------
 # Set up python env
 if [ ! -d venv ]; then
-    virtualenv venv
+    virtualenv venv || exit 1
 fi
-source venv/bin/activate
+source venv/bin/activate || exit 1
 
 
 if [ ! -d venvp3 ]; then
-   python3 -m venv venvp3
+   python3 -m venv venvp3 || exit 1
 fi
 
 
@@ -39,8 +39,8 @@ function log() {
         echo "CONTROLLER shell variable is not set !?"
         exit 1
     fi
-    mkdir -p log
-    (echo `date` $CONTROLLER $OPENTREE_TAG " $*") >>log/messages
+    mkdir -p log || exit 1
+    (echo `date` $CONTROLLER $OPENTREE_TAG " $*") >>log/messages  || exit
 }
 
 # ---------- WORKSPACES ----------
@@ -48,10 +48,10 @@ function log() {
 # Temporary locations for things downloaded from web.  Can delete this
 # after server is up and running.
 
-mkdir -p downloads
+mkdir -p downloads || exit 1
 
 REPOS_DIR=repo
-mkdir -p $REPOS_DIR
+mkdir -p $REPOS_DIR || exit 1
 
 # ---------- SHELL FUNCTIONS ----------
 
@@ -62,7 +62,7 @@ function opentree_branch {
     #echo Set branch for $1 to be ${OPENTREE_BRANCHES[$1]}
 }
 
-. setup/CONFIG
+. setup/CONFIG || exit
 
 # Refresh a git repo
 

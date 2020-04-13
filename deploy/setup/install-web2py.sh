@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. setup/functions.sh
+. setup/functions.sh || exit 1
 set -e
 
 # ---------- WEB2PY ----------
@@ -11,7 +11,7 @@ WEB2PY_RELEASE='2.19.1'
 # N.B. We should only change WEB2PY_RELEASE after updating the modified web2py files
 # listed in the section 'ROUTES AND WEB2PY PATCHES' below, and thorough testing!
 
-mkdir -p downloads
+mkdir -p downloads || exit 1
 log "ABOUT TO  web2py from git........................................................................." || exit
 
 if [ ! -d web2py ]; then
@@ -47,6 +47,6 @@ EOF
 (head -2 web2py/handlers/wsgihandler.py && \
  cat fragment.tmp && \
  tail -n +3 web2py/handlers/wsgihandler.py) \
-   > web2py/wsgihandler.py
+   > web2py/wsgihandler.py || exit 1
 
-rm fragment.tmp
+rm fragment.tmp || exit 1

@@ -81,10 +81,10 @@ if [ -r /etc/ssl/certs/opentree/STAR_opentreeoflife_org.pem ]; then
 else
    SSL_CERTS_FOUND=false
 fi
-echo "Triggering use of HTTPS from within web2py? [$SSL_CERTS_FOUND]"
+echo "Triggering use of HTTPS from within web2py? [$SSL_CERTS_FOUND]" || exit 1
 
 # Replace tokens in example config file to make the active config (assume this always changes)
-cp -p $configtemplate $configfile
+cp -p $configtemplate $configfile || exit 1
 
 # Append /cached to some API base URLs (for faster retrieval of common method calls)
 # N.B. We now expect these base URLs to be simple domain names, with no trailing path!
@@ -107,8 +107,8 @@ sed "s+github_client_id = .*+github_client_id = $TREEVIEW_GITHUB_CLIENT_ID+;
      s+CACHED_taxomachine = .*+CACHED_taxomachine = $CACHED_TAXOMACHINE_BASE_URL+
      s+CACHED_oti = .*+CACHED_oti = $CACHED_OTI_BASE_URL+
      s+secure_sessions_with_HTTPS = .*+secure_sessions_with_HTTPS = $SSL_CERTS_FOUND+
-    " < $configfile > tmp.tmp
-mv tmp.tmp $configfile
+    " < $configfile > tmp.tmp || exit 1
+mv tmp.tmp $configfile || exit 1
 
 # ---- curator webapp
 configdir=repo/opentree/curator/private
@@ -131,21 +131,21 @@ sed "s+github_client_id = .*+github_client_id = $CURATION_GITHUB_CLIENT_ID+;
      s+CACHED_taxomachine = .*+CACHED_taxomachine = $CACHED_TAXOMACHINE_BASE_URL+
      s+CACHED_oti = .*+CACHED_oti = $CACHED_OTI_BASE_URL+
      s+secure_sessions_with_HTTPS = .*+secure_sessions_with_HTTPS = $SSL_CERTS_FOUND+
-    " < $configfile > tmp.tmp
-mv tmp.tmp $configfile
+    " < $configfile > tmp.tmp || exit 1
+mv tmp.tmp $configfile || exit 1
 
 # install ncl a C++ app needed for NEXUS, newick, NeXML -->NexSON conversion
-(cd repo/opentree/curator ; ./install-ncl.sh) 
+(cd repo/opentree/curator ; ./install-ncl.sh)  || exit 1
 
 # record the current SHA for ncl
-log  Installing NCL at `cd repo/opentree/curator/ncl; git log | head -1`
+log  Installing NCL at `cd repo/opentree/curator/ncl; git log | head -1` || exit 1
 
-echo "Apache / web2py restart required (due to app configuration)"
+echo "Apache / web2py restart required (due to app configuration)" || exit 1
 
 # ---------- INSTALL PYTHON REQUIREMENTS, SYMLINK APPLICATIONS ----------
 
-(cd $APPROOT; pip install -r requirements.txt)
+(cd $APPROOT; pip install -r requirements.txt) || exit 1
 
 (cd web2py/applications; \
     ln -sf ../../repo/$WEBAPP/webapp ./$WEBAPP; \
-    ln -sf ../../repo/$WEBAPP/curator ./)
+    ln -sf ../../repo/$WEBAPP/curator ./) || exit 1

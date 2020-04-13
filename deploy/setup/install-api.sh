@@ -22,18 +22,18 @@ FAVORITES_API_BASE_URL=${11}
 OPENTREE_DEFAULT_APPLICATION=${12}
 OTINDEX_BASE_URL=${13}
 
-. setup/functions.sh
+. setup/functions.sh || exit 1
 
-setup/install-common.sh $OPENTREE_DEFAULT_APPLICATION $CONTROLLER
+setup/install-common.sh $OPENTREE_DEFAULT_APPLICATION $CONTROLLER || exit 1
 
-echo "Installing API"
+echo "Installing API" || exit 1
 
 
 #Pre installs for normal phylestem-api venv
-venv/bin/pip  install vine==1.3
+venv/bin/pip  install vine==1.3 || exit 1
 #Force early version of vine in venv to deal with python2 python3 issues
-venv/bin/pip install kombu==4.1.0
-venv/bin/pip install celery==4.1.0
+venv/bin/pip install kombu==4.1.0 || exit 1
+venv/bin/pip install celery==4.1.0 || exit 1
 
 
 
@@ -50,9 +50,9 @@ if ! test -f redis/bin/redis-server ; then
             tar xfz "${REDIS_WITH_VERSION}.tar.gz")
     fi
     if ! test -d redis/work ; then
-        mkdir -p redis/work
+        mkdir -p redis/work || exit 1
         (cd downloads/${REDIS_WITH_VERSION} ; \
-            make && make PREFIX="${HOME}/redis" install)
+            make && make PREFIX="${HOME}/redis" install) || exit 1
     fi
 fi
 
@@ -67,10 +67,10 @@ APPROOT=repo/$WEBAPP
 OTHOME=$PWD
 
 # This is required to make "git pull" work correctly
-git config --global user.name "OpenTree API"
-git config --global user.email api@opentreeoflife.org
+git config --global user.name "OpenTree API" || exit 1
+git config --global user.email api@opentreeoflife.org || exit 1
 
-echo "...fetching $WEBAPP repo..."
+echo "...fetching $WEBAPP repo..." || exit 1
 git_refresh OpenTreeOfLife $WEBAPP || true
 
 if [ "${PEYOTL_LOG_FILE_PATH:0:1}" != "/" ]; then
@@ -80,12 +80,12 @@ fi
 git_refresh OpenTreeOfLife peyotl || true
 py_package_setup_install peyotl || true
 
-(cd $APPROOT; pip install -r requirements.txt)
-(cd $APPROOT/ot-celery; pip install -r requirements.txt ; python setup.py develop)
+(cd $APPROOT; pip install -r requirements.txt) || exit 1
+(cd $APPROOT/ot-celery; pip install -r requirements.txt ; python setup.py develop) || exit 1
 
 (cd web2py/applications; \
     rm -rf ./phylesystem ; \
-    ln -sf ../../repo/$WEBAPP ./phylesystem)
+    ln -sf ../../repo/$WEBAPP ./phylesystem) || exit 1
 
 # ---------- DOC STORE ----------
 
