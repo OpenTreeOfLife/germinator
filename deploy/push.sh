@@ -240,6 +240,7 @@ function docomponent {
         ;;
     otcetera)
 	push_otcetera || exit 1
+    restart_apache=yes
 	;;
     *)
         echo "Unrecognized component: $component"
