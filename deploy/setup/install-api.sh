@@ -99,9 +99,10 @@ pushd .
     cd $phylesystem
     # All the repos above are cloned via https, but we need to push via
     # ssh to use our deploy keys
-    if ! grep "originssh" .git/config ; then
-        git remote add originssh git@github.com:OpenTreeOfLife/$OPENTREE_DOCSTORE.git
-    fi
+    echo "NO PUSHES FOR NOW!!!!"
+    #if ! grep "originssh" .git/config ; then
+    #    git remote add originssh git@github.com:OpenTreeOfLife/$OPENTREE_DOCSTORE.git
+    #fi
 popd
 
 pushd .
@@ -111,7 +112,7 @@ pushd .
     sed -i -e "s+PHYLESYSTEM_REPO_PAR+$OTHOME/repo/${OPENTREE_DOCSTORE}_par+" config
 
     # Specify our remote to push to, which is added to local repo above
-    sed -i -e "s+PHYLESYSTEM_REPO_REMOTE+originssh+" config
+    #sed -i -e "s+PHYLESYSTEM_REPO_REMOTE+originssh+" config
 
     # This wrapper script allows us to specify an ssh key to use in git pushes
     sed -i -e "s+GIT_SSH+$OTHOME/repo/$WEBAPP/bin/git.sh+" config
@@ -173,9 +174,10 @@ pushd .
     cd $collections
     # All the repos above are cloned via https, but we need to push via
     # ssh to use our deploy keys
-    if ! grep "originssh" .git/config ; then
-        git remote add originssh git@github.com:OpenTreeOfLife/$COLLECTIONS_REPO.git
-    fi
+    echo "NO PUSHES FOR NOW!!!! collections"
+    #if ! grep "originssh" .git/config ; then
+    #    git remote add originssh git@github.com:OpenTreeOfLife/$COLLECTIONS_REPO.git
+    #fi
 popd
 
 echo "   ${AMENDMENTS_REPO}..."
@@ -186,9 +188,10 @@ git_refresh OpenTreeOfLife $AMENDMENTS_REPO "$BRANCH" repo/${AMENDMENTS_REPO}_pa
 
 pushd .
     cd $amendments
-    if ! grep "originssh" .git/config ; then
-        git remote add originssh git@github.com:OpenTreeOfLife/$AMENDMENTS_REPO.git
-    fi
+    echo "NO PUSHES FOR NOW!!!! ammendments"
+    #if ! grep "originssh" .git/config ; then
+    #    git remote add originssh git@github.com:OpenTreeOfLife/$AMENDMENTS_REPO.git
+    #fi
 popd
 
 echo "   ${FAVORITES_REPO}..."
@@ -201,9 +204,10 @@ pushd .
     cd $favorites
     # All the repos above are cloned via https, but we need to push via
     # ssh to use our deploy keys
-    if ! grep "originssh" .git/config ; then
-        git remote add originssh git@github.com:OpenTreeOfLife/$FAVORITES_REPO.git
-    fi
+    echo "NO PUSHES FOR NOW!!!! collections"
+    #if ! grep "originssh" .git/config ; then
+    #    git remote add originssh git@github.com:OpenTreeOfLife/$FAVORITES_REPO.git
+    #fi
 popd
 
 # more modifications to existing app config
@@ -218,9 +222,9 @@ pushd .
     sed -i -e "s+FAVORITES_REPO_PAR+$OTHOME/repo/${FAVORITES_REPO}_par+" config
 
     # Specify our remotes to push to (added to local repos above)
-    sed -i -e "s+COLLECTIONS_REPO_REMOTE+originssh+" config
-    sed -i -e "s+AMENDMENTS_REPO_REMOTE+originssh+" config
-    sed -i -e "s+FAVORITES_REPO_REMOTE+originssh+" config
+    #sed -i -e "s+COLLECTIONS_REPO_REMOTE+originssh+" config
+    #sed -i -e "s+AMENDMENTS_REPO_REMOTE+originssh+" config
+    #sed -i -e "s+FAVORITES_REPO_REMOTE+originssh+" config
 
     # N.B. Assume we're using the same ssh keys as for the main OPENTREE_DOCSTORE
 
