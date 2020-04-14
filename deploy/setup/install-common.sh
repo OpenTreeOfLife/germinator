@@ -8,7 +8,7 @@ if [ "$#" -ne 2 ]; then
 fi
 
 OPENTREE_DEFAULT_APPLICATION=$1
-CONTROLLER=$2
+export CONTROLLER=$2
 
 . setup/functions.sh  || exit 1
 
