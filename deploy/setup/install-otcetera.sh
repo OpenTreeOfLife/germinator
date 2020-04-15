@@ -219,7 +219,7 @@ ${VIRTUAL_ENV}/bin/pip install configparser
 #git_refresh OpenTreeOfLife ws_wrapper ini-template || true
 git_refresh OpenTreeOfLife ws_wrapper || true
 
-#py_package_setup_install ws_wrapper || true
+git_refresh OpenTreeOfLife peyotl || true
 
 cd $HOME/repo/peyotl/
 ${VIRTUAL_ENV_PYTHON3}/bin/pip install -r requirements.txt
