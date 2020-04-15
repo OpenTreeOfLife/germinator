@@ -7,6 +7,7 @@ OPENTREE_HOST=$2
 CERTIFICATE_FILE=$3
 CERTIFICATE_KEY_FILE=$4
 OTINDEX_BASE_URL=$5
+PHYLAPI_BASE_URL=$6
 
 OPENTREE_HOME=$(bash <<< "echo ~$OPENTREE_USER")
 
@@ -43,6 +44,8 @@ fi
 TMP=/tmp/$$.tmp
 sed -e s+/home/opentree+$OPENTREE_HOME+ <"$OPENTREE_HOME/setup/opentree-shared.conf" >$TMP
 sed -i -e "s+OTINDEX_BASE_URL+$OTINDEX_BASE_URL+" $TMP
+sed -i -e "s+PHYLAPI_BASE_URL+$PHYLAPI_BASE_URL+" $TMP
+
 if [ ! -r /etc/apache2/opentree-shared.conf ] || \
    ! cmp -s $TMP /etc/apache2/opentree-shared.conf; then
     echo "Installing opentree vhosts shared config"

@@ -50,6 +50,7 @@ if [ ! -e "$OTT" ] ; then
     mkdir -p $OTT
     (
 	cd $OPENTREE
+    ## temporary, must copy by hand bc files is down
 	#wget -O $TAX_FILE $TAX_URL
 	(
 	    cd $OTT
@@ -73,6 +74,7 @@ SYNTH_DIR=${SYNTH_FILE%_output.tgz}
 if [ ! -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
     (
     cd $SYNTHPARENT
+ ## temporary, must copy by hand bc files is down
  #   wget $SYNTH_URL
     tar -zxf $SYNTH_FILE
     )
