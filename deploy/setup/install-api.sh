@@ -239,7 +239,7 @@ popd
 
 # Add a simple parametric router to set our default web2py app
 echo "PWD (install-api):"
-pwd
+echo "$(pwd)"
 pushd .
     TMP=/tmp/tmp.tmp
     echo default_application should be "$OPENTREE_DEFAULT_APPLICATION" || exit 1
