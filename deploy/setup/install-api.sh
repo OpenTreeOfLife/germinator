@@ -238,13 +238,17 @@ pushd .
 popd
 
 # Add a simple parametric router to set our default web2py app
-TMP=/tmp/tmp.tmp
-echo default_application should be "$OPENTREE_DEFAULT_APPLICATION" || exit 1
-sed -e "s+default_application='.*'+default_application='$OPENTREE_DEFAULT_APPLICATION'+" \
-   web2py/examples/routes.parametric.example.py >$TMP || exit 1
-cp $TMP web2py/routes.py || exit 1
-rm $TMP || exit 1
-grep default_ web2py/routes.py || exit 1
+echo "PWD (install-api):"
+pwd
+pushd .
+    TMP=/tmp/tmp.tmp
+    echo default_application should be "$OPENTREE_DEFAULT_APPLICATION" || exit 1
+    sed -e "s+default_application='.*'+default_application='$OPENTREE_DEFAULT_APPLICATION'+" \
+       web2py/examples/routes.parametric.example.py >$TMP || exit 1
+    cp $TMP web2py/routes.py || exit 1
+    rm $TMP || exit 1
+    grep default_ web2py/routes.py || exit 1
+popd
 
 # ---------- REDIS AND CELERY ----------
 
