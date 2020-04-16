@@ -16,7 +16,7 @@ mkdir -p downloads || exit 1
 echo "ABOUT TO clone web2py from git" || exit
 
 if [ ! -d web2py ]; then
-    git clone --recursive https://github.com/web2py/web2py.git || exit
+    git clone --branch $WEB2PY_RELEASE --recursive https://github.com/web2py/web2py.git || exit
     echo "Installed web2py from git." || exit
 
     # clear old sessions in all web2py applications (these can cause heisenbugs in web2py upgrades)

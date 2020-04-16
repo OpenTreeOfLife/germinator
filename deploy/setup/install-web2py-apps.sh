@@ -28,7 +28,9 @@ CONFLICT_BASE_URL=${16}
 
 . setup/functions.sh
 
-setup/install-common.sh $OPENTREE_DEFAULT_APPLICATION $CONTROLLER
+
+
+bash setup/install-web2py.sh || exit 1
 
 echo "Installing web2py applications.  Hostname = $OPENTREE_HOST.  Public-facing domain = $OPENTREE_PUBLIC_DOMAIN"
 
@@ -76,7 +78,7 @@ configtemplate=$configdir/config.example
 configfile=$configdir/config
 
 # Use the existence of a wildcard cert to trigger the use of HTTPS from within web2py.
-if [ -r /etc/ssl/certs/opentree/STAR_opentreeoflife_org.pem ]; then
+if [ -r /etc/letsencrypt/live/opentreeoflife.org/fullchain.pem]; then
    SSL_CERTS_FOUND=true
 else
    SSL_CERTS_FOUND=false

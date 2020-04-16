@@ -72,8 +72,8 @@ done
 [ "x$CONFIGFILE" != x ] || err "No configuration file given (need -c {filename})"
 
 # Configurable parameters
-[ "x$CERTIFICATE_FILE" != x ] || CERTIFICATE_FILE=/etc/ssl/certs/opentree/STAR_opentreeoflife_org.pem
-[ "x$CERTIFICATE_KEY_FILE" != x ] || CERTIFICATE_KEY_FILE=/etc/ssl/private/opentreeoflife.org.key
+[ "x$CERTIFICATE_FILE" != x ] || CERTIFICATE_FILE=/etc/letsencrypt/live/opentreeoflife.org/fullchain.pem
+[ "x$CERTIFICATE_KEY_FILE" != x ] || CERTIFICATE_KEY_FILE=/etc/letsencrypt/live/opentreeoflife.org/privkey.pem
 
 # OPENTREE_HOST (the server being set up) must always be specified, e.g.
 # OPENTREE_HOST=devapi.opentreeoflife.org
