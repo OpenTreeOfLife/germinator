@@ -39,6 +39,6 @@ rm $TMP || exit 1
 grep default_ web2py/routes.py || exit 1
 
 # Kludge in case OPENTREE_DEFAULT_APPLICATION is set to 'welcome' or (more likely) 'phylesystem'
-cp -p repo/opentree/webapp/static/robots.txt web2py/applications/welcome/static/ || exit 1
-mkdir -p web2py/applications/phylesystem/static || exit 1
-cp -p repo/opentree/webapp/static/robots.txt web2py/applications/phylesystem/static/ || exit 1
+#cp -p repo/opentree/webapp/static/robots.txt web2py/applications/welcome/static/ || exit 1
+#mkdir -p web2py/applications/phylesystem/static || exit 1
+#cp -p repo/opentree/webapp/static/robots.txt web2py/applications/phylesystem/static/ || exit 1

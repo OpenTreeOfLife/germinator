@@ -26,7 +26,8 @@ AMENDMENTS_API_BASE_URL=${14}
 FAVORITES_API_BASE_URL=${15}
 CONFLICT_BASE_URL=${16}
 
-. setup/functions.sh
+. setup/functions.sh || exit 1
+setup/install-common.sh $OPENTREE_DEFAULT_APPLICATION $CONTROLLER || exit
 
 
 
