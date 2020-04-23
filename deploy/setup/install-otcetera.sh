@@ -69,7 +69,7 @@ fi
 SYNTHPARENT=$OPENTREE/synth-par
 mkdir -p $SYNTHPARENT
 SYNTH_FILE=${SYNTH_URL##*/}
-SYNTH_DIR=${SYNTH_FILE%_output.tgz}
+SYNTH_DIR=${SYNTH_FILE%.tgz}
 
 if [ ! -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
     (

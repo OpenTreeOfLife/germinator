@@ -141,7 +141,7 @@ mv tmp.tmp $configfile || exit 1
 
 # Add a simple parametric router to set our default web2py app
 echo "PWD (install-web2py-apps):"
-pwd
+echo "$(pwd)"
 pushd .
     TMP=/tmp/tmp.tmp
     echo default_application should be "$OPENTREE_DEFAULT_APPLICATION" || exit 1
