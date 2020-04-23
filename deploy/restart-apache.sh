@@ -15,8 +15,8 @@ if apt-cache policy apache2 | egrep -q "Installed: 2.2"; then
 
 echo "This project requires apache 2.4 or higher! Please upgrade apache and try again."
 exit 1
-
-else
+fi
+#else
 
 # Apache 2.4+
 
@@ -49,7 +49,7 @@ else
 # if [ ! -r /etc/apache2/opentree-shared.conf ] || \
 #    ! cmp -s $TMP /etc/apache2/opentree-shared.conf; then
 #     echo "Installing opentree vhosts shared config"
-    sudo cp -p $TMP /etc/apache2/opentree-shared.conf || "Sudo failed"
+#    sudo cp -p $TMP /etc/apache2/opentree-shared.conf || "Sudo failed"
     # Access otindex search from shared server-config variable
 #fi
 #rm $TMP
