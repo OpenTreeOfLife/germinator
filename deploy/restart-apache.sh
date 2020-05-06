@@ -27,40 +27,40 @@ if [ $update_apache_config = "yes" ]; then
 
   echo "Updating apache configuration..."   # TODO
 
-# if [ ! -r /etc/apache2/sites-available/opentree.conf ] || \
-#    ! cmp -s "$OPENTREE_HOME/setup/opentree.conf" /etc/apache2/sites-available/opentree; then
-#     echo "Installing opentree vhost config"
-#     sudo cp -p "$OPENTREE_HOME/setup/opentree.conf" /etc/apache2/sites-available/ || \
-#       "opentree.conf install failed"
-# fi
-
-# if [ ! -r /etc/apache2/sites-available/opentree-ssl.conf ] || \
-#    ! cmp -s "$OPENTREE_HOME/setup/opentree-ssl.conf" /etc/apache2/sites-available/opentree-ssl.conf; then
-#     echo "Installing opentree ssl vhost config"
-#     # This will overwrite the letsencrypt configuration
-#     sudo cp -p "$OPENTREE_HOME/setup/opentree-ssl.conf" /etc/apache2/sites-available/ || \
-#       "opentree-ssl.conf install failed"
-#     sudo sed -i -e s/SERVERNAME_REPLACEME/$OPENTREE_HOST/g \
-#       /etc/apache2/sites-available/opentree-ssl.conf  || "Edit hostname in opentree-ssl failed"
-#     sudo sed -i -e s+CERTIFICATE_FILE+$CERTIFICATE_FILE+ \
-#       /etc/apache2/sites-available/opentree-ssl.conf  || "Edit cert file in opentree-ssl failed"
-#     sudo sed -i -e s+CERTIFICATE_KEY_FILE+$CERTIFICATE_KEY_FILE+ \
-#       /etc/apache2/sites-available/opentree-ssl.conf  || "Edit cert key file in opentree-ssl failed"
-# fi
-
-# TMP=/tmp/$$.tmp
-# sed -e s+/home/opentree+$OPENTREE_HOME+ <"$OPENTREE_HOME/setup/opentree-shared.conf" >$TMP
-# sed -i -e "s+OTINDEX_BASE_URL+$OTINDEX_BASE_URL+" $TMP
-# sed -i -e "s+PHYLAPI_BASE_URL+$PHYLAPI_BASE_URL+" $TMP
-
-# if [ ! -r /etc/apache2/opentree-shared.conf ] || \
-#    ! cmp -s $TMP /etc/apache2/opentree-shared.conf; then
-#     echo "Installing opentree vhosts shared config"
-#    sudo cp -p $TMP /etc/apache2/opentree-shared.conf || "Sudo failed"
-    # Access otindex search from shared server-config variable
-#fi
-#rm $TMP
-#fi
+  if [ ! -r /etc/apache2/sites-available/opentree.conf ] || \
+     ! cmp -s "$OPENTREE_HOME/setup/opentree.conf" /etc/apache2/sites-available/opentree; then
+      echo "Installing opentree vhost config"
+      sudo cp -p "$OPENTREE_HOME/setup/opentree.conf" /etc/apache2/sites-available/ || \
+        "opentree.conf install failed"
+  fi
+  
+  if [ ! -r /etc/apache2/sites-available/opentree-ssl.conf ] || \
+     ! cmp -s "$OPENTREE_HOME/setup/opentree-ssl.conf" /etc/apache2/sites-available/opentree-ssl.conf; then
+      echo "Installing opentree ssl vhost config"
+      # This will overwrite the letsencrypt configuration
+      sudo cp -p "$OPENTREE_HOME/setup/opentree-ssl.conf" /etc/apache2/sites-available/ || \
+        "opentree-ssl.conf install failed"
+      sudo sed -i -e s/SERVERNAME_REPLACEME/$OPENTREE_HOST/g \
+        /etc/apache2/sites-available/opentree-ssl.conf  || "Edit hostname in opentree-ssl failed"
+      sudo sed -i -e s+CERTIFICATE_FILE+$CERTIFICATE_FILE+ \
+        /etc/apache2/sites-available/opentree-ssl.conf  || "Edit cert file in opentree-ssl failed"
+      sudo sed -i -e s+CERTIFICATE_KEY_FILE+$CERTIFICATE_KEY_FILE+ \
+        /etc/apache2/sites-available/opentree-ssl.conf  || "Edit cert key file in opentree-ssl failed"
+  fi
+  
+  TMP=/tmp/$$.tmp
+  sed -e s+/home/opentree+$OPENTREE_HOME+ <"$OPENTREE_HOME/setup/opentree-shared.conf" >$TMP
+  sed -i -e "s+OTINDEX_BASE_URL+$OTINDEX_BASE_URL+" $TMP
+  sed -i -e "s+PHYLAPI_BASE_URL+$PHYLAPI_BASE_URL+" $TMP
+  
+  if [ ! -r /etc/apache2/opentree-shared.conf ] || \
+     ! cmp -s $TMP /etc/apache2/opentree-shared.conf; then
+      echo "Installing opentree vhosts shared config"
+     sudo cp -p $TMP /etc/apache2/opentree-shared.conf || "Sudo failed"
+     # Access otindex search from shared server-config variable
+  fi
+  rm $TMP
+fi
 
 fi
 
