@@ -145,12 +145,16 @@ ASSH="ssh -i ${ADMIN_IDENTITY}"
 OT_USER=$OPENTREE_USER
 
 echo "host=$OPENTREE_HOST, admin=$OPENTREE_ADMIN, pem=$OPENTREE_IDENTITY, controller=$CONTROLLER" || exit 1
-
+installing_web2py=no
+update_apache_config=yes
 restart_apache=no
 
 function process_arguments {
     sync_system
     docommand $*
+    if [ $installing_web2py = "yes" ]; then
+        # TODO: is there a uniform action here?
+    fi
     if [ $restart_apache = "yes" ]; then
         restart_apache
     fi
@@ -185,10 +189,14 @@ function docommand {
         ;;
     index  | indexoti | index-db)
         index_doc_store
-            ;;
+        ;;
     apache)
         restart_apache=yes
-            ;;
+        # if used as a standalone command, don't change configuration!
+        if [ $OPENTREE_COMPONENTS = "apache" ]; then
+            update_apache_config=no
+        fi
+        ;;
     echo)
         # Test ability to do remote commands inline...
         ${SSH} "$OT_USER@$OPENTREE_HOST" bash <<EOF
@@ -215,11 +223,13 @@ function docomponent {
     case $component in
     opentree)
         push_webapps || exit 1
+        installing_web2py=yes
         restart_apache=yes
         ;;
     phylesystem-api | api)
         # 'api' option is for backward compatibility
         push_phylesystem_api || exit 1
+        installing_web2py=yes
         restart_apache=yes
         ;;
     oti)
@@ -239,9 +249,9 @@ function docomponent {
         push_smasher || exit 1
         ;;
     otcetera)
-	push_otcetera || exit 1
-    restart_apache=yes
-	;;
+        push_otcetera || exit 1
+        restart_apache=yes
+        ;;
     *)
         echo "Unrecognized component: $component"
         ;;
@@ -281,7 +291,7 @@ function restart_apache {
     if [ $DRYRUN = "yes" ]; then echo "[restarting apache]"; return; fi
     scp -p -i "${ADMIN_IDENTITY}" restart-apache.sh "$ADMIN@$OPENTREE_HOST":
     ${ASSH} "$ADMIN@$OPENTREE_HOST" bash restart-apache.sh "$OT_USER" "$OPENTREE_HOST" \
-      "$CERTIFICATE_FILE" "$CERTIFICATE_KEY_FILE" "$OTINDEX_BASE_URL"
+      "$CERTIFICATE_FILE" "$CERTIFICATE_KEY_FILE" "$OTINDEX_BASE_URL" "$installing_web2py"
 }
 
 # Commands
