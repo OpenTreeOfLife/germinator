@@ -291,7 +291,7 @@ function restart_apache {
     if [ $DRYRUN = "yes" ]; then echo "[restarting apache]"; return; fi
     scp -p -i "${ADMIN_IDENTITY}" restart-apache.sh "$ADMIN@$OPENTREE_HOST":
     ${ASSH} "$ADMIN@$OPENTREE_HOST" bash restart-apache.sh "$OT_USER" "$OPENTREE_HOST" \
-      "$CERTIFICATE_FILE" "$CERTIFICATE_KEY_FILE" "$OTINDEX_BASE_URL" "$installing_web2py"
+      "$CERTIFICATE_FILE" "$CERTIFICATE_KEY_FILE" "$OTINDEX_BASE_URL" "$PHYLAPI_BASE_URL" "$installing_web2py"
 }
 
 # Commands
