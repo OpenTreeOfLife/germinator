@@ -117,11 +117,11 @@ fi
 
 #4b. Build restbed: build.
 mkdir -p $APPS/restbed/build
-if ! (cd $APPS/restbed/build && cmake -DBUILD_SSL=NO -DCMAKE_INSTALL_PREFIX=$APPS/restbed/local/ ../restbed -DCMAKE_POSITION_INDEPENDENT_CODE=ON -G Ninja && ninja install) ; then
+if ! (cd $APPS/restbed/build && cmake -DBUILD_TESTS=NO -DBUILD_SSL=NO -DCMAKE_INSTALL_PREFIX=$APPS/restbed/local/ ../restbed -DCMAKE_POSITION_INDEPENDENT_CODE=ON -G Ninja && ninja install) ; then
     echo "Blowing away pre-existing restbed build and trying from scratch..."
     rm -rf $APPS/restbed/build $APPS/restbed/local
     mkdir -p $APPS/restbed/build
-    cd $APPS/restbed/build && cmake -DBUILD_SSL=NO -DCMAKE_INSTALL_PREFIX=$APPS/restbed/local/ ../restbed -DCMAKE_POSITION_INDEPENDENT_CODE=ON -G Ninja && ninja install
+    cd $APPS/restbed/build && cmake -DBUILD_TESTS=NO -DBUILD_SSL=NO -DCMAKE_INSTALL_PREFIX=$APPS/restbed/local/ ../restbed -DCMAKE_POSITION_INDEPENDENT_CODE=ON -G Ninja && ninja install
 fi
 
 if [ -r $APPS/restbed/local/include/restbed ] && [ -r $APPS/restbed/local/library/librestbed.a ] ; then
