@@ -220,7 +220,7 @@ fi
 
 # Copy all possible Open Tree config files. A given target machine will have
 # some but not all of these, so suppress "file not found" messages.
-CONFIG_BACKUP_DIR="~/otol-backups.$(date +'%b-%d-%Y-%H%M%S')"
+CONFIG_BACKUP_DIR="/home/admin/otol-backups.$(date +'%b-%d-%Y-%H%M%S')"
 mkdir -p $CONFIG_BACKUP_DIR
 cp --parents --preserve=all \
         /etc/apache2/sites-available/opentree.conf \
