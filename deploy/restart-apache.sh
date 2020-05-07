@@ -23,7 +23,7 @@ fi
 
 # Apache 2.4+
 
-if [ $update_apache_config = "yes" ]; then
+if [ "$update_apache_config" = "yes" ]; then
 
   echo "Updating apache configuration..."   # TODO
 
@@ -60,7 +60,6 @@ if [ $update_apache_config = "yes" ]; then
      # Access otindex search from shared server-config variable
   fi
   rm $TMP
-fi
 
 fi
 
@@ -71,7 +70,7 @@ sudo apache2ctl graceful || echo "apache2ctl failed"
 # so for now I'm going to disable this code.  See 
 # https://github.com/OpenTreeOfLife/opentree/issues/845
 
-if [ $installing_web2py = "yes" ]; then
+if [ "$installing_web2py" = "yes" ]; then
   echo "(Re)starting web2py session sweeper..."
   # The sessions2trash.py utility script runs in the background, deleting expired
   # sessions every 5 minutes. See documentation at
