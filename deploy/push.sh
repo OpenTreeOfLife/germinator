@@ -154,6 +154,7 @@ function process_arguments {
     docommand $*
     if [ $installing_web2py = "yes" ]; then
         # TODO: is there a uniform action here?
+        :  # for now, do nothing
     fi
     if [ $restart_apache = "yes" ]; then
         restart_apache
