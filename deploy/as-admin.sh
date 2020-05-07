@@ -216,6 +216,22 @@ if [ ! -r /etc/ntp.conf ]; then
 fi
 
 
+# ---------- BACKUP EXISTING CONFIG FILES ---------
+
+# Copy all possible Open Tree config files. A given target machine will have
+# some but not all of these, so suppress "file not found" messages.
+CONFIG_BACKUP_DIR="~/otol-backups.$(date +'%b-%d-%Y-%H%M%S')"
+mkdir -p $CONFIG_BACKUP_DIR
+cp --parents --preserve=all \
+        /etc/apache2/sites-available/opentree.conf \
+        /etc/apache2/sites-available/opentree-ssl.conf \
+        /etc/apache2/opentree-shared.conf \
+        /home/opentree/repo/opentree/curator/private/config \
+        /home/opentree/repo/opentree/webapp/private/config \
+        /home/phylesystemapi/repo/phylesystem-api/private/config \
+        $CONFIG_BACKUP_DIR 2>/dev/null
+
+
 # ---------- APACHE VHOST ----------
 
 # Set up apache so that web2py takes over the vhost
