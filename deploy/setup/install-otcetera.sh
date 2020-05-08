@@ -49,12 +49,12 @@ OK="[${LIGHT_GREEN}OK${NC}]"
 if [ ! -e "$OTT" ] ; then
     mkdir -p $OTT
     (
-	cd $OPENTREE
-	wget -O $TAX_FILE $TAX_URL
-	(
-	    cd $OTT
-	    tar -zxf ../${TAX_FILE} --strip-components=1;
-	)
+        cd $OPENTREE
+        wget -O $TAX_FILE $TAX_URL
+        (
+            cd $OTT
+            tar -zxf ../${TAX_FILE} --strip-components=1;
+        )
     )
 fi
 
@@ -68,13 +68,13 @@ fi
 SYNTHPARENT=$OPENTREE/synth-par
 mkdir -p $SYNTHPARENT
 SYNTH_FILE=${SYNTH_URL##*/}
-SYNTH_DIR=${SYNTH_FILE%_output.tgz}
+SYNTH_DIR=${SYNTH_FILE%.tgz}
 
 if [ ! -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
     (
-    cd $SYNTHPARENT
-    wget $SYNTH_URL
-    tar -zxf $SYNTH_FILE
+        cd $SYNTHPARENT
+        wget $SYNTH_URL
+        tar -zxf $SYNTH_FILE
     )
 fi
 if [ -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
@@ -122,7 +122,7 @@ if ! (cd $APPS/restbed/build && cmake -DBUILD_TESTS=NO -DBUILD_SSL=NO -DCMAKE_IN
     cd $APPS/restbed/build && cmake -DBUILD_TESTS=NO -DBUILD_SSL=NO -DCMAKE_INSTALL_PREFIX=$APPS/restbed/local/ ../restbed -DCMAKE_POSITION_INDEPENDENT_CODE=ON -G Ninja && ninja install
 fi
 
-if [ -r $APPS/restbed/local/include/restbed ] && [ -r $APPS/restbed/local/lib/librestbed.a ] ; then
+if [ -r $APPS/restbed/local/include/restbed ] && [ -r $APPS/restbed/local/library/librestbed.a ] ; then
     echo "restbed: installed."
 else
     echo "** Failed to install restbed"
@@ -130,7 +130,7 @@ else
 fi
 
 # Make sure apps linked against these libraries know where to find them.
-export LD_RUN_PATH=$APPS/restbed/local/lib/
+export LD_RUN_PATH=$APPS/restbed/local/library/
 
 #5. Build otcetera with web services
 SERVER=$APPS/otcetera/local/bin/otc-tol-ws
@@ -154,7 +154,7 @@ else
     (
     git clone --recursive https://github.com/OpenTreeOfLife/otcetera
     cd otcetera
-    git branch --track ${otceterabranch} origin/${otceterabranch}
+#    git branch --track ${otceterabranch} origin/${otceterabranch}
     git checkout "${otceterabranch}"
     )
 fi
@@ -162,7 +162,7 @@ fi
 log Checkout: otcetera `git log | head -1`
 
 (
-    export LDFLAGS=-L${APPS}/restbed/local/lib
+    export LDFLAGS=-L${APPS}/restbed/local/library
     export CPPFLAGS=-I${APPS}/restbed/local/include
     export CXX=$(which g++-8)
 
@@ -198,7 +198,7 @@ else
 fi
 
 echo -ne "${LIGHT_CYAN}Starting otcetera web services (otc-tol-ws)${NC}: "
-LD_LIBRARY_PATH=${APPS}/restbed/local/lib /usr/sbin/daemonize -c $OPENTREE $SERVER $OTT -D$SYNTHPARENT -p$PIDFILE -P1984 --num-threads=4
+LD_LIBRARY_PATH=${APPS}/restbed/local/library /usr/sbin/daemonize -c $OPENTREE $SERVER $OTT -D$SYNTHPARENT -p$PIDFILE -P1984 --num-threads=4
 sleep 1
 if pgrep -x "otc-tol-ws" ; then
     echo -e "${OK}"
@@ -217,7 +217,15 @@ ${VIRTUAL_ENV}/bin/pip install configparser
 #git_refresh OpenTreeOfLife ws_wrapper ini-template || true
 git_refresh OpenTreeOfLife ws_wrapper || true
 
-py_package_setup_install ws_wrapper || true
+git_refresh OpenTreeOfLife peyotl || true
+
+cd $HOME/repo/peyotl/
+${VIRTUAL_ENV_PYTHON3}/bin/pip install -r requirements.txt
+${VIRTUAL_ENV_PYTHON3}/bin/python setup.py develop
+
+
+cd $HOME/repo/ws_wrapper/
+${VIRTUAL_ENV_PYTHON3}/bin/python setup.py develop
 
 WPIDFILE=$HOME/repo/ws_wrapper/pid
 
@@ -225,4 +233,4 @@ WPIDFILE=$HOME/repo/ws_wrapper/pid
 cp $HOME/repo/ws_wrapper/template.ini $HOME/repo/ws_wrapper/wswrapper.ini
 sed -i -e "s+OPENTREE_WEBAPI_BASE_URL+${OPENTREE_WEBAPI_BASE_URL}+" $HOME/repo/ws_wrapper/wswrapper.ini
 
-(pkill -F "$WPIDFILE" 2>/dev/null || true ) && /usr/sbin/daemonize -p $WPIDFILE -c $HOME/repo/ws_wrapper ${VIRTUAL_ENV}/bin/pserve wswrapper.ini
+(pkill -F "$WPIDFILE" 2>/dev/null || true ) && /usr/sbin/daemonize -p $WPIDFILE -c $HOME/repo/ws_wrapper ${VIRTUAL_ENV_PYTHON3}/bin/pserve wswrapper.ini

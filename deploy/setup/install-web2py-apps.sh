@@ -32,7 +32,9 @@ CONFLICT_BASE_URL=${20}
 
 . setup/functions.sh
 
-setup/install-common.sh $OPENTREE_DEFAULT_APPLICATION $CONTROLLER
+
+
+bash setup/install-web2py.sh || exit 1
 
 echo "Installing web2py applications.  Hostname = $OPENTREE_HOST.  Public-facing domain = $OPENTREE_PUBLIC_DOMAIN"
 
@@ -82,15 +84,15 @@ configtemplate=$configdir/config.example
 configfile=$configdir/config
 
 # Use the existence of a wildcard cert to trigger the use of HTTPS from within web2py.
-if [ -r /etc/ssl/certs/opentree/STAR_opentreeoflife_org.pem ]; then
+if [ -r /etc/letsencrypt/live/opentreeoflife.org/fullchain.pem]; then
    SSL_CERTS_FOUND=true
 else
    SSL_CERTS_FOUND=false
 fi
-echo "Triggering use of HTTPS from within web2py? [$SSL_CERTS_FOUND]"
+echo "Triggering use of HTTPS from within web2py? [$SSL_CERTS_FOUND]" || exit 1
 
 # Replace tokens in example config file to make the active config (assume this always changes)
-cp -p $configtemplate $configfile
+cp -p $configtemplate $configfile || exit 1
 
 # Append /cached to some API base URLs (for faster retrieval of common method calls)
 # N.B. We now expect these base URLs to be simple domain names, with no trailing path!
@@ -115,8 +117,8 @@ sed "s+github_app_id = .*+github_app_id = $TREEVIEW_GITHUB_APP_ID+;
      s+CACHED_taxomachine = .*+CACHED_taxomachine = $CACHED_TAXOMACHINE_BASE_URL+
      s+CACHED_oti = .*+CACHED_oti = $CACHED_OTI_BASE_URL+
      s+secure_sessions_with_HTTPS = .*+secure_sessions_with_HTTPS = $SSL_CERTS_FOUND+
-    " < $configfile > tmp.tmp
-mv tmp.tmp $configfile
+    " < $configfile > tmp.tmp || exit 1
+mv tmp.tmp $configfile || exit 1
 
 # ---- curator webapp
 configdir=repo/opentree/curator/private
@@ -141,21 +143,34 @@ sed "s+github_app_id = .*+github_app_id = $CURATION_GITHUB_APP_ID+;
      s+CACHED_taxomachine = .*+CACHED_taxomachine = $CACHED_TAXOMACHINE_BASE_URL+
      s+CACHED_oti = .*+CACHED_oti = $CACHED_OTI_BASE_URL+
      s+secure_sessions_with_HTTPS = .*+secure_sessions_with_HTTPS = $SSL_CERTS_FOUND+
-    " < $configfile > tmp.tmp
-mv tmp.tmp $configfile
+    " < $configfile > tmp.tmp || exit 1
+mv tmp.tmp $configfile || exit 1
+
+# Add a simple parametric router to set our default web2py app
+echo "PWD (install-web2py-apps):"
+echo "$(pwd)"
+pushd .
+    TMP=/tmp/tmp.tmp
+    echo default_application should be "$OPENTREE_DEFAULT_APPLICATION" || exit 1
+    sed -e "s+default_application='.*'+default_application='$OPENTREE_DEFAULT_APPLICATION'+" \
+       web2py/examples/routes.parametric.example.py >$TMP || exit 1
+    cp $TMP web2py/routes.py || exit 1
+    rm $TMP || exit 1
+    grep default_ web2py/routes.py || exit 1
+popd
 
 # install ncl a C++ app needed for NEXUS, newick, NeXML -->NexSON conversion
-(cd repo/opentree/curator ; ./install-ncl.sh) 
+(cd repo/opentree/curator ; ./install-ncl.sh)  || exit 1
 
 # record the current SHA for ncl
-log  Installing NCL at `cd repo/opentree/curator/ncl; git log | head -1`
+log  Installing NCL at `cd repo/opentree/curator/ncl; git log | head -1` || exit 1
 
-echo "Apache / web2py restart required (due to app configuration)"
+echo "Apache / web2py restart required (due to app configuration)" || exit 1
 
 # ---------- INSTALL PYTHON REQUIREMENTS, SYMLINK APPLICATIONS ----------
 
-(cd $APPROOT; pip install -r requirements.txt)
+(cd $APPROOT; pip install -r requirements.txt) || exit 1
 
 (cd web2py/applications; \
     ln -sf ../../repo/$WEBAPP/webapp ./$WEBAPP; \
-    ln -sf ../../repo/$WEBAPP/curator ./)
+    ln -sf ../../repo/$WEBAPP/curator ./) || exit 1
