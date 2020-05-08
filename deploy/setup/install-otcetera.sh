@@ -49,13 +49,12 @@ OK="[${LIGHT_GREEN}OK${NC}]"
 if [ ! -e "$OTT" ] ; then
     mkdir -p $OTT
     (
-	cd $OPENTREE
-    ## temporary, must copy by hand bc files is down
-	#wget -O $TAX_FILE $TAX_URL
-	(
-	    cd $OTT
-	    tar -zxf ../${TAX_FILE} --strip-components=1;
-	)
+        cd $OPENTREE
+        wget -O $TAX_FILE $TAX_URL
+        (
+            cd $OTT
+            tar -zxf ../${TAX_FILE} --strip-components=1;
+        )
     )
 fi
 
@@ -73,10 +72,9 @@ SYNTH_DIR=${SYNTH_FILE%.tgz}
 
 if [ ! -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
     (
-    cd $SYNTHPARENT
- ## temporary, must copy by hand bc files is down
- #   wget $SYNTH_URL
-    tar -zxf $SYNTH_FILE
+        cd $SYNTHPARENT
+        wget $SYNTH_URL
+        tar -zxf $SYNTH_FILE
     )
 fi
 if [ -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
