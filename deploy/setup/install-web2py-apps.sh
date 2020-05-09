@@ -4,7 +4,7 @@
 
 # Lots of arguments to make this work.. check to see if we have them all.
 if [ "$#" -ne 20 ]; then
-    echo "install-web2py-apps.sh missing required parameters (expecting 16)"
+    echo "install-web2py-apps.sh missing required parameters (expecting 20)"
     exit 1
 fi
 
