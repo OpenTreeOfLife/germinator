@@ -14,6 +14,13 @@ which also allows for rewriting of certain error messages.
 routes.py supports two styles of URL rewriting, depending on whether 'routers' is defined.
 Refer to router.example.py and routes.example.py for additional documentation.
 
+*****************************
+NOTE that this is a modified version from web2py 2.19.1. For full details on what has changed, see
+ https://github.com/OpenTreeOfLife/opentree/commits/master/rewrite.py
+This file was patched (by jimallman, on 5/5/2020) to restore liberal CORS
+headers when returning exceptions from a cross-domain request.
+*****************************
+
 """
 
 import os
@@ -211,10 +218,25 @@ def url_out(request, environ, application, controller, function,
     return url
 
 
+def make_response_CORS_compliant(request, http_response):
+    """
+    prevents "lost" responses (esp. HTTP exceptions) across domains
+    """
+    http_response.headers['Access-Control-Allow-Credentials'] = 'true'
+    http_response.headers['Access-Control-Allow-Origin'] = '*'
+    # echo requested methods and headers, if found (helps with cached response to OPTIONS)
+    if request.env.http_access_control_request_method:
+         http_response.headers['Access-Control-Allow-Methods'] = request.env.http_access_control_request_method
+    if request.env.http_access_control_request_headers:
+         http_response.headers['Access-Control-Allow-Headers'] = request.env.http_access_control_request_headers
+    http_response.headers['Access-Control-Max-Age'] = 86400
+
+
 def try_rewrite_on_error(http_response, request, environ, ticket=None):
     """
     Called from main.wsgibase to rewrite the http response.
     """
+    make_response_CORS_compliant(request, http_response)
     status = int(str(http_response.status).split()[0])
     if status >= 399 and THREAD_LOCAL.routes.routes_onerror:
         keys = set(('%s/%s' % (request.application, status),
