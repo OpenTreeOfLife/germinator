@@ -26,15 +26,16 @@ if [ ! -d web2py ]; then
     rm -rf web2py/applications/welcome  || exit
     rm -rf web2py/applications/examples  || exit
     echo "Cleared old sessions in all web2py apps"  || exit
-
-    # ---- WEB2PY PATCHES ---
-    # Apply a few tweaks to vanilla web2py (updated for web2py 2.19.1)
-    # See comments in each patched file for details.
-  ##cp -p setup/web2py-patches/oauth20_account.py web2py/gluon/contrib/login_methods/ || exit 1
-    cp -p setup/web2py-patches/rewrite.py web2py/gluon/ || exit 1
-  ##cp -p setup/web2py-patches/custom_import.py web2py/gluon/ || exit 1
-
 fi
+
+# ---- WEB2PY PATCHES ---
+# Apply a few tweaks to vanilla web2py (updated for web2py 2.19.1)
+# See comments in each patched file for details.
+cp -p setup/web2py-patches/rewrite.py web2py/gluon/ || exit 1
+# Update these otehr legacy patches?
+##cp -p setup/web2py-patches/oauth20_account.py web2py/gluon/contrib/login_methods/ || exit 1
+##cp -p setup/web2py-patches/custom_import.py web2py/gluon/ || exit 1
+
 
 # ---------- VIRTUALENV + WEB2PY + WSGI ----------
 
