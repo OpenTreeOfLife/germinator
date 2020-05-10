@@ -30,9 +30,9 @@ if [ ! -d web2py ]; then
     # ---- WEB2PY PATCHES ---
     # Apply a few tweaks to vanilla web2py (updated for web2py 2.19.1)
     # See comments in each patched file for details.
-    ##cp -p repo/opentree/oauth20_account.py web2py/gluon/contrib/login_methods/ || exit 1
-    cp -p repo/opentree/rewrite.py web2py/gluon/ || exit 1
-    ##cp -p repo/opentree/custom_import.py web2py/gluon/ || exit 1
+  ##cp -p setup/web2py-patches/oauth20_account.py web2py/gluon/contrib/login_methods/ || exit 1
+    cp -p setup/web2py-patches/rewrite.py web2py/gluon/ || exit 1
+  ##cp -p setup/web2py-patches/custom_import.py web2py/gluon/ || exit 1
 
 fi
 
