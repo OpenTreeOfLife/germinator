@@ -396,6 +396,7 @@ function push_phylesystem_api {
     [ "x$AMENDMENTS_REPO"   != "x" ] || err "AMENDMENTS_REPO not configured"
     [ "x$FAVORITES_REPO"    != "x" ] || err "FAVORITES_REPO not configured"
     [ "x$OTI_BASE_URL"      != "x" ] || err "OTI_BASE_URL not configured"
+    [ "x$READ_ONLY_MODE"    != "x" ] || err "READ_ONLY_MODE not configured"
     [ "x$OTINDEX_BASE_URL"      != "x" ] || err "OTINDEX_BASE_URL not configured"
 
     push_bot_identity || exit 1
@@ -420,7 +421,7 @@ function push_phylesystem_api {
     fi
 
     ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-api.sh "$OPENTREE_HOST" \
-           $OPENTREE_DOCSTORE $COLLECTIONS_REPO $AMENDMENTS_REPO $FAVORITES_REPO $CONTROLLER $OTI_BASE_URL $OPENTREE_API_BASE_URL $COLLECTIONS_API_BASE_URL $AMENDMENTS_API_BASE_URL $FAVORITES_API_BASE_URL $OPENTREE_DEFAULT_APPLICATION $OTINDEX_BASE_URL  || exit 1
+           $OPENTREE_DOCSTORE $COLLECTIONS_REPO $AMENDMENTS_REPO $FAVORITES_REPO $CONTROLLER $OTI_BASE_URL $OPENTREE_API_BASE_URL $COLLECTIONS_API_BASE_URL $AMENDMENTS_API_BASE_URL $FAVORITES_API_BASE_URL $OPENTREE_DEFAULT_APPLICATION $OTINDEX_BASE_URL $READ_ONLY_MODE || exit 1
 }
 
 function push_neo4j {

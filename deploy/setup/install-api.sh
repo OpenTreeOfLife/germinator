@@ -3,8 +3,8 @@
 # Some of this repeats what's found in install-web2py-apps.sh.  Keep in sync.
 
 # Lots of arguments to make this work.. check to see if we have them all.
-if [ "$#" -ne 13 ]; then
-    echo "install-api.sh missing required parameters (expecting 13)"
+if [ "$#" -ne 14 ]; then
+    echo "install-api.sh missing required parameters (expecting 14)"
     exit 1
 fi
 
@@ -21,6 +21,7 @@ AMENDMENTS_API_BASE_URL=${10}
 FAVORITES_API_BASE_URL=${11}
 OPENTREE_DEFAULT_APPLICATION=${12}
 OTINDEX_BASE_URL=${13}
+READ_ONLY_MODE=${14}
 
 . setup/functions.sh || exit 1
 
@@ -110,6 +111,9 @@ pushd .
     cp config.example config
     sed -i -e "s+PHYLESYSTEM_REPO_PATH+$OTHOME/repo/${OPENTREE_DOCSTORE}_par/$OPENTREE_DOCSTORE+" config
     sed -i -e "s+PHYLESYSTEM_REPO_PAR+$OTHOME/repo/${OPENTREE_DOCSTORE}_par+" config
+
+    # Optionally run the API as "read-only", ie block all data-writing methods
+    sed -i -e "s+READ_ONLY_MODE+${READ_ONLY_MODE}+" config
 
     # Specify our remote to push to, which is added to local repo above
     sed -i -e "s+PHYLESYSTEM_REPO_REMOTE+originssh+" config
