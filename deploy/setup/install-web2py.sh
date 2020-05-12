@@ -31,6 +31,7 @@ fi
 # ---- WEB2PY PATCHES ---
 # Apply a few tweaks to vanilla web2py (updated for web2py 2.19.1)
 # See comments in each patched file for details.
+echo "Applying patches (hot fixes) to standard web2py..."  || exit
 cp -p setup/web2py-patches/rewrite.py web2py/gluon/ || exit 1
 # Update these otehr legacy patches?
 ##cp -p setup/web2py-patches/oauth20_account.py web2py/gluon/contrib/login_methods/ || exit 1
