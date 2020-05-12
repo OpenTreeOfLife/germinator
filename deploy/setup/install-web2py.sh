@@ -34,8 +34,6 @@ fi
 echo "Applying patches (hot fixes) to standard web2py..."  || exit
 cp -p setup/web2py-patches/rewrite.py web2py/gluon/ || exit 1
 cp -p setup/web2py-patches/oauth20_account.py web2py/gluon/contrib/login_methods/ || exit 1
-# Update more legacy patches?
-##cp -p setup/web2py-patches/custom_import.py web2py/gluon/ || exit 1
 
 
 # ---------- VIRTUALENV + WEB2PY + WSGI ----------
