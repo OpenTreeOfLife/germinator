@@ -9,6 +9,12 @@ Adds support for  OAuth 2.0 authentication to web2py.
 
 OAuth 2.0 spec: http://tools.ietf.org/html/rfc6749
 
+*****************************
+NOTE that this is a modified version from web2py 2.19.1. For full details on what has changed, see
+ https://github.com/OpenTreeOfLife/opentree/commits/master/rewrite.py
+
+This file was patched (by jimallman, on 5/11/2020) to support redirection on proxied web2py servers.
+*****************************
 """
 
 import time
@@ -104,17 +110,23 @@ server for requests.  It can be used for the optional"scope" parameters for Face
         """
 
         r = current.request
-        http_host = r.env.http_host
+        if 'redirect_uri' in self.args and self.args['redirect_uri']:
+            # avoid problems with proxied servers ('localhost:8000')
+            uri = self.args['redirect_uri']
+        else:
+            # no preset redirect_uri, try to construct one
+            http_host = r.env.http_host
 
-        if r.env.https == 'on':
-            url_scheme = 'https'
-        else:
-            url_scheme = r.env.wsgi_url_scheme
-        if next:
-            path_info = next
-        else:
-            path_info = r.env.path_info
-        uri = '%s://%s%s' % (url_scheme, http_host, path_info)
+            if r.env.https == 'on':
+                url_scheme = 'https'
+            else:
+                url_scheme = r.env.wsgi_url_scheme
+            if next:
+                path_info = next
+            else:
+                path_info = r.env.path_info
+            uri = '%s://%s%s' % (url_scheme, http_host, path_info)
+
         if r.get_vars and not next:
             uri += '?' + urlencode(r.get_vars)
         return uri
@@ -212,7 +224,11 @@ server for requests.  It can be used for the optional"scope" parameters for Face
                         time.time()
                 finally:
                     opener.close()
-                return current.session.token['access_token']
+                try:
+                    return current.session.token['access_token']
+                except Exception, e:
+                    raise Exception("No access_token found in data: %s %s" % (current.session.token, e))
+                    return None
 
         current.session.token = None
         return None
