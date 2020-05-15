@@ -104,9 +104,13 @@ apt_get_install_one libcurl4-openssl-dev
 apt_get_install_one daemonize
 
 # ---------- PYTHON-DEV (for some python packages) ----------
-if [ ! -r /usr/include/*/Python.h ]; then
-    apt_get_install python-dev
-fi
+for f in /usr/include/*/Python.h; do
+    ## Test the first header file found (if any); ignore others
+    if [ ! -r "$f" ]; then
+        apt_get_install python-dev
+    fi
+    break
+done
 # -----G++ (for NCL, the nexus, newick converter used by the curation tool's import) -----
 if [ `which g++`x = x ]; then
     apt_get_install g++
