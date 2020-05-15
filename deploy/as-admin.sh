@@ -34,6 +34,14 @@ function apt_get_install {
     $APTGET install $*
 }
 
+function apt_get_install_one
+{
+    PKG=$1
+    if ! dpkg -s "$PKG" >/dev/null 2>&1 ; then
+	apt_get_install $PKG
+    fi
+}
+
 # ---------- UPDATE ----------
 
 if [ `which dialog`x = x ]; then
@@ -70,6 +78,30 @@ fi
 if [ `which automake`x = x ]; then
     apt_get_install automake
 fi
+
+# ---------- for taxonomy browser -------------
+apt_get_install_one python-requests
+
+# ---------- for otcetera  ----------------
+apt_get_install_one libboost-dev
+apt_get_install_one libboost-filesystem-dev
+apt_get_install_one libboost-program-options-dev
+apt_get_install_one libboost-system-dev
+apt_get_install_one libtool
+apt_get_install_one pkg-config
+apt_get_install_one psmisc # for killall
+apt_get_install_one python3-venv
+#apt_get_install_one g++-8
+apt_get_install_one ninja-build
+
+
+# ---------- for restbed (otcetera web services dependency) ----------
+apt_get_install_one cmake
+apt_get_install_one libssl-dev
+apt_get_install_one libcurl4-openssl-dev
+
+# ---------- for running otc-tol-ws ------------------
+apt_get_install_one daemonize
 
 # ---------- PYTHON-DEV (for some python packages) ----------
 if [ ! -r /usr/include/*/Python.h ]; then
@@ -114,6 +146,12 @@ fi
 if [ ! -r /etc/apache2/mods-enabled/ssl.load ]; then
     sudo a2enmod ssl
 fi
+
+# Enable the apache cgid. Used for the taxonomy browser
+if [ ! -r /etc/apache2/mods-enabled/cgid.load ]; then
+    sudo a2enmod cgid
+fi
+
 
 # ---------- UNZIP ----------
 # unzip is needed for unpacking web2py.  Somebody broke the 'which' program -

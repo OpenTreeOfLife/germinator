@@ -19,12 +19,18 @@ else
     exit 1
 fi
 
-# ---------- OUR VIRTUALENV ----------
+# ---------- Setup TWO VIRTUALENVs ----------
 # Set up python env
 if [ ! -d venv ]; then
     virtualenv venv
 fi
 source venv/bin/activate
+
+
+if [ ! -d venvp3 ]; then
+   python3 -m venv venvp3
+fi
+
 
 # ---------- LOGGING ----------
 

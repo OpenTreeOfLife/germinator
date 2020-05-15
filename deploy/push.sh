@@ -201,8 +201,8 @@ EOF
 
     *)
         if ! in_list $command $OPENTREE_COMPONENTS; then
-	    err "Unrecognized command, or component not in OPENTREE_COMPONENTS: $command"
-	fi
+        err "Unrecognized command, or component not in OPENTREE_COMPONENTS: $command"
+    fi
         # Default if not a recognized command: treat as component name
         docomponent $command
     esac
@@ -238,6 +238,9 @@ function docomponent {
     smasher)
         push_smasher
         ;;
+    otcetera)
+	push_otcetera
+	;;
     *)
         echo "Unrecognized component: $component"
         ;;
@@ -277,7 +280,7 @@ function restart_apache {
     if [ $DRYRUN = "yes" ]; then echo "[restarting apache]"; return; fi
     scp -p -i "${ADMIN_IDENTITY}" restart-apache.sh "$ADMIN@$OPENTREE_HOST":
     ${ASSH} "$ADMIN@$OPENTREE_HOST" bash restart-apache.sh "$OT_USER" "$OPENTREE_HOST" \
-      "$CERTIFICATE_FILE" "$CERTIFICATE_KEY_FILE"
+      "$CERTIFICATE_FILE" "$CERTIFICATE_KEY_FILE" "$OTINDEX_BASE_URL"
 }
 
 # Commands
@@ -400,6 +403,12 @@ function push_smasher {
     if [ $DRYRUN = "yes" ]; then echo "[push_smasher]"; return; fi
     echo push_smasher: ${OPENTREE_WEBAPI_BASE_URL}
     ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-smasher.sh ${CONTROLLER} ${OPENTREE_WEBAPI_BASE_URL}
+}
+
+function push_otcetera {
+    if [ $DRYRUN = "yes" ]; then echo "[push_otcetera]"; return; fi
+    echo push_otcetera:
+    ${SSH} "$OT_USER@$OPENTREE_HOST" ./setup/install-otcetera.sh ${CONTROLLER} ${OPENTREE_WEBAPI_BASE_URL}
 }
 
 process_arguments $*

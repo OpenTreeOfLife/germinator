@@ -24,8 +24,11 @@ git_refresh OpenTreeOfLife opentree || true
 (cd web2py/applications; \
     ln -sf ../../repo/$WEBAPP/common ./)
 
+# Apply our patches to vanilla web2py 2.8.2
+# See comments in each patched file for details.
 cp -p repo/opentree/oauth20_account.py web2py/gluon/contrib/login_methods/
 cp -p repo/opentree/rewrite.py web2py/gluon/
+cp -p repo/opentree/custom_import.py web2py/gluon/
 
 TMP=/tmp/tmp.tmp
 echo default_application should be "$OPENTREE_DEFAULT_APPLICATION"

@@ -28,8 +28,20 @@ setup/install-common.sh $OPENTREE_DEFAULT_APPLICATION $CONTROLLER
 
 echo "Installing API"
 
+
+#Pre installs for normal phylestem-api venv
+venv/bin/pip  install vine==1.3
+#Force early version of vine in venv to deal with python2 python3 issues
+venv/bin/pip install kombu==4.1.0
+venv/bin/pip install redis==2.10.6
+venv/bin/pip install celery==4.1.0
+
+
+
+
 # ---------- Redis for caching ---------
-REDIS_WITH_VERSION="redis-2.8.8"
+#This is in the default venv
+REDIS_WITH_VERSION="redis-2.10.6"
 if ! test -f redis/bin/redis-server ; then
     if ! test -d "downloads/${REDIS_WITH_VERSION}" ; then
         if ! test -f downloads/"${REDIS_WITH_VERSION}.tar.gz" ; then
@@ -44,21 +56,8 @@ if ! test -f redis/bin/redis-server ; then
             make && make PREFIX="${HOME}/redis" install)
     fi
 fi
-# ---------- Celery for task queue for deferred tasks ------
-if ! which celery
-then
-    CELERY_VERSION="3.0.20"
-    if ! test -d celery-${CELERY_VERSION} ; then
-        if ! test -d "downloads/v${CELERY_VERSION}.zip" ; then
-            wget --no-verbose -O downloads/v${CELERY_VERSION}.zip https://github.com/celery/celery/archive/v${CELERY_VERSION}.zip
-        fi
-        (cd downloads; \
-            unzip v${CELERY_VERSION}.zip)
-        mv downloads/celery-${CELERY_VERSION} celery-${CELERY_VERSION}
-    fi
-    (cd celery-${CELERY_VERSION} ; \
-            python setup.py build ; python setup.py install)
-fi
+
+
 
 # ---------- API & TREE STORE ----------
 # Set up api web app
