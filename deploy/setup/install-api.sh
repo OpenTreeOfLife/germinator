@@ -36,12 +36,16 @@ venv/bin/pip  install vine==1.3 || exit 1
 #Force early version of vine in venv to deal with python2 python3 issues
 venv/bin/pip install kombu==4.1.0 || exit 1
 venv/bin/pip install celery==4.1.0 || exit 1
+venv/bin/pip install redis==2.10.6
+
 
 
 
 
 # ---------- Redis for caching ---------
 #This is in the default venv
+## EJM Note: I am not clear on why it is important to pip install redis 2.10.6 and install v3.0.0 for the cli, but it works.
+## There is no 2.10.86 on redis.io releases, and newer pip installed python libaries break a la https://github.com/celery/celery/issues/5175.
 REDIS_WITH_VERSION="redis-3.0.0"
 if ! test -f redis/bin/redis-server ; then
     if ! test -d "downloads/${REDIS_WITH_VERSION}" ; then
