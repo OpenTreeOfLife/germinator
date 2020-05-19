@@ -202,28 +202,6 @@ if [ `which virtualenv`x = x ]; then
     apt_get_install python-virtualenv virtualenv
 fi
 
-# ---------- JAVA ----------
-# N.b. Java 8 isn't available for woody, and is available for jessie
-# only with the addition of unstable to /etc/apt/sources.list and a
-# corresponding prioritization in /etc/apt/preferences (to prevent
-# unstable from taking over the whole system).
-
-if [ `which javac`x != x ] && ( javac -version 2>&1 | egrep -q 1.8 ); then
-    echo "Java 8 OK"
-elif apt-cache policy openjdk-8-jre-headless | grep -q "Installed.*none"; then
-    apt_get_install openjdk-8-jre-headless
-    apt_get_install openjdk-8-jdk
-    sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
-    sudo update-alternatives --set javac /usr/lib/jvm/java-8-openjdk-amd64/bin/javac
-elif [ `which javac`x != x ] && ( javac -version 2>&1 | egrep -q 1.7 ); then
-    echo path is $PATH
-    echo "Java 7 OK"
-elif [ `which javac`x != x ]; then
-    echo "** Possible wrong version of java"
-else
-    apt_get_install openjdk-7-jre-headless
-    apt_get_install openjdk-7-jdk
-fi
 
 # ---------- MAVEN 3 ----------
 if [ `which mvn`x = x ]; then
@@ -240,6 +218,22 @@ fi
 if [ ! -r /etc/ntp.conf ]; then
     apt_get_install ntp
 fi
+
+
+# ---------- BACKUP EXISTING CONFIG FILES ---------
+
+# Copy all possible Open Tree config files. A given target machine will have
+# some but not all of these, so suppress "file not found" messages.
+CONFIG_BACKUP_DIR="/home/admin/otol-backups.$(date +'%b-%d-%Y-%H%M%S')"
+mkdir -p $CONFIG_BACKUP_DIR
+cp --parents --preserve=all \
+        /etc/apache2/sites-available/opentree.conf \
+        /etc/apache2/sites-available/opentree-ssl.conf \
+        /etc/apache2/opentree-shared.conf \
+        /home/opentree/repo/opentree/curator/private/config \
+        /home/opentree/repo/opentree/webapp/private/config \
+        /home/phylesystemapi/repo/phylesystem-api/private/config \
+        $CONFIG_BACKUP_DIR 2>/dev/null
 
 
 # ---------- APACHE VHOST ----------

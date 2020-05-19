@@ -2,7 +2,8 @@
 *~
 *.pem
 deploy/janrain.key
-deploy/GITHUB_CLIENT_SECRET
+GITHUB_CLIENT_SECRET
+GITHUB_APP_PRIVATE_KEY_PEM
 deploy/setup/CONFIG
 *.pyc
 *gz

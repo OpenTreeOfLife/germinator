@@ -3,32 +3,38 @@
 # Some of this repeats what's found in install-api.sh.  Keep in sync.
 
 # Lots of arguments to make this work.. check to see if we have them all.
-if [ "$#" -ne 16 ]; then
-    echo "install-web2py-apps.sh missing required parameters (expecting 16)"
+if [ "$#" -ne 20 ]; then
+    echo "install-web2py-apps.sh missing required parameters (expecting 20)"
     exit 1
 fi
 
+# NOTE that args beyond nine must be referenced in curly braces
 OPENTREE_HOST=$1  #Not used; set in functions.sh anyhow
 OPENTREE_PUBLIC_DOMAIN=$2
 OPENTREE_DEFAULT_APPLICATION=$3
 CONTROLLER=$4
-CURATION_GITHUB_CLIENT_ID=$5
-CURATION_GITHUB_REDIRECT_URI=$6
-TREEVIEW_GITHUB_CLIENT_ID=$7
-TREEVIEW_GITHUB_REDIRECT_URI=$8
-TREEMACHINE_BASE_URL=$9
-# NOTE that args beyond nine must be referenced in curly braces
-TAXOMACHINE_BASE_URL=${10}
-OTI_BASE_URL=${11}
-OPENTREE_API_BASE_URL=${12}
-COLLECTIONS_API_BASE_URL=${13}
-AMENDMENTS_API_BASE_URL=${14}
-FAVORITES_API_BASE_URL=${15}
-CONFLICT_BASE_URL=${16}
+CURATION_GITHUB_APP_ID=$5
+CURATION_GITHUB_CLIENT_ID=$6
+CURATION_GITHUB_REDIRECT_URI=$7
+CURATION_GITHUB_INSTALLATION_ID=$8
+TREEVIEW_GITHUB_APP_ID=$9
+TREEVIEW_GITHUB_CLIENT_ID=${10}
+TREEVIEW_GITHUB_REDIRECT_URI=${11}
+TREEVIEW_GITHUB_INSTALLATION_ID=${12}
+TREEMACHINE_BASE_URL=${13}
+TAXOMACHINE_BASE_URL=${14}
+OTI_BASE_URL=${15}
+OPENTREE_API_BASE_URL=${16}
+COLLECTIONS_API_BASE_URL=${17}
+AMENDMENTS_API_BASE_URL=${18}
+FAVORITES_API_BASE_URL=${19}
+CONFLICT_BASE_URL=${20}
 
 . setup/functions.sh
 
-setup/install-common.sh $OPENTREE_DEFAULT_APPLICATION $CONTROLLER
+
+
+bash setup/install-web2py.sh || exit 1
 
 echo "Installing web2py applications.  Hostname = $OPENTREE_HOST.  Public-facing domain = $OPENTREE_PUBLIC_DOMAIN"
 
@@ -65,9 +71,11 @@ git_refresh OpenTreeOfLife $WEBAPP || true
 # authentication purposes.  'hostname' doesn't work on EC2 instances,
 # so it has to be passed in as a parameter.
 
-# N.B. Two other files with were already placed via rsync (in push.sh):
+# N.B. Other sensitive files were already placed via rsync (in push.sh):
 #   curator/private/GITHUB_CLIENT_SECRET
+#   curator/private/GITHUB_APP_PRIVATE_KEY_PEM
 #   webapp/private/GITHUB_CLIENT_SECRET
+#   webapp/private/GITHUB_APP_PRIVATE_KEY_PEM
 
 # ---- main webapp (opentree)
 
@@ -76,15 +84,15 @@ configtemplate=$configdir/config.example
 configfile=$configdir/config
 
 # Use the existence of a wildcard cert to trigger the use of HTTPS from within web2py.
-if [ -r /etc/ssl/certs/opentree/STAR_opentreeoflife_org.pem ]; then
+if [ -r /etc/letsencrypt/live/opentreeoflife.org/fullchain.pem]; then
    SSL_CERTS_FOUND=true
 else
    SSL_CERTS_FOUND=false
 fi
-echo "Triggering use of HTTPS from within web2py? [$SSL_CERTS_FOUND]"
+echo "Triggering use of HTTPS from within web2py? [$SSL_CERTS_FOUND]" || exit 1
 
 # Replace tokens in example config file to make the active config (assume this always changes)
-cp -p $configtemplate $configfile
+cp -p $configtemplate $configfile || exit 1
 
 # Append /cached to some API base URLs (for faster retrieval of common method calls)
 # N.B. We now expect these base URLs to be simple domain names, with no trailing path!
@@ -92,8 +100,10 @@ CACHED_TREEMACHINE_BASE_URL=$(sed "s+$+/cached+" <<< $TREEMACHINE_BASE_URL)
 CACHED_TAXOMACHINE_BASE_URL=$(sed "s+$+/cached+" <<< $TAXOMACHINE_BASE_URL)
 CACHED_OTI_BASE_URL=$(sed "s+$+/cached+" <<< $OTI_BASE_URL)
 
-sed "s+github_client_id = .*+github_client_id = $TREEVIEW_GITHUB_CLIENT_ID+;
+sed "s+github_app_id = .*+github_app_id = $TREEVIEW_GITHUB_APP_ID+;
+     s+github_client_id = .*+github_client_id = $TREEVIEW_GITHUB_CLIENT_ID+;
      s+github_redirect_uri = .*+github_redirect_uri = $TREEVIEW_GITHUB_REDIRECT_URI+
+     s+github_app_installation_id = .*+github_app_installation_id = $TREEVIEW_GITHUB_INSTALLATION_ID+;
      s+hostdomain = .*+hostdomain = $OPENTREE_PUBLIC_DOMAIN+;
      s+treemachine = .*+treemachine = $TREEMACHINE_BASE_URL+
      s+taxomachine = .*+taxomachine = $TAXOMACHINE_BASE_URL+
@@ -107,8 +117,8 @@ sed "s+github_client_id = .*+github_client_id = $TREEVIEW_GITHUB_CLIENT_ID+;
      s+CACHED_taxomachine = .*+CACHED_taxomachine = $CACHED_TAXOMACHINE_BASE_URL+
      s+CACHED_oti = .*+CACHED_oti = $CACHED_OTI_BASE_URL+
      s+secure_sessions_with_HTTPS = .*+secure_sessions_with_HTTPS = $SSL_CERTS_FOUND+
-    " < $configfile > tmp.tmp
-mv tmp.tmp $configfile
+    " < $configfile > tmp.tmp || exit 1
+mv tmp.tmp $configfile || exit 1
 
 # ---- curator webapp
 configdir=repo/opentree/curator/private
@@ -117,8 +127,10 @@ configfile=$configdir/config
 
 # Replace tokens in example config file to make the active config (assume this always changes)
 cp -p $configtemplate $configfile
-sed "s+github_client_id = .*+github_client_id = $CURATION_GITHUB_CLIENT_ID+;
+sed "s+github_app_id = .*+github_app_id = $CURATION_GITHUB_APP_ID+;
+     s+github_client_id = .*+github_client_id = $CURATION_GITHUB_CLIENT_ID+;
      s+github_redirect_uri = .*+github_redirect_uri = $CURATION_GITHUB_REDIRECT_URI+
+     s+github_app_installation_id = .*+github_app_installation_id = $CURATION_GITHUB_INSTALLATION_ID+;
      s+treemachine = .*+treemachine = $TREEMACHINE_BASE_URL+
      s+taxomachine = .*+taxomachine = $TAXOMACHINE_BASE_URL+
      s+oti = .*+oti = $OTI_BASE_URL+
@@ -131,21 +143,34 @@ sed "s+github_client_id = .*+github_client_id = $CURATION_GITHUB_CLIENT_ID+;
      s+CACHED_taxomachine = .*+CACHED_taxomachine = $CACHED_TAXOMACHINE_BASE_URL+
      s+CACHED_oti = .*+CACHED_oti = $CACHED_OTI_BASE_URL+
      s+secure_sessions_with_HTTPS = .*+secure_sessions_with_HTTPS = $SSL_CERTS_FOUND+
-    " < $configfile > tmp.tmp
-mv tmp.tmp $configfile
+    " < $configfile > tmp.tmp || exit 1
+mv tmp.tmp $configfile || exit 1
+
+# Add a simple parametric router to set our default web2py app
+echo "PWD (install-web2py-apps):"
+echo "$(pwd)"
+pushd .
+    TMP=/tmp/tmp.tmp
+    echo default_application should be "$OPENTREE_DEFAULT_APPLICATION" || exit 1
+    sed -e "s+default_application='.*'+default_application='$OPENTREE_DEFAULT_APPLICATION'+" \
+       web2py/examples/routes.parametric.example.py >$TMP || exit 1
+    cp $TMP web2py/routes.py || exit 1
+    rm $TMP || exit 1
+    grep default_ web2py/routes.py || exit 1
+popd
 
 # install ncl a C++ app needed for NEXUS, newick, NeXML -->NexSON conversion
-(cd repo/opentree/curator ; ./install-ncl.sh) 
+(cd repo/opentree/curator ; ./install-ncl.sh)  || exit 1
 
 # record the current SHA for ncl
-log  Installing NCL at `cd repo/opentree/curator/ncl; git log | head -1`
+log  Installing NCL at `cd repo/opentree/curator/ncl; git log | head -1` || exit 1
 
-echo "Apache / web2py restart required (due to app configuration)"
+echo "Apache / web2py restart required (due to app configuration)" || exit 1
 
 # ---------- INSTALL PYTHON REQUIREMENTS, SYMLINK APPLICATIONS ----------
 
-(cd $APPROOT; pip install -r requirements.txt)
+(cd $APPROOT; pip install -r requirements.txt) || exit 1
 
 (cd web2py/applications; \
     ln -sf ../../repo/$WEBAPP/webapp ./$WEBAPP; \
-    ln -sf ../../repo/$WEBAPP/curator ./)
+    ln -sf ../../repo/$WEBAPP/curator ./) || exit 1

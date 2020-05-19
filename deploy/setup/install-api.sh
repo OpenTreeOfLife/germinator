@@ -3,8 +3,8 @@
 # Some of this repeats what's found in install-web2py-apps.sh.  Keep in sync.
 
 # Lots of arguments to make this work.. check to see if we have them all.
-if [ "$#" -ne 13 ]; then
-    echo "install-api.sh missing required parameters (expecting 13)"
+if [ "$#" -ne 14 ]; then
+    echo "install-api.sh missing required parameters (expecting 14)"
     exit 1
 fi
 
@@ -13,7 +13,7 @@ OPENTREE_DOCSTORE=$2
 COLLECTIONS_REPO=$3
 AMENDMENTS_REPO=$4
 FAVORITES_REPO=$5
-CONTROLLER=$6
+export CONTROLLER=$6
 OTI_BASE_URL=$7
 OPENTREE_API_BASE_URL=$8
 COLLECTIONS_API_BASE_URL=$9
@@ -21,27 +21,32 @@ AMENDMENTS_API_BASE_URL=${10}
 FAVORITES_API_BASE_URL=${11}
 OPENTREE_DEFAULT_APPLICATION=${12}
 OTINDEX_BASE_URL=${13}
+READ_ONLY_MODE=${14}
 
-. setup/functions.sh
+. setup/functions.sh || exit 1
 
-setup/install-common.sh $OPENTREE_DEFAULT_APPLICATION $CONTROLLER
 
-echo "Installing API"
+bash setup/install-web2py.sh || exit 1
+
+echo "Installing API" || exit 1
 
 
 #Pre installs for normal phylestem-api venv
-venv/bin/pip  install vine==1.3
+venv/bin/pip  install vine==1.3 || exit 1
 #Force early version of vine in venv to deal with python2 python3 issues
-venv/bin/pip install kombu==4.1.0
+venv/bin/pip install kombu==4.1.0 || exit 1
+venv/bin/pip install celery==4.1.0 || exit 1
 venv/bin/pip install redis==2.10.6
-venv/bin/pip install celery==4.1.0
+
 
 
 
 
 # ---------- Redis for caching ---------
 #This is in the default venv
-REDIS_WITH_VERSION="redis-2.10.6"
+## EJM Note: I am not clear on why it is important to pip install redis 2.10.6 and install v3.0.0 for the cli, but it works.
+## There is no 2.10.86 on redis.io releases, and newer pip installed python libaries break a la https://github.com/celery/celery/issues/5175.
+REDIS_WITH_VERSION="redis-3.0.0"
 if ! test -f redis/bin/redis-server ; then
     if ! test -d "downloads/${REDIS_WITH_VERSION}" ; then
         if ! test -f downloads/"${REDIS_WITH_VERSION}.tar.gz" ; then
@@ -51,9 +56,9 @@ if ! test -f redis/bin/redis-server ; then
             tar xfz "${REDIS_WITH_VERSION}.tar.gz")
     fi
     if ! test -d redis/work ; then
-        mkdir -p redis/work
+        mkdir -p redis/work || exit 1
         (cd downloads/${REDIS_WITH_VERSION} ; \
-            make && make PREFIX="${HOME}/redis" install)
+            make && make PREFIX="${HOME}/redis" install) || exit 1
     fi
 fi
 
@@ -68,10 +73,10 @@ APPROOT=repo/$WEBAPP
 OTHOME=$PWD
 
 # This is required to make "git pull" work correctly
-git config --global user.name "OpenTree API"
-git config --global user.email api@opentreeoflife.org
+git config --global user.name "OpenTree API" || exit 1
+git config --global user.email api@opentreeoflife.org || exit 1
 
-echo "...fetching $WEBAPP repo..."
+echo "...fetching $WEBAPP repo..." || exit 1
 git_refresh OpenTreeOfLife $WEBAPP || true
 
 if [ "${PEYOTL_LOG_FILE_PATH:0:1}" != "/" ]; then
@@ -81,12 +86,12 @@ fi
 git_refresh OpenTreeOfLife peyotl || true
 py_package_setup_install peyotl || true
 
-(cd $APPROOT; pip install -r requirements.txt)
-(cd $APPROOT/ot-celery; pip install -r requirements.txt ; python setup.py develop)
+(cd $APPROOT; pip install -r requirements.txt) || exit 1
+(cd $APPROOT/ot-celery; pip install -r requirements.txt ; python setup.py develop) || exit 1
 
 (cd web2py/applications; \
     rm -rf ./phylesystem ; \
-    ln -sf ../../repo/$WEBAPP ./phylesystem)
+    ln -sf ../../repo/$WEBAPP ./phylesystem) || exit 1
 
 # ---------- DOC STORE ----------
 
@@ -110,6 +115,9 @@ pushd .
     cp config.example config
     sed -i -e "s+PHYLESYSTEM_REPO_PATH+$OTHOME/repo/${OPENTREE_DOCSTORE}_par/$OPENTREE_DOCSTORE+" config
     sed -i -e "s+PHYLESYSTEM_REPO_PAR+$OTHOME/repo/${OPENTREE_DOCSTORE}_par+" config
+
+    # Optionally run the API as "read-only", ie block all data-writing methods
+    sed -i -e "s+READ_ONLY_MODE+${READ_ONLY_MODE}+" config
 
     # Specify our remote to push to, which is added to local repo above
     sed -i -e "s+PHYLESYSTEM_REPO_REMOTE+originssh+" config
@@ -145,7 +153,7 @@ pushd .
 popd
 
 # N.B. Another file 'GITHUB_CLIENT_SECRET' was already placed via rsync (in push.sh)
-# Also 'OPENTREEAPI_OAUTH_TOKEN'
+# Also 'GITHUB_APP_PRIVATE_KEY_PEM'
 
 # prompt to add a GitHub webhook (if it's not already there) to nudge my oti service as studies change
 pushd .
@@ -231,6 +239,19 @@ pushd .
     sed -i -e "s+COLLECTIONS_REPO_URL+https://github.com/OpenTreeOfLife/$COLLECTIONS_REPO+" config
     sed -i -e "s+AMENDMENTS_REPO_URL+https://github.com/OpenTreeOfLife/$AMENDMENTS_REPO+" config
     sed -i -e "s+FAVORITES_REPO_URL+https://github.com/OpenTreeOfLife/$FAVORITES_REPO+" config
+popd
+
+# Add a simple parametric router to set our default web2py app
+echo "PWD (install-api):"
+echo "$(pwd)"
+pushd .
+    TMP=/tmp/tmp.tmp
+    echo default_application should be "$OPENTREE_DEFAULT_APPLICATION" || exit 1
+    sed -e "s+default_application='.*'+default_application='$OPENTREE_DEFAULT_APPLICATION'+" \
+       web2py/examples/routes.parametric.example.py >$TMP || exit 1
+    cp $TMP web2py/routes.py || exit 1
+    rm $TMP || exit 1
+    grep default_ web2py/routes.py || exit 1
 popd
 
 # ---------- REDIS AND CELERY ----------
