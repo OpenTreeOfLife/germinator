@@ -256,5 +256,5 @@ if pgrep -f "pserve" >/dev/null ; then
     echo -e "${OK}"
 else
     echo -e "${FAIL}"
-    tail $OPENTREE/logs/myeasylog.log || true
+    tail $HOME/repo/ws_wrapper/ws_wrapper.log || true
 fi
