@@ -1,5 +1,4 @@
 #!/bin/bash
-set -x
 
 # Name of user who ran the 'push.sh' command
 CONTROLLER=$1 
@@ -61,7 +60,7 @@ fi
 if [ -e "$OTT/version.txt" ] ; then
     echo "Taxonomy: installed."
 else
-    echo "** Failed to install taxonomy file $TAX_URL"
+    echo "** ${DARK_RED}Failed${NC} to install taxonomy file $TAX_URL"
 fi
 
 # 3. Install the synth tree && define SYNTHPARENT
@@ -80,7 +79,7 @@ fi
 if [ -d "$SYNTHPARENT/$SYNTH_DIR" ] ; then
     echo "Synth tree: installed."
 else
-    echo "** Failed to install synth tree $SYNTH_URL"
+    echo "** ${DARK_RED}Failed${NC} to install synth tree $SYNTH_URL"
 fi
 
 # FIXME: probably we should check out a stable branch, instead of master.
@@ -200,7 +199,7 @@ fi
 echo -ne "${LIGHT_CYAN}Starting otcetera web services (otc-tol-ws)${NC}: "
 LD_LIBRARY_PATH=${APPS}/restbed/local/library /usr/sbin/daemonize -c $OPENTREE $SERVER $OTT -D$SYNTHPARENT -p$PIDFILE -P1984 --num-threads=4
 sleep 1
-if pgrep -x "otc-tol-ws" ; then
+if pgrep -x "otc-tol-ws" >/dev/null ; then
     echo -e "${OK}"
 else
     echo -e "${FAIL}"
@@ -233,4 +232,29 @@ WPIDFILE=$HOME/repo/ws_wrapper/pid
 cp $HOME/repo/ws_wrapper/template.ini $HOME/repo/ws_wrapper/wswrapper.ini
 sed -i -e "s+OPENTREE_WEBAPI_BASE_URL+${OPENTREE_WEBAPI_BASE_URL}+" $HOME/repo/ws_wrapper/wswrapper.ini
 
-(pkill -F "$WPIDFILE" 2>/dev/null || true ) && /usr/sbin/daemonize -p $WPIDFILE -c $HOME/repo/ws_wrapper ${VIRTUAL_ENV_PYTHON3}/bin/pserve wswrapper.ini
+echo -n "Killing old pserve: "
+
+(pkill -F "$WPIDFILE" 2>/dev/null || true )
+# This handles cases where people start pserve by hand:
+pkill -9 -f pserve || true
+if pgrep -f pserve >/dev/null ; then
+    echo -e "${FAIL}"
+    exit 1
+else
+    echo -e "${OK}"
+fi
+
+echo -n "Starting ws_wrapper: "
+/usr/sbin/daemonize -p $WPIDFILE -c $HOME/repo/ws_wrapper ${VIRTUAL_ENV_PYTHON3}/bin/pserve wswrapper.ini
+
+# How to check that the process with $WPIDFILE lives long enough to DO something?
+# Probably we would need to give it a secret token, and then ask on port 1983 for
+#  that token.
+
+sleep 1
+if pgrep -f "pserve" >/dev/null ; then
+    echo -e "${OK}"
+else
+    echo -e "${FAIL}"
+    tail $HOME/repo/ws_wrapper/ws_wrapper.log || true
+fi

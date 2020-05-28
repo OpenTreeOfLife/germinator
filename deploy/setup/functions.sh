@@ -1,7 +1,7 @@
 # Use with 'source' command
 # Variable CONTROLLER is an implicit parameter (name of user who ran the 'push.sh' command)
 
-set -x
+set -e
 
 # Utilities and some setup.
 # Source this file from another bash script.
