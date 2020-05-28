@@ -258,7 +258,7 @@ popd
 
 echo "copy redis config and start redis"
 # Make sure that redis has the up-to-date config from the api repo...
-cp $APPROOT/private/ot-redis.config redis/ot-redis.config
+cat $APPROOT/private/ot-redis.config | sed -E "s+OPENTREE_USER+${OPENTREE_USER}+" > redis/ot-redis.config
 # somewhat hacky shutdown and restart redis
 echo 'shutdown' | redis/bin/redis-cli
 nohup redis/bin/redis-server redis/ot-redis.config &
