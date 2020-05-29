@@ -49,7 +49,7 @@ if [ "$update_apache_config" = "yes" ]; then
   fi
   
   TMP=/tmp/$$.tmp
-  sed -e s+/home/opentree+$OPENTREE_HOME+ <"$OPENTREE_HOME/setup/opentree-shared.conf" >$TMP
+  cp "$OPENTREE_HOME/setup/opentree-shared.conf" $TMP || "Copy (cp) of shared config failed"
   sed -i -e "s+OTINDEX_BASE_URL+$OTINDEX_BASE_URL+" $TMP
   sed -i -e "s+PHYLAPI_BASE_URL+$PHYLAPI_BASE_URL+" $TMP
   
