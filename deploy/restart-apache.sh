@@ -23,6 +23,7 @@ fi
 
 # Apache 2.4+
 
+echo "update_apache_config=[$update_apache_config]"
 if [ "$update_apache_config" = "yes" ]; then
 
   echo "Updating apache configuration..."   # TODO
