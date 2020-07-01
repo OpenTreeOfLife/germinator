@@ -191,7 +191,7 @@ fi
 # ---------- WSGI ----------
 # Get wsgi (apache / web2py communication)
 if [ ! -r /etc/apache2/mods-enabled/wsgi.load ]; then
-    apt_get_install libapache2-mod-wsgi
+    apt_get_install libapache2-mod-wsgi-py3
 fi
 
 # AWS has python 2.7.3 built in, no need to install it.
