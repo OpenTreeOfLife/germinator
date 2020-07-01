@@ -169,7 +169,7 @@ log Checkout: otcetera `git log | head -1`
     # We need to check a full build, since change to defaults aren't applied to pre-existing project dirs.
     if  ! (cd ./build && ninja install) ; then
     rm -rf ../otcetera/build
-    ${VIRTUAL_ENV_PYTHON3}/bin/meson otcetera build --prefix=$APPS/otcetera/local
+    ${VIRTUAL_ENV_PYTHON3}/bin/meson otcetera build --prefix=$APPS/otcetera/local -Db_ndebug=true
         (cd ./build && ninja install)
     fi
 )
