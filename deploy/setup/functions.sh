@@ -22,7 +22,7 @@ fi
 # ---------- Setup TWO VIRTUALENVs ----------
 # Set up python env
 if [ ! -d venv ]; then
-    virtualenv venv || exit 1
+    virtualenv -p `which python2` venv || exit 1
 fi
 source venv/bin/activate || exit 1
 

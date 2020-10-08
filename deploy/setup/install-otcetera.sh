@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 # Name of user who ran the 'push.sh' command
 CONTROLLER=$1 
 

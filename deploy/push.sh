@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 # push.sh -c {configfile} {command} {arg...}  - see README.md for documentation
 # The command is either a component to install, or an operation to
 # perform.  Components are opentree [web app], api, taxomachine, etc.
@@ -78,6 +78,7 @@ done
 # OPENTREE_HOST (the server being set up) must always be specified, e.g.
 # OPENTREE_HOST=devapi.opentreeoflife.org
 [ "x$OPENTREE_HOST" != x ] || err "OPENTREE_HOST not specified"
+export OPENTREE_HOST
 
 # On ubuntu, the admin user is called 'ubuntu'; on debian it's 'admin'
 [ "x$OPENTREE_ADMIN" != x ] || OPENTREE_ADMIN=admin
