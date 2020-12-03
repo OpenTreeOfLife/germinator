@@ -84,7 +84,7 @@ configtemplate=$configdir/config.example
 configfile=$configdir/config
 
 # Use the existence of a wildcard cert to trigger the use of HTTPS from within web2py.
-if [ -r /etc/letsencrypt/live/opentreeoflife.org/fullchain.pem]; then
+if [ -r /etc/letsencrypt/live/opentreeoflife.org/fullchain.pem ]; then
    SSL_CERTS_FOUND=true
 else
    SSL_CERTS_FOUND=false
