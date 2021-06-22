@@ -1,4 +1,4 @@
-# Open Tree of Life version 12.3
+# Open Tree of Life version 13.4
 
 Version 13.4 of the synthetic tree was generated on 18 June 2021 using the [propinquity pipeline](https://github.com/OpenTreeOfLife/propinquity).
 
