@@ -3,10 +3,10 @@
 Version 11.4 of the synthetic tree was generated on 09 October 2019 using the [propinquity pipeline](https://github.com/OpenTreeOfLife/propinquity).
 
 ## Downloads
-There are two downloads. The first (smaller download) contain only tree and annotations files. The second (larger download) is the full output from the synthesis procedure, including documentation. You can also [browse the full output](http://files.opentreeoflife.org/synthesis/opentree11.4/output/index.html).
+There are two downloads. The first (smaller download) contain only tree and annotations files. The second (larger download) is the full output from the synthesis procedure, including documentation. You can also [browse the full output](https://files.opentreeoflife.org/synthesis/opentree11.4/output/index.html).
 
-* [Tree and annotations](http://files.opentreeoflife.org/synthesis/opentree11.4/opentree11.4_tree.tgz) : Several versions of the synthetic tree, along with the annotations file. See the enclosed README for details. (compressed tar archive; 40 Mbytes)
-* [All pipeline outputs](http://files.opentreeoflife.org/synthesis/opentree11.4/opentree11.4_output.tgz) : Outputs and documentation from all stages of the synthesis pipeline. Or, you can [browse the output](http://files.opentreeoflife.org/synthesis/opentree11.4/output/index.html) rather than downloading. (compressed tar archive; 301 Mbytes)
+* [Tree and annotations](https://files.opentreeoflife.org/synthesis/opentree11.4/opentree11.4_tree.tgz) : Several versions of the synthetic tree, along with the annotations file. See the enclosed README for details. (compressed tar archive; 40 Mbytes)
+* [All pipeline outputs](https://files.opentreeoflife.org/synthesis/opentree11.4/opentree11.4_output.tgz) : Outputs and documentation from all stages of the synthesis pipeline. Or, you can [browse the output](https://files.opentreeoflife.org/synthesis/opentree11.4/output/index.html) rather than downloading. (compressed tar archive; 301 Mbytes)
 
 ## Release notes
 

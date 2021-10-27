@@ -5,8 +5,8 @@ Version 10.3 of the synthetic tree was generated on 10 July 2018 using the [prop
 ## Downloads
 There are two downloads. The first (smaller download) contain only tree and annotations files. The second (larger download) is the full output from the synthesis procedure, including documentation. You can also [browse the full output](http://files.opentreeoflife.org/synthesis/opentree10.3/output/index.html).
 
-* [Tree and annotations](http://files.opentreeoflife.org/synthesis/opentree10.3/opentree10.3_tree.tgz) : Several versions of the synthetic tree, along with the annotations file. See the enclosed README for details. (compressed tar archive; 35 Mbytes)
-* [All pipeline outputs](http://files.opentreeoflife.org/synthesis/opentree10.3/opentree10.3_output.tgz) : Outputs and documentation from all stages of the synthesis pipeline. Or, you can [browse the output](http://files.opentreeoflife.org/synthesis/opentree10.3/output/index.html) rather than downloading. (compressed tar archive; 189 Mbytes)
+* [Tree and annotations](https://files.opentreeoflife.org/synthesis/opentree10.3/opentree10.3_tree.tgz) : Several versions of the synthetic tree, along with the annotations file. See the enclosed README for details. (compressed tar archive; 35 Mbytes)
+* [All pipeline outputs](https://files.opentreeoflife.org/synthesis/opentree10.3/opentree10.3_output.tgz) : Outputs and documentation from all stages of the synthesis pipeline. Or, you can [browse the output](https://files.opentreeoflife.org/synthesis/opentree10.3/output/index.html) rather than downloading. (compressed tar archive; 189 Mbytes)
 
 ## Release notes
 
