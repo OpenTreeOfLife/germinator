@@ -195,7 +195,7 @@ else
 fi
 
 echo -ne "${LIGHT_CYAN}Starting otcetera web services (otc-tol-ws)${NC}: "
-LD_LIBRARY_PATH=${APPS}/restbed/local/library /usr/sbin/daemonize -c $OPENTREE $SERVER $OTT -D$SYNTHPARENT -p$PIDFILE -P1984 --num-threads=4
+LD_LIBRARY_PATH=${APPS}/restbed/local/library /usr/bin/daemonize -c $OPENTREE $SERVER $OTT -D$SYNTHPARENT -p$PIDFILE -P1984 --num-threads=4
 sleep 1
 if pgrep -x "otc-tol-ws" >/dev/null ; then
     echo -e "${OK}"
