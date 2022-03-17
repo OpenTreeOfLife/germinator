@@ -160,15 +160,12 @@ fi
 log Checkout: otcetera `git log | head -1`
 
 (
-    export LDFLAGS=-L${APPS}/restbed/local/library
-    export CPPFLAGS=-I${APPS}/restbed/local/include
-
     echo $PWD
     # We need to check a full build, since change to defaults aren't applied to pre-existing project dirs.
-    if  ! (cd ./build && ninja install) ; then
-    rm -rf ../otcetera/build
-    ${VIRTUAL_ENV_PYTHON3}/bin/meson otcetera build --prefix=$APPS/otcetera/local -Db_ndebug=true
-        (cd ./build && ninja install)
+    if  ! ninja -C build install ; then
+        rm -rf ../otcetera/build
+        ${VIRTUAL_ENV_PYTHON3}/bin/meson otcetera build --prefix=$APPS/otcetera/local -Db_ndebug=true -Drestbed_dir=${APPS}/restbed/local/
+        ninja -C build install
     fi
 )
 if [ -r "$SERVER" ] ; then
