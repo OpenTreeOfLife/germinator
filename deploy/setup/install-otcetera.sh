@@ -232,7 +232,8 @@ echo -n "Killing old pserve: "
 (pkill -F "$WPIDFILE" 2>/dev/null || true )
 # This handles cases where people start pserve by hand:
 pkill -9 -f pserve || true
-if pgrep -f pserve >/dev/null ; then
+sleep 1
+if pgrep -f "pserve" >/dev/null ; then
     echo -e "${FAIL}"
     exit 1
 else
@@ -240,7 +241,7 @@ else
 fi
 
 echo -n "Starting ws_wrapper: "
-/usr/sbin/daemonize -p $WPIDFILE -c $HOME/repo/ws_wrapper ${VIRTUAL_ENV_PYTHON3}/bin/pserve wswrapper.ini
+/usr/bin/daemonize -p $WPIDFILE -c $HOME/repo/ws_wrapper ${VIRTUAL_ENV_PYTHON3}/bin/pserve wswrapper.ini
 
 # How to check that the process with $WPIDFILE lives long enough to DO something?
 # Probably we would need to give it a secret token, and then ask on port 1983 for
