@@ -87,7 +87,6 @@ fi
 restbedbranch=master
 
 # 4a. Build restbed: update source
-export CXX=$(which g++-8)
 if [ -d $APPS/restbed/restbed ] ; then
     (
         cd $APPS/restbed/restbed
@@ -163,7 +162,6 @@ log Checkout: otcetera `git log | head -1`
 (
     export LDFLAGS=-L${APPS}/restbed/local/library
     export CPPFLAGS=-I${APPS}/restbed/local/include
-    export CXX=$(which g++-8)
 
     echo $PWD
     # We need to check a full build, since change to defaults aren't applied to pre-existing project dirs.
