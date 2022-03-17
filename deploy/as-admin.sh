@@ -83,6 +83,7 @@ fi
 apt_get_install_one python-requests
 
 # ---------- for otcetera  ----------------
+apt_get_install_one ccache
 apt_get_install_one libboost-dev
 apt_get_install_one libboost-filesystem-dev
 apt_get_install_one libboost-program-options-dev
@@ -91,7 +92,6 @@ apt_get_install_one libtool
 apt_get_install_one pkg-config
 apt_get_install_one psmisc # for killall
 apt_get_install_one python3-venv
-#apt_get_install_one g++-8
 apt_get_install_one ninja-build
 
 
