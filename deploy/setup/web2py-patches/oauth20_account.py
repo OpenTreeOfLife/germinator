@@ -83,7 +83,7 @@ class OAuthAccount(object):
                user = None
                try:
                    user = self.graph.get_object("me")
-               except GraphAPIError, e:
+               except GraphAPIError as e:
                    self.session.token = None
                    self.graph = None
 
@@ -226,7 +226,7 @@ server for requests.  It can be used for the optional"scope" parameters for Face
                     opener.close()
                 try:
                     return current.session.token['access_token']
-                except Exception, e:
+                except Exception as e:
                     raise Exception("No access_token found in data: %s %s" % (current.session.token, e))
                     return None
 
