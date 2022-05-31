@@ -80,10 +80,10 @@ done
 [ "x$OPENTREE_HOST" != x ] || err "OPENTREE_HOST not specified"
 
 # On ubuntu, the admin user is called 'ubuntu'; on debian it's 'admin'
-[ "x$OPENTREE_ADMIN" != x ] || OPENTREE_ADMIN=admin
+[ "x$OPENTREE_ADMIN" != x ] || OPENTREE_ADMIN=ubuntu
 
 # Unprivileged user that runs all the services
-[ "x$OPENTREE_USER" != x ] || OPENTREE_USER=opentree
+[ "x$OPENTREE_USER" != x ] || OPENTREE_USER=deploy
 
 # OPENTREE_SECRETS is the *local* directory where .pem and other
 # private files are kept
