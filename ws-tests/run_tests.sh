@@ -58,6 +58,9 @@ fi
 
 first_config_spec=$1
 shift
+echo '+ first_config_spec:'
+echo $first_config_spec
+echo '+'
 
 if [[ ! "$first_config_spec" =~ "=" ]]; then
     if [[ "$first_config_spec" =~ ^http: ]]; then
@@ -71,6 +74,11 @@ config_specs="$first_config_spec $*"
 if [[ ! "$config_specs" =~ "host:allowwrite=" ]]; then
     config_specs="$first_config_spec $* host:allowwrite=false"
 fi
+echo '+'
+echo '+ config_specs:'
+echo $config_specs
+echo '+'
+echo '+'
 
 
 # The python test scripts all use the opentreetesting.py library,
