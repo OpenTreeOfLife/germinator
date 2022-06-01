@@ -280,9 +280,21 @@ function sync_system {
     if [ $DRYRUN = "yes" ]; then echo "[sync]"; return; fi
     # Do privileged stuff
     # Don't use rsync - might not be installed yet
+
+    ##echo ">>>>>>>>>>>>"
+    ##echo "BEFORE as-admin.sh..."
+    ##echo "  scp -p -i '${ADMIN_IDENTITY}' as-admin.sh '$OPENTREE_ADMIN@$OPENTREE_HOST':"
+    ##echo "  ${ASSH} '$ADMIN@$OPENTREE_HOST' ./as-admin.sh '$OPENTREE_HOST' '$OPENTREE_USER' '$CERTIFICATE_FILE' '$CERTIFICATE_KEY_FILE'"
+    ## echo ">>>>>>>>>>>>"
+
     scp -p -i "${ADMIN_IDENTITY}" as-admin.sh "$OPENTREE_ADMIN@$OPENTREE_HOST":
     ${ASSH} "$ADMIN@$OPENTREE_HOST" ./as-admin.sh "$OPENTREE_HOST" "$OPENTREE_USER" \
        "$CERTIFICATE_FILE" "$CERTIFICATE_KEY_FILE"
+
+    ##echo "<<<<<<<<<<<<"
+    ##echo "AFTER as-admin.sh!"
+    ##echo "<<<<<<<<<<<<"
+
     # Copy files over
     rsync -pr -e "${SSH}" "--exclude=*~" "--exclude=#*" setup "$OT_USER@$OPENTREE_HOST":
     # Bleh
