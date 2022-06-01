@@ -49,6 +49,16 @@ function apt_get_install_one
     fi
 }
 
+# Add Bionic repository for these python2.* packages (in newer Ubuntu)
+#  python-venv (vs python3-venv)
+#  python-pip (vs python3-pip)
+#  python-requests (vs python3-requests)
+# These are required by our current version of web2py
+apt_get_install_one software-properties-common  # needed for add-apt-repository
+sudo apt-add-repository "deb http://us.archive.ubuntu.com/ubuntu/ bionic main universe"
+$APTGET update
+
+
 # ---------- UPDATE ----------
 
 if [ `which dialog`x = x ]; then
@@ -97,7 +107,8 @@ apt_get_install_one libboost-system-dev
 apt_get_install_one libtool
 apt_get_install_one pkg-config
 apt_get_install_one psmisc # for killall
-apt_get_install_one python3-venv
+apt_get_install_one elpa-pyvenv # for web2py
+apt_get_install_one python3-venv # for everyone else
 #apt_get_install_one g++-8
 apt_get_install_one ninja-build
 
@@ -174,6 +185,8 @@ fi
 # ---------- PIP ----------
 # Get pip
 if [ `which pip`x = x ]; then
+    apt_get_install --allow-downgrades python-pip-whl=9.0.1-2
+    # this python-pip dependency is very fussy about version
     apt_get_install python-pip
 fi
 
@@ -206,9 +219,9 @@ fi
 # ---------- PYTHON VIRTUALENV ----------
 # Get virtualenv
 if [ `which virtualenv`x = x ]; then
-    apt_get_install python-virtualenv virtualenv
+    # install for both python2 and python3
+    apt_get_install python-virtualenv python3-virtualenv virtualenv
 fi
-
 
 # ---------- MAVEN 3 ----------
 if [ `which mvn`x = x ]; then
@@ -225,7 +238,6 @@ fi
 if [ ! -r /etc/ntp.conf ]; then
     apt_get_install ntp
 fi
-
 
 # ---------- BACKUP EXISTING CONFIG FILES ---------
 
