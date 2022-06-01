@@ -323,6 +323,10 @@ if [ ! -e $OTHOME/.ssh ]; then
 fi
 
 log ".ssh/authorized_keys created"
+
+# Update the canonical hostname on this server
+sudo hostnamectl set-hostname "$OPENTREE_HOST"
+
 # Ideally stowing the hostname one would be done every time, but we
 # want to avoid unsatisfiable sudo prompt demands, so let's assume it
 # stays the same.
