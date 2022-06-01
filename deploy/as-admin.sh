@@ -14,6 +14,13 @@ OPENTREE_USER=$2
 CERTIFICATE_FILE=$3
 CERTIFICATE_KEY_FILE=$4
 
+# copied from setup/functions.sh (not yet available), so we can log admin stuff
+ADMIN_HOME=$(bash <<< "echo ~")
+function log() {
+    mkdir -p "$ADMIN_HOME/log" || exit 1
+    (echo `date` as-admin.sh: " $*") >>"$ADMIN_HOME/log/messages"  || exit
+}
+
 if [ x$OPENTREE_USER = x ]; then
     OPENTREE_USER=opentree
 fi
@@ -287,6 +294,8 @@ else
     sudo rm -f /etc/apache2/sites-enabled/001-opentree-ssl.conf
 fi
 
+log "before UNPRIVILEGED USER"
+
 # Apache 2.4 is finicky about protection of the key file
 
 
@@ -304,6 +313,8 @@ if [ ! -e $OTHOME ]; then
     sudo chsh -s /bin/bash $OPENTREE_USER
 fi
 
+log "OPENTREE_USER added"
+
 if [ ! -e $OTHOME/.ssh ]; then
     sudo mkdir $OTHOME/.ssh
     sudo cp -p .ssh/authorized_keys $OTHOME/.ssh/
@@ -311,6 +322,7 @@ if [ ! -e $OTHOME/.ssh ]; then
     sudo chown -R $OPENTREE_USER:$OPENTREE_USER $OTHOME
 fi
 
+log ".ssh/authorized_keys created"
 # Ideally stowing the hostname one would be done every time, but we
 # want to avoid unsatisfiable sudo prompt demands, so let's assume it
 # stays the same.
@@ -322,4 +334,8 @@ if [ x$OPENTREE_HOST != x -a ! -r $OTHOME/hostname ]; then
 	chmod go+r $HOSTFILE
 	chown $OPENTREE_USER $HOSTFILE
 EOF
+
+    log "hostname updated to $OPENTREE_HOST"
 fi
+
+log "did we SKIP the hostname?"
