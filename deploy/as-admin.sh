@@ -252,8 +252,10 @@ sudo cp --parents --preserve=all \
         /home/opentree/repo/opentree/curator/private/config \
         /home/opentree/repo/opentree/webapp/private/config \
         /home/phylesystemapi/repo/phylesystem-api/private/config \
-        $CONFIG_BACKUP_DIR 2>/dev/null
-
+        $CONFIG_BACKUP_DIR 2>/dev/null || true
+# NB the final '|| true' (alternately, '|| :') makes sure we keep on running even if
+# any of the above source files are missing. Else this script fails silently before
+# doing the steps below!
 
 # ---------- APACHE VHOST ----------
 
