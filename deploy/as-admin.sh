@@ -20,6 +20,7 @@ function log() {
     mkdir -p "$ADMIN_HOME/log" || exit 1
     (echo `date` as-admin.sh: " $*") >>"$ADMIN_HOME/log/messages"  || exit
 }
+log ">>> as-admin.sh starting"
 
 if [ x$OPENTREE_USER = x ]; then
     OPENTREE_USER=opentree
@@ -356,4 +357,4 @@ EOF
     log "hostname updated to $OPENTREE_HOST"
 fi
 
-log "did we SKIP the hostname?"
+log "<<< as-admin.sh finished"
