@@ -38,6 +38,10 @@ cp -p setup/web2py-patches/oauth20_account.py web2py/gluon/contrib/login_methods
 
 # ---------- VIRTUALENV + WEB2PY + WSGI ----------
 
+# Patch broken virtualenv activation helper (mid-June 2022), used below
+echo "Applying patch (hot fix) to buggy virtualenv..."  || exit
+cp -p setup/virtualenv-patches/activate_this.py "$PWD/venv/bin/" || exit 1
+
 # Patch web2py's wsgihandler so that it does the equivalent of 'venv/activate'
 # when started by Apache.
 

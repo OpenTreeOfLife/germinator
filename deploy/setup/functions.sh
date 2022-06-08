@@ -24,6 +24,7 @@ fi
 if [ ! -d venv ]; then
     # specify python2.* or you'll now get python3
     virtualenv --python=`which python2` venv || exit 1
+    # NB - later we'll probably apply our single-file patch to `activate_this.py`
 fi
 source venv/bin/activate || exit 1
 
