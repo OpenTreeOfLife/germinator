@@ -221,33 +221,7 @@ fi
 # Get virtualenv
 if [ `which virtualenv`x = x ]; then
     # install for both python2 and python3
-    #apt_get_install python-virtualenv python3-virtualenv
-    # No, it seems both of these install a buggy virtualenv (20.0.17)
-
-    # Now for something really special. We need a bug fix for python2.7 venvs
-    # that only appears in a newer version of virtualenv (20.0.19+) than the
-    # current Ubuntu repos. The newer version we need is in the 'jammy'
-    # repository, but we should ONLY enable this as needed, or it may try to
-    # update other packages too aggressively.
-    #
-    # For background and bug details, see
-    # <https://github.com/pypa/virtualenv/issues/1776>
-
-    # Briefly add (or enable) the jammy repo
-    # WORKS if added manually: "deb http://archive.ubuntu.com/ubuntu/ jammy main universe"
-    FUTURE_REPO="deb http://archive.ubuntu.com/ubuntu/ jammy main universe"
-    sudo apt-add-repository "$FUTURE_REPO"
-    $APTGET update
-
-    #apt_get_install virtualenv  # FAILS with missing/broken dependencies!
-    # Let's try again, pulling all dependencies from the newer repo; see
-    # <https://jaqque.sbih.org/kplug/apt-pinning.html> for examples
-    apt-get -t jammy install virtualenv
-
-
-    # Remove (or disable) the jammy repo to avoid surprises
-    sudo apt-add-repository --remove "$FUTURE_REPO"
-    $APTGET update
+    apt_get_install python-virtualenv python3-virtualenv virtualenv
 fi
 
 # ---------- MAVEN 3 ----------
