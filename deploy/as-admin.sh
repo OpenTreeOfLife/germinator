@@ -309,7 +309,17 @@ else
     sudo rm -f /etc/apache2/sites-enabled/001-opentree-ssl.conf
 fi
 
-log "before UNPRIVILEGED USER"
+# Add global ServerName to main apache config, to silence warnings on restart
+# NB we use 'localhost' here as a reminder that we might have multiple virtual
+# hosts defined for this server.
+APACHE_GLOBAL_CONFIG_FILE=/etc/apache2/apache2.conf
+if grep -q "^ServerName" $APACHE_GLOBAL_CONFIG_FILE; then
+    log "global ServerName found in main apache config"
+else
+    log "adding global ServerName to main apache config"
+    echo "ServerName localhost" | sudo tee -a $APACHE_GLOBAL_CONFIG_FILE > /dev/null
+    log "DONE!"
+fi
 
 # Apache 2.4 is finicky about protection of the key file
 
