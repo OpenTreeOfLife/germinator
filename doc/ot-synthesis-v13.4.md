@@ -5,10 +5,10 @@ Version 13.4 of the synthetic tree was generated on 18 June 2021 using the [prop
 On 27-July-2021, MTH corrected errors in the tree identifiers in the `subproblems/contesting_trees.json` file. This method for making these corrections automatically in the propinquity builds was committed in [this commit](https://github.com/OpenTreeOfLife/propinquity/commit/2b2b65d18efe1dbf2141a9242b29e0a02ad41b58).
 
 ## Downloads
-There are two downloads. The first (smaller download) contain only tree and annotations files. The second (larger download) is the full output from the synthesis procedure, including documentation. You can also [browse the full output](http://files.opentreeoflife.org/synthesis/opentree13.4/output/index.html).
+There are two downloads. The first (smaller download) contain only tree and annotations files. The second (larger download) is the full output from the synthesis procedure, including documentation. You can also [browse the full output](https://files.opentreeoflife.org/synthesis/opentree13.4/output/index.html).
 
-* [Tree and annotations](http://files.opentreeoflife.org/synthesis/opentree13.4/opentree13.4tree.tgz) : Several versions of the synthetic tree, along with the annotations file. See the enclosed README for details. (compressed tar archive; 36 Mbytes)
-* [All pipeline outputs](http://files.opentreeoflife.org/synthesis/opentree13.4/opentree13.4.tgz) : Outputs and documentation from all stages of the synthesis pipeline. Or, you can [browse the output](http://files.opentreeoflife.org/synthesis/opentree13.4/output/index.html) rather than downloading. (compressed tar archive; 561 Mbytes)
+* [Tree and annotations](https://files.opentreeoflife.org/synthesis/opentree13.4/opentree13.4tree.tgz) : Several versions of the synthetic tree, along with the annotations file. See the enclosed README for details. (compressed tar archive; 36 Mbytes)
+* [All pipeline outputs](https://files.opentreeoflife.org/synthesis/opentree13.4/opentree13.4.tgz) : Outputs and documentation from all stages of the synthesis pipeline. Or, you can [browse the output](https://files.opentreeoflife.org/synthesis/opentree13.4/output/index.html) rather than downloading. (compressed tar archive; 561 Mbytes)
 
 ## Release notes
 
