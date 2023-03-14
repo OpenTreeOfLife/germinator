@@ -2,6 +2,8 @@
 
 Version 13.4 of the synthetic tree was generated on 18 June 2021 using the [propinquity pipeline](https://github.com/OpenTreeOfLife/propinquity).
 
+On 27-July-2021, MTH corrected errors in the tree identifiers in the `subproblems/contesting_trees.json` file. This method for making these corrections automatically in the propinquity builds was committed in [this commit](https://github.com/OpenTreeOfLife/propinquity/commit/2b2b65d18efe1dbf2141a9242b29e0a02ad41b58).
+
 ## Downloads
 There are two downloads. The first (smaller download) contain only tree and annotations files. The second (larger download) is the full output from the synthesis procedure, including documentation. You can also [browse the full output](https://files.opentreeoflife.org/synthesis/opentree13.4/output/index.html).
 

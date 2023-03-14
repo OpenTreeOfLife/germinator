@@ -87,7 +87,6 @@ fi
 restbedbranch=master
 
 # 4a. Build restbed: update source
-export CXX=$(which g++-8)
 if [ -d $APPS/restbed/restbed ] ; then
     (
         cd $APPS/restbed/restbed
@@ -161,16 +160,12 @@ fi
 log Checkout: otcetera `git log | head -1`
 
 (
-    export LDFLAGS=-L${APPS}/restbed/local/library
-    export CPPFLAGS=-I${APPS}/restbed/local/include
-    export CXX=$(which g++-8)
-
     echo $PWD
     # We need to check a full build, since change to defaults aren't applied to pre-existing project dirs.
-    if  ! (cd ./build && ninja install) ; then
-    rm -rf ../otcetera/build
-    ${VIRTUAL_ENV_PYTHON3}/bin/meson otcetera build --prefix=$APPS/otcetera/local -Db_ndebug=true
-        (cd ./build && ninja install)
+    if  ! ninja -C build install ; then
+        rm -rf ../otcetera/build
+        ${VIRTUAL_ENV_PYTHON3}/bin/meson otcetera build --prefix=$APPS/otcetera/local -Db_ndebug=true -Drestbed_dir=${APPS}/restbed/local/
+        ninja -C build install
     fi
 )
 if [ -r "$SERVER" ] ; then
@@ -197,7 +192,7 @@ else
 fi
 
 echo -ne "${LIGHT_CYAN}Starting otcetera web services (otc-tol-ws)${NC}: "
-LD_LIBRARY_PATH=${APPS}/restbed/local/library /usr/sbin/daemonize -c $OPENTREE $SERVER $OTT -D$SYNTHPARENT -p$PIDFILE -P1984 --num-threads=4
+LD_LIBRARY_PATH=${APPS}/restbed/local/library /usr/bin/daemonize -c $OPENTREE $SERVER $OTT -D$SYNTHPARENT -p$PIDFILE -P1984 --num-threads=4
 sleep 1
 if pgrep -x "otc-tol-ws" >/dev/null ; then
     echo -e "${OK}"
@@ -237,7 +232,8 @@ echo -n "Killing old pserve: "
 (pkill -F "$WPIDFILE" 2>/dev/null || true )
 # This handles cases where people start pserve by hand:
 pkill -9 -f pserve || true
-if pgrep -f pserve >/dev/null ; then
+sleep 1
+if pgrep -f "pserve" >/dev/null ; then
     echo -e "${FAIL}"
     exit 1
 else
@@ -245,7 +241,7 @@ else
 fi
 
 echo -n "Starting ws_wrapper: "
-/usr/sbin/daemonize -p $WPIDFILE -c $HOME/repo/ws_wrapper ${VIRTUAL_ENV_PYTHON3}/bin/pserve wswrapper.ini
+/usr/bin/daemonize -p $WPIDFILE -c $HOME/repo/ws_wrapper ${VIRTUAL_ENV_PYTHON3}/bin/pserve wswrapper.ini
 
 # How to check that the process with $WPIDFILE lives long enough to DO something?
 # Probably we would need to give it a secret token, and then ask on port 1983 for
