@@ -3,10 +3,10 @@
 Version 7.0 of the synthetic tree was generated on 11 September 2016 using the [propinquity pipeline](https://github.com/OpenTreeOfLife/propinquity).
 
 ## Downloads
-There are two downloads. The first (smaller download) contain only tree and annotations files. The second (larger download) is the full output from the synthesis procedure, including documentation. You can also [browse the full output](http://files.opentreeoflife.org/synthesis/opentree7.0/output/index.html).
+There are two downloads. The first (smaller download) contain only tree and annotations files. The second (larger download) is the full output from the synthesis procedure, including documentation. You can also [browse the full output](https://files.opentreeoflife.org/synthesis/opentree7.0/output/index.html).
 
-* [Tree and annotations](http://files.opentreeoflife.org/synthesis/opentree7.0/opentree7.0_tree.tgz) : Several versions of the synthetic tree, along with the annotations file. See the enclosed README for details. (compressed tar archive; 49 Mbytes)
-* [All pipeline outputs](http://files.opentreeoflife.org/synthesis/opentree7.0/opentree7.0_output.tgz) : Outputs and documentation from all stages of the synthesis pipeline. Or, you can [browse the output](http://files.opentreeoflife.org/synthesis/opentree7.0/output/index.html) rather than downloading. (compressed tar archive; 128 Mbytes)
+* [Tree and annotations](https://files.opentreeoflife.org/synthesis/opentree7.0/opentree7.0_tree.tgz) : Several versions of the synthetic tree, along with the annotations file. See the enclosed README for details. (compressed tar archive; 49 Mbytes)
+* [All pipeline outputs](https://files.opentreeoflife.org/synthesis/opentree7.0/opentree7.0_output.tgz) : Outputs and documentation from all stages of the synthesis pipeline. Or, you can [browse the output](https://files.opentreeoflife.org/synthesis/opentree7.0/output/index.html) rather than downloading. (compressed tar archive; 128 Mbytes)
 
 ## Release notes
 
