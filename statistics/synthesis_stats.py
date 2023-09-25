@@ -163,7 +163,7 @@ def getargs():
     if args.synthesis_version:
         synthesis_version = args.synthesis_version
     else:
-        synthesis_version = raw_input(USER_PROMPT)
+        synthesis_version = input(USER_PROMPT)
     return server, filename, synthesis_version
 
 
