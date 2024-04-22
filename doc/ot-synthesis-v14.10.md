@@ -1,6 +1,6 @@
 # Open Tree of Life version 14.9
 
-Version 14.10 of the synthetic tree was generated on 19 Sept 2024 using the [propinquity pipeline](https://github.com/OpenTreeOfLife/propinquity) SHA 4b3178e3c8a1f838dcfae63eca3ea0847148265d.
+Version 14.10 of the synthetic tree was generated on 19 Apr 2024 using the [propinquity pipeline](https://github.com/OpenTreeOfLife/propinquity) SHA 4b3178e3c8a1f838dcfae63eca3ea0847148265d.
 
 ## Downloads
 There are two downloads. The first (smaller download) contain only tree and annotations files. The second (larger download) is the full output from the synthesis procedure, including documentation. You can also [browse the full output](https://files.opentreeoflife.org/synthesis/opentree14.10/output/index.html).
@@ -13,6 +13,7 @@ There are two downloads. The first (smaller download) contain only tree and anno
 ### Changes in inputs
 
 * 28 new input trees, and 1 input tree1 removed
+* OTT 3.7 instead of OTT 3.6
 
 ### Changes in output
 
