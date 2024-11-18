@@ -1,6 +1,6 @@
-# Open Tree of Life version 14.9
+# Open Tree of Life version 15.1
 
-Version 4.1 of the synthetic tree was generated on 30 May 2024 using the [propinquity pipeline](https://github.com/OpenTreeOfLife/propinquity) SHA 3465211a757420b8f8584da98ed9d5390d8db9cf.
+Version 15.1 of the synthetic tree was generated on 15 July 2024 using the [propinquity pipeline](https://github.com/OpenTreeOfLife/propinquity) SHA 3465211a757420b8f8584da98ed9d5390d8db9cf.
 
 ## Downloads
 There are two downloads. The first (smaller download) contain only tree and annotations files. The second (larger download) is the full output from the synthesis procedure, including documentation. You can also [browse the full output](https://files.opentreeoflife.org/synthesis/opentree15.1/output/index.html).
