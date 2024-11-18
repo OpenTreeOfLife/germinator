@@ -1,6 +1,6 @@
 # Open Tree of Life version 14.9
 
-Version 14.9 of the synthetic tree was generated on 25 Sept 2023 using the [propinquity pipeline](https://github.com/OpenTreeOfLife/propinquity).
+Version 14.9 of the synthetic tree was generated on 26 Sept 2023 using the [propinquity pipeline](https://github.com/OpenTreeOfLife/propinquity).
 
 ## Downloads
 There are two downloads. The first (smaller download) contain only tree and annotations files. The second (larger download) is the full output from the synthesis procedure, including documentation. You can also [browse the full output](https://files.opentreeoflife.org/synthesis/opentree14.9/output/index.html).
